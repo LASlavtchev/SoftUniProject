@@ -1,0 +1,32 @@
+﻿@model PlanIt.Web.ViewModels.Invites.InvitesListViewModel
+
+@{
+    ViewData["Title"] = "Invites";
+}
+
+<h1>Invites</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Id</th>
+            <th>Id</th>
+            <th>Id</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Invites) {
+        <tr>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
