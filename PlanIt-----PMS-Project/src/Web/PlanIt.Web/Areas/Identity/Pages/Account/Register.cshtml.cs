@@ -56,9 +56,9 @@
         {
             returnUrl ??= this.Url.Content("~/");
 
-            if (this.Input.Occupation.ToLower() == "founder")
+            if (this.Input.JobTitle.ToLower() == "founder")
             {
-                this.ModelState.AddModelError(string.Empty, "Occupation Founder already exists!!!");
+                this.ModelState.AddModelError(string.Empty, "Job Title Founder already exists!!!");
             }
 
             if (this.ModelState.IsValid)
@@ -70,8 +70,8 @@
                     FirstName = this.Input.FirstName,
                     MiddleName = this.Input.MiddleName,
                     LastName = this.Input.LastName,
-                    CompanyName = this.Input.Company.ToLower(),
-                    Occupation = this.Input.Occupation,
+                    CompanyName = this.Input.Company,
+                    JobTitle = this.Input.JobTitle.ToLower(),
                     PhoneNumber = this.Input.PhoneNumber,
                 };
 
@@ -85,7 +85,7 @@
                     // Assign to user claims - needed for the _loginPartial
                     string fullName = $"{user.FirstName} {user.LastName}";
                     await this.userManager.AddClaimAsync(user, new Claim("FullName", fullName));
-                    await this.userManager.AddClaimAsync(user, new Claim("Occupation", user.Occupation));
+                    await this.userManager.AddClaimAsync(user, new Claim("JobTitle", user.JobTitle));
                     await this.userManager.AddClaimAsync(user, new Claim("CompanyName", user.CompanyName));
 
                     this.logger.LogInformation("User created a new account with password.");
@@ -188,7 +188,7 @@
                 GlobalConstants.MaxLengthString,
                 ErrorMessage = GlobalConstants.ErrorMessageStringLength,
                 MinimumLength = GlobalConstants.MinLengthString)]
-            public string Occupation { get; set; }
+            public string JobTitle { get; set; }
 
             [Required]
             [RegularExpression(GlobalConstants.PhoneNumberRegexPattern, ErrorMessage = GlobalConstants.ErrorMessagePhoneNumber)]

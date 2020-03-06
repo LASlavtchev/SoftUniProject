@@ -19,7 +19,7 @@
         public IViewComponentResult Invoke()
         {
             var founder = this.userManager.Users
-                .FirstOrDefault(u => u.Occupation == "founder");
+                .FirstOrDefault(u => u.JobTitle == "founder");
 
             var viewModel = new CompanyNameViewModel();
 

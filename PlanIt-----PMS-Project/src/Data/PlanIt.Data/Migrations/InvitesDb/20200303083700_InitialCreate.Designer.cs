@@ -10,8 +10,8 @@ using PlanIt.Data;
 namespace PlanIt.Data.Migrations.InvitesDb
 {
     [DbContext(typeof(InvitesDbContext))]
-    [Migration("20200301164226__InitialCreate")]
-    partial class _InitialCreate
+    [Migration("20200303083700_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,7 +33,7 @@ namespace PlanIt.Data.Migrations.InvitesDb
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ExpiredOn")
                         .HasColumnType("datetime2");
@@ -42,9 +42,13 @@ namespace PlanIt.Data.Migrations.InvitesDb
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityValue")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email", "SecurityValue")
+                        .IsUnique();
 
                     b.ToTable("Invites");
                 });

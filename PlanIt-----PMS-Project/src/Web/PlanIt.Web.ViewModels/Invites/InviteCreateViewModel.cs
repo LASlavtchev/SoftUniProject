@@ -1,22 +1,21 @@
-﻿namespace PlanIt.Data.Models
+﻿namespace PlanIt.Web.ViewModels.Invites
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Text;
 
     using PlanIt.Common;
-    using PlanIt.Data.Common.Models;
+    using PlanIt.Data.Models;
+    using PlanIt.Services.Mapping;
+    using PlanIt.Web.ViewModels.ValidationAttributes;
 
-    public class Invite : BaseModel<int>
+    public class InviteCreateViewModel : IMapTo<Invite>
     {
         [Required]
         [EmailAddress(ErrorMessage = GlobalConstants.EmailAddressErrorMessage)]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
-        public string SecurityValue { get; set; }
-
+        [DateTimeAfterNow]
         public DateTime ExpiredOn { get; set; }
     }
 }

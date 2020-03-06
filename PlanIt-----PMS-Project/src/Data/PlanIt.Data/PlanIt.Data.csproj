@@ -11,12 +11,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\InviteUsersDb\**" />
+    <EmbeddedResource Remove="Migrations\InviteUsersDb\**" />
+    <None Remove="Migrations\InviteUsersDb\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Migrations\20191224074400_InitialCreate.cs" />
     <Compile Remove="Migrations\20191224074400_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200216091919_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200216091919_InitialCreate.Designer.cs" />
     <Compile Remove="Migrations\20200223183607_AddProject.cs" />
     <Compile Remove="Migrations\20200223183607_AddProject.Designer.cs" />
-    <Compile Remove="Migrations\InviteUsersDb\20200219220416_InitialCreate.cs" />
-    <Compile Remove="Migrations\InviteUsersDb\20200219220416_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200223200924_AddProject.cs" />
+    <Compile Remove="Migrations\20200223200924_AddProject.Designer.cs" />
+    <Compile Remove="Migrations\20200306204232_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200306204232_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200306210915_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200306210915_InitialCreate.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,10 +63,6 @@
     <ProjectReference Include="..\..\PlanIt.Common\PlanIt.Common.csproj" />
     <ProjectReference Include="..\PlanIt.Data.Common\PlanIt.Data.Common.csproj" />
     <ProjectReference Include="..\PlanIt.Data.Models\PlanIt.Data.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\InviteUsersDb\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

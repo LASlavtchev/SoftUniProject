@@ -31,7 +31,7 @@ namespace PlanIt.Data.Migrations.InvitesDb
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ExpiredOn")
                         .HasColumnType("datetime2");
@@ -40,9 +40,13 @@ namespace PlanIt.Data.Migrations.InvitesDb
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityValue")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email", "SecurityValue")
+                        .IsUnique();
 
                     b.ToTable("Invites");
                 });

@@ -17,7 +17,9 @@ namespace PlanIt.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
-            this.UserProjects = new HashSet<UserProject>();
+            this.UserProblems = new HashSet<UserProblem>();
+            this.Projects = new HashSet<Project>();
+            this.Hours = new HashSet<Hour>();
         }
 
         // Audit info
@@ -53,8 +55,14 @@ namespace PlanIt.Data.Models
         public string CompanyName { get; set; }
 
         [Required]
-        public string Occupation { get; set; }
+        public string JobTitle { get; set; }
 
-        public virtual ICollection<UserProject> UserProjects { get; set; }
+        public Client Client { get; set; }
+
+        public virtual ICollection<UserProblem> UserProblems { get; set; }
+
+        public virtual ICollection<Project> Projects { get; set; }
+
+        public virtual ICollection<Hour> Hours { get; set; }
     }
 }

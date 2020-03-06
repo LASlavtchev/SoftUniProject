@@ -24,9 +24,9 @@ namespace PlanIt.Web.Areas.Administration.Controllers
         }
 
         // GET: Invites
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var invites = this.invitesService.GetAll<InviteViewModel>();
+            var invites = await this.invitesService.GetAllAsync<InviteViewModel>();
             var model = new InvitesListViewModel
             {
                 Invites = invites,

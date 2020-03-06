@@ -1,11 +1,16 @@
 ﻿namespace PlanIt.Services.Data
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Threading.Tasks;
+
+    using PlanIt.Data.Models;
 
     public interface IInvitesService
     {
-        IEnumerable<T> GetAll<T>();
+        Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>();
+
+        string GenerateUniqueSecurityValue();
+
+        // Task<Invite> CreateInviteAsync<TViewModel>(TViewModel model);
     }
 }

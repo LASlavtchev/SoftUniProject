@@ -63,7 +63,7 @@
                     MiddleName = this.Input.MiddleName,
                     LastName = this.Input.LastName,
                     CompanyName = this.Input.Company,
-                    Occupation = "founder",
+                    JobTitle = "founder",
                     PhoneNumber = this.Input.PhoneNumber,
                     EmailConfirmed = true,
                 };
@@ -77,7 +77,7 @@
                     // Assign to user claims - needed for the _loginPartial
                     string fullName = $"{user.FirstName} {user.LastName}";
                     await this.userManager.AddClaimAsync(user, new Claim("FullName", fullName));
-                    await this.userManager.AddClaimAsync(user, new Claim("Occupation", user.Occupation));
+                    await this.userManager.AddClaimAsync(user, new Claim("JobTitle", user.JobTitle));
                     await this.userManager.AddClaimAsync(user, new Claim("CompanyName", user.CompanyName));
 
                     this.logger.LogInformation("Founder created a new account with password.");

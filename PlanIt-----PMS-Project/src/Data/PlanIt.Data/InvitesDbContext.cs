@@ -11,5 +11,12 @@
         }
 
         public DbSet<Invite> Invites { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Invite>()
+                .HasIndex(i => new { i.Email, i.SecurityValue })
+                .IsUnique(true);
+        }
     }
 }

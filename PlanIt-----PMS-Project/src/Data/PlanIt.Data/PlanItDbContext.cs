@@ -23,11 +23,25 @@
         {
         }
 
-        public DbSet<Setting> Settings { get; set; }
+        public DbSet<Problem> Problems { get; set; }
+
+        public DbSet<UserProblem> UserProblems { get; set; }
+
+        public DbSet<ProgressStatus> ProgressStatuses { get; set; }
+
+        public DbSet<SubProject> SubProjects { get; set; }
+
+        public DbSet<SubProjectType> SubProjectTypes { get; set; }
+
+        public DbSet<Client> Clients { get; set; }
 
         public DbSet<Project> Projects { get; set; }
 
-        public DbSet<UserProject> UserProjects { get; set; }
+        public DbSet<AdditionalCost> AdditionalCosts { get; set; }
+
+        public DbSet<Hour> Hours { get; set; }
+
+        public DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -100,8 +114,9 @@
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<UserProject>()
-                .HasKey(e => new { e.PlanItUserId, e.ProjectId });
+            // Additional relations
+            builder.Entity<UserProblem>()
+                .HasKey(e => new { e.PlanItUserId, e.ProblemId });
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)
