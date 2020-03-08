@@ -2,6 +2,20 @@
 // More info at https://go.microsoft.com/fwlink/?LinkId=808241
 [
   {
+    "outputFileName": "wwwroot/lib/klorofil/js/theme.min.js",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "wwwroot/lib/klorofil/js/theme.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/lib/klorofil/css/theme.min.css",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "wwwroot/lib/klorofil/css/theme.css"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/css/site.min.css",
     // An array of relative input file paths. Globbing patterns supported
     "inputFiles": [

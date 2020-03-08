@@ -35,6 +35,49 @@
         "dist/jquery.validate.unobtrusive.js",
         "dist/jquery.validate.unobtrusive.min.js"
       ]
+    },
+    {
+      "library": "font-awesome@4.7.0",
+      "destination": "wwwroot/lib/font-awesome/",
+      "files": [
+        "css/font-awesome.css",
+        "css/font-awesome.min.css",
+        "fonts/FontAwesome.otf",
+        "fonts/fontawesome-webfont.eot",
+        "fonts/fontawesome-webfont.svg",
+        "fonts/fontawesome-webfont.ttf",
+        "fonts/fontawesome-webfont.woff",
+        "fonts/fontawesome-webfont.woff2"
+      ]
+    },
+    {
+      "library": "animate.css@3.7.2",
+      "destination": "wwwroot/lib/animate/",
+      "files": [
+        "animate.css",
+        "animate.min.css"
+      ]
+    },
+    {
+      "library": "linearicons@1.0.2",
+      "destination": "wwwroot/lib/linearicons/",
+      "files": [
+        "dist/web-font/style.css",
+        "dist/web-font/style.min.css",
+        "dist/web-font/fonts/Linearicons-Free.eot",
+        "dist/web-font/fonts/Linearicons-Free.svg",
+        "dist/web-font/fonts/Linearicons-Free.ttf",
+        "dist/web-font/fonts/Linearicons-Free.woff",
+        "dist/web-font/fonts/Linearicons-Free.woff2"
+      ]
+    },
+    {
+      "library": "jquery-slimscroll@1.3.8",
+      "destination": "wwwroot/lib/jquery-slimscroll/",
+      "files": [
+        "jquery.slimscroll.js",
+        "jquery.slimscroll.min.js"        
+      ]
     }
   ]
 }
