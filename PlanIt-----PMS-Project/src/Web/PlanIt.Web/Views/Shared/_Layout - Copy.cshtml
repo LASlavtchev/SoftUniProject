@@ -1,0 +1,97 @@
+﻿@using PlanIt.Common
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
+
+    <environment names="Development">
+        <!-- VENDOR CSS -->
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/animate/animate.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet" asp-append-version="true" />
+
+
+
+        <link href="~/lib/linearicons/dist/web-font/style.css" rel="stylesheet" asp-append-version="true" />
+        <!-- MAIN CSS -->
+        <link href="~/lib/klorofil/css/theme.css" rel="stylesheet" asp-append-version="true" />
+        <!-- CUSTOM CSS -->
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <!-- VENDOR CSS -->
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/animate/animate.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/open-iconic/font/css/open-iconic-bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+
+
+
+        <link href="~/lib/linearicons/dist/web-font/style.min.css" rel="stylesheet" asp-append-version="true" />
+        <!-- MAIN CSS -->
+        <link href="~/lib/klorofil/css/theme.min.css" rel="stylesheet" asp-append-version="true" />
+        <!-- CUSTOM CSS -->
+        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+
+    @RenderSection("Headers", required: false)
+
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet" asp-append-version="true">
+</head>
+<body>
+    <!-- WRAPPER -->
+    <div id="wrapper">
+        <!-- NAVBAR -->
+        <header>
+            <partial name="_NavBarPartial" />
+        </header>
+        <!-- END NAVBAR -->
+        <!-- LEFT SIDEBAR -->
+        <partial name="_SideBarPartial" />
+        <!-- END LEFT SIDEBAR -->
+        <!-- MAIN -->
+        <div class="main">
+            <main role="main">
+                @this.RenderBody()
+            </main>
+        </div>
+        <!-- END MAIN -->
+        <div class="clearfix"></div>
+        <footer>
+            <div class="container-fluid">
+                &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <vc:company-name></vc:company-name> Ltd.
+            </div>
+        </footer>
+    </div>
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
+
+        <script src="~/lib/jquery-slimscroll/jquery.slimscroll.js" asp-append-version="true"></script>
+
+        <script src="~/lib/klorofil/js/theme.js" asp-append-version="true"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+
+        <script src="~/lib/jquery-slimscroll/jquery.slimscroll.min.js" asp-append-version="true"></script>
+
+        <script src="~/lib/klorofil/js/theme.min.js" asp-append-version="true"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @this.RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -14,6 +14,13 @@
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\lib\pace\**" />
+    <Content Remove="wwwroot\lib\pace\**" />
+    <EmbeddedResource Remove="wwwroot\lib\pace\**" />
+    <None Remove="wwwroot\lib\pace\**" />
+  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
@@ -45,6 +52,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\lib\jquery\" />
   </ItemGroup>
 </Project>

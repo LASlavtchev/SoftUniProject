@@ -8,78 +8,62 @@
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
 
     <environment names="Development">
-        <!-- VENDOR CSS -->
-        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
-        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" asp-append-version="true" />
-        <link href="~/lib/animate/animate.css" rel="stylesheet" asp-append-version="true" />
-        <link href="~/lib/linearicons/dist/web-font/style.css" rel="stylesheet" asp-append-version="true" />
-        <!-- MAIN CSS -->
-        <link href="~/lib/klorofil/css/theme.css" rel="stylesheet" asp-append-version="true" />
-        <!-- CUSTOM CSS -->
+        <!-- Font Awesome Icons -->
+        <link href="~/lib/font-awesome-free/css/all.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <!-- Font Awesome Icons -->
+        <link href="~/lib/font-awesome-free/css/all.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+
+    @this.RenderSection("Styles", required: false)
+
+    <environment names="Development">
+        <!-- Theme style -->
+        <link href="~/dist/css/adminlte.css" rel="stylesheet" asp-append-version="true" />
+        <!-- Custom style -->
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
-        <!-- VENDOR CSS -->
-        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
-        <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" asp-append-version="true" />
-        <link href="~/lib/animate/animate.min.css" rel="stylesheet" asp-append-version="true" />
-        <link href="~/lib/linearicons/dist/web-font/style.min.css" rel="stylesheet" asp-append-version="true" />
-        <!-- MAIN CSS -->
-        <link href="~/lib/klorofil/css/theme.min.css" rel="stylesheet" asp-append-version="true" />
-        <!-- CUSTOM CSS -->
+        <!-- Theme style -->
+        <link href="~/lib/admin-lte/css/adminlte.css" rel="stylesheet" asp-append-version="true" />
+        <!-- Custom style -->
         <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body>
-    <header class="header">
-        <nav class="navbar fixed-top bg-dark flex-md-nowrap p-0 shadow">
-            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"><vc:company-name></vc:company-name></a>
-            <input class="form-control form-control-dark w-25" type="text" placeholder="Search" aria-label="Search">
-            <ul class="navbar-nav px-3">
-                <li class="nav-item text-nowrap">
-                    <a class="nav-link" href="#">Sign out</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    
 
-    <div class="container">
-        <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
-            @this.RenderBody()
-        </main>
-    </div>
+@this.RenderSection("CustomStyles", required: false)
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <vc:company-name></vc:company-name> Ltd.<a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+<body class="hold-transition register-page">
+
+    @this.RenderBody()
 
     <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
-
-        <script src="~/lib/jquery-slimscroll/jquery.slimscroll.js" asp-append-version="true"></script>
-
-        <script src="~/lib/klorofil/js/theme.js" asp-append-version="true"></script>
+        <!-- jQuery -->
+        <script src="~/lib/jquery/jquery.js" asp-append-version="true"></script>
+        <!-- Bootstrap 4 -->
+        <script src="~/lib/bootstrap/js/bootstrap.bundle.js" asp-append-version="true"></script>
+        <!-- AdminLTE App -->
+        <script src="~/dist/js/adminlte.js" asp-append-version="true"></script>
+        <!-- Custom js -->
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
-        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
-
-        <script src="~/lib/jquery-slimscroll/jquery.slimscroll.min.js" asp-append-version="true"></script>
-
-        <script src="~/lib/klorofil/js/theme.min.js" asp-append-version="true"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <!-- jQuery -->
+        <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
+        <!-- Bootstrap 4 -->
+        <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+        <!-- AdminLTE App -->
+        <script src="~/lib/admin-lte/js/adminlte.js" asp-append-version="true"></script>
+        <!-- Custom js -->
+        <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
 
     @this.RenderSection("Scripts", required: false)
+
 </body>
+
 </html>
