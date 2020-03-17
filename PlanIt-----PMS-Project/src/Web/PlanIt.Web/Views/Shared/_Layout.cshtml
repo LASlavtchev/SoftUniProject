@@ -20,13 +20,13 @@
 
     <environment names="Development">
         <!-- Theme style -->
-        <link href="~/dist/css/adminlte.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/admin-lte/css/adminlte.css" rel="stylesheet" asp-append-version="true" />
         <!-- Custom style -->
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
         <!-- Theme style -->
-        <link href="~/lib/admin-lte/css/adminlte.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/admin-lte/css/adminlte.min.css" rel="stylesheet" asp-append-version="true" />
         <!-- Custom style -->
         <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
@@ -37,9 +37,10 @@
 
 @this.RenderSection("CustomStyles", required: false)
 
-<body class="hold-transition register-page">
+<body>
 
     @this.RenderBody()
+
 
     <environment names="Development">
         <!-- jQuery -->
@@ -47,7 +48,7 @@
         <!-- Bootstrap 4 -->
         <script src="~/lib/bootstrap/js/bootstrap.bundle.js" asp-append-version="true"></script>
         <!-- AdminLTE App -->
-        <script src="~/dist/js/adminlte.js" asp-append-version="true"></script>
+        <script src="~/lib/admin-lte/js/adminlte.js" asp-append-version="true"></script>
         <!-- Custom js -->
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
@@ -57,9 +58,9 @@
         <!-- Bootstrap 4 -->
         <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
         <!-- AdminLTE App -->
-        <script src="~/lib/admin-lte/js/adminlte.js" asp-append-version="true"></script>
+        <script src="~/lib/admin-lte/js/adminlte.min.js" asp-append-version="true"></script>
         <!-- Custom js -->
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
     @this.RenderSection("Scripts", required: false)

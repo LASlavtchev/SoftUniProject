@@ -42,10 +42,6 @@
       ]
     },
     {
-      "library": "particlesjs@2.2.3",
-      "destination": "wwwroot/lib/particles/"
-    },
-    {
       "library": "animate.css@3.7.2",
       "destination": "wwwroot/lib/animate/"
     },
