@@ -11,9 +11,9 @@
             return fullName.Value;
         }
 
-        public static string GetOcccupation(this ClaimsPrincipal principal)
+        public static string GetJobTitle(this ClaimsPrincipal principal)
         {
-            var occupation = principal.Claims.FirstOrDefault(c => c.Type == "Occupation");
+            var occupation = principal.Claims.FirstOrDefault(c => c.Type == "JobTitle");
             return occupation.Value;
         }
     }

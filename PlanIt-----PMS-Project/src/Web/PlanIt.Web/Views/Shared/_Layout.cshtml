@@ -41,10 +41,48 @@
 
 @this.RenderSection("CustomStyles", required: false)
 
-<body>
-
-    @this.RenderBody()
-
+<body class="hold-transition sidebar-mini">
+    <!-- Wrapper -->
+    <div class="wrapper">
+        @if (this.User.Identity.IsAuthenticated)
+        {
+            <!-- Navbar -->
+            <partial name="_NavBarPartial" />
+            <!-- /.Navbar -->
+            <!--================================================================-->
+            <!-- Main Sidebar -->
+            <partial name="_MainSideBarPartial" />
+            <!-- /.Main Sidebar -->
+            <!--================================================================-->
+            <!-- Main wrapper -->
+            <div class="content-wrapper">
+                <!--************************************************************-->
+                <!-- Main header -->
+                <partial name="_MainHeaderPartial" />
+                <!-- /.Main header -->
+                <!--************************************************************-->
+                <!-- Main content -->
+                @this.RenderBody()
+                <!-- /.Main content -->
+            </div>
+            <!-- /.Main wrapper -->
+            <!--================================================================-->
+            <!-- Control Sidebar -->
+            <partial name="_SideBarPartial" />
+            <!-- /.Control Sidebar -->
+            <!--================================================================-->
+            <!-- Main Footer -->
+            <partial name="_FooterPartial" />
+            <!-- /.Main Footer -->
+        }
+        else
+        {
+            <!-- Main content -->
+            @this.RenderBody()
+            <!-- /.Main content -->
+        }
+    </div>
+    <!-- /.Wrapper -->
 
     <environment names="Development">
         <!-- jQuery -->
