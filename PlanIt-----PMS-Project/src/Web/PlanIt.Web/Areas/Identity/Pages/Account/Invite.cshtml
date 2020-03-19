@@ -1,12 +1,11 @@
 ﻿@page
 @using PlanIt.Common
-@model LoginModel
-
+@model PlanIt.Web.Areas.Identity.Pages.Account.InviteModel
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Invite";
 }
 
-@section Styles{
+@section Styles {
     <partial name="_IdentityStylesPartial" />
 }
 
@@ -27,9 +26,9 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg animated fadeInUp">WELCOME to <strong><vc:company-name></vc:company-name> Ltd.</strong></p>
-                <p class="login-box-msg animated fadeInUp">Log in to start your session</p>
+                <p class="login-box-msg animated fadeInUp">Ask for invitation</p>
 
-                <form method="post">
+                <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="row">
                         <div class="col-12">
@@ -46,38 +45,31 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group mb-3">
-                                    <input asp-for="Input.Password" class="form-control" asp-placeholder-for="Input.Password" />
+                                    <textarea asp-for="Input.Purpose" class="form-control" placeholder="Write your purpose for invitation"></textarea>
                                     <div class="input-group-append">
                                         <div class="input-group-text">
-                                            <span class="fas fa-lock"> </span>
+                                            <span class="fas fa-text-height"> </span>
                                         </div>
                                     </div>
                                 </div>
-                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                <span asp-validation-for="Input.Purpose" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="icheck-primary">
-                            <input type="checkbox" asp-for="Input.RememberMe" id="remember">
-                            <label asp-for="Input.RememberMe" for="remember">
-                                @Html.DisplayNameFor(m => m.Input.RememberMe)
-                            </label>
-                        </div>
-                    </div>
+
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-block">Log In</button>
+                                <button type="submit" class="btn btn-primary btn-block">Invite me</button>
                             </div>
                         </div>
                     </div>
                 </form>
                 <p class="mb-1">
-                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                    <strong>This site is invite only.</strong>
                 </p>
-                <p class="mb-0">
-                    <a asp-page="./Invite" asp-route-returnUrl="@Model.ReturnUrl">Ask for invitation</a>
+                <p class="mb-1">
+                    We will send you an email about your invitation. Your invitation request will expire in 24hours.
                 </p>
             </div>
         </div>
@@ -87,3 +79,4 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+

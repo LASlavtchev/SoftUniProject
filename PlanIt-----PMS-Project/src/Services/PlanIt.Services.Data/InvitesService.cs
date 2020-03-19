@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using AutoMapper;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using PlanIt.Data.Common.Repositories;
@@ -14,16 +15,11 @@
     public class InvitesService : IInvitesService
     {
         private readonly IRepository<Invite> invitesRepository;
-        private readonly UserManager<PlanItUser> userManager;
-        // private readonly IMapper mapper;
 
         public InvitesService(
-            IRepository<Invite> invitesRepository,
-            UserManager<PlanItUser> userManager)
+            IRepository<Invite> invitesRepository)
         {
             this.invitesRepository = invitesRepository;
-            this.userManager = userManager;
-            // this.mapper = mapper;
         }
 
         public string GenerateUniqueSecurityValue()
@@ -35,18 +31,38 @@
 
         public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
         {
-            var all = await this.invitesRepository.All().To<TViewModel>().ToListAsync();
+            var all = await this.invitesRepository
+                .All()
+                .To<TViewModel>()
+                .ToListAsync();
 
             return all;
         }
 
-        //public async Task<Invite> CreateInviteAsync<TViewModel>(TViewModel model)
-        //{
-        //    var invite = this.mapper.Map<Invite>(model);
+        public async Task<TViewModel> GetByEmailAsync<TViewModel>(string email)
+        {
+            var invite = await this.invitesRepository.All()
+                .Where(i => i.Email == email)
+                .To<TViewModel>()
+                .FirstOrDefaultAsync();
 
-        //    await this.invitesRepository.AddAsync(invite);
+            return invite;
+        }
 
-        //    return invite;
-        //}
+        public async Task<Invite> CreateInviteByUserAsync(string email, string purpose)
+        {
+            var invite = new Invite
+            {
+                Email = email,
+                Purpose = purpose,
+                IsInvited = false,
+                RequestExpiredOn = DateTime.UtcNow.AddHours(24),
+            };
+
+            await this.invitesRepository.AddAsync(invite);
+            var result = await this.invitesRepository.SaveChangesAsync();
+
+            return invite;
+        }
     }
 }

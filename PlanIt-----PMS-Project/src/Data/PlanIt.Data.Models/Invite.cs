@@ -14,9 +14,14 @@
         [EmailAddress(ErrorMessage = GlobalConstants.EmailAddressErrorMessage)]
         public string Email { get; set; }
 
-        [Required]
+        public string Purpose { get; set; }
+
         public string SecurityValue { get; set; }
 
-        public DateTime ExpiredOn { get; set; }
+        public bool IsInvited { get; set; }
+
+        public DateTime? ExpiredOn { get; set; }
+
+        public DateTime RequestExpiredOn { get; set; }
     }
 }

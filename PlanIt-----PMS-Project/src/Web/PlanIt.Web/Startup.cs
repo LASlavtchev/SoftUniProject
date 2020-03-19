@@ -1,10 +1,11 @@
 ﻿namespace PlanIt.Web
 {
     using System.Reflection;
-
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -51,7 +52,16 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); // CSRF
+            });
+
+            services.Configure<CookieAuthenticationOptions>(options =>
+            {
+                options.LoginPath = new PathString("/Account/Login");
+            });
+
             services.AddRazorPages();
 
             services.AddSingleton(this.configuration);

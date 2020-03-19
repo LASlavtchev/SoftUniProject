@@ -10,10 +10,14 @@
     <environment names="Development">
         <!-- Font Awesome Icons -->
         <link href="~/lib/font-awesome-free/css/all.css" rel="stylesheet" asp-append-version="true" />
+        <!-- icheck bootstrap -->
+        <link href="~/lib/icheck-bootstrap/icheck-bootstrap.css" rel="stylesheet" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
         <!-- Font Awesome Icons -->
         <link href="~/lib/font-awesome-free/css/all.min.css" rel="stylesheet" asp-append-version="true" />
+        <!-- icheck bootstrap -->
+        <link href="~/lib/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
 
     @this.RenderSection("Styles", required: false)

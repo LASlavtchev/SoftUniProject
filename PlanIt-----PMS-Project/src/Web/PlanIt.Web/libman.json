@@ -64,7 +64,26 @@
     },
     {
       "library": "admin-lte@3.0.2",
-      "destination": "wwwroot/lib/admin-lte/"
+      "destination": "wwwroot/lib/admin-lte/",
+      "files": [
+        "css/adminlte.css",
+        "css/adminlte.min.css",
+        "css/adminlte.css.map",
+        "css/adminlte.min.css.map",
+        "js/adminlte.js",
+        "js/adminlte.min.js",
+        "js/adminlte.js.map", 
+        "js/adminlte.min.js.map"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "icheck-bootstrap@3.0.1",
+      "destination": "wwwroot/lib/icheck-bootstrap/",
+      "files": [
+        "icheck-bootstrap.css",
+        "icheck-bootstrap.min.css"
+      ]
     }
   ]
 }

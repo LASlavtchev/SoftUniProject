@@ -9,8 +9,10 @@
     {
         Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>();
 
+        Task<TViewModel> GetByEmailAsync<TViewModel>(string email);
+
         string GenerateUniqueSecurityValue();
 
-        // Task<Invite> CreateInviteAsync<TViewModel>(TViewModel model);
+        Task<Invite> CreateInviteByUserAsync(string email, string purpose);
     }
 }

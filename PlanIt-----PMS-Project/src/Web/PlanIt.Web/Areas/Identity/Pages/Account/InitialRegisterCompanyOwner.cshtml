@@ -14,22 +14,23 @@
         .register-box {
             width: 720px;
         }
+
+        .w-5 {
+            width: 5%;
+        }
     </style>
 }
 
-
 <div class="hold-transition register-page">
     <div class="register-box">
-
         <div class="register-logo animated fadeInDown">
-            <b> PlanIt</b>
+            <img class="w-5" src="~/images/planit_logo.png" alt="" />
+            <b>@GlobalConstants.SystemName</b>
         </div>
-
         <div class="card">
             <div class="card-body register-card-body">
                 <p class="animated fadeInUp login-box-msg"> This is the first registration</p>
                 <p class="animated fadeInUp login-box-msg"> Register a new company owner</p>
-
                 <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="row">
@@ -138,7 +139,7 @@
                         </div>
                     </div>
                 </form>
-                <a asp-area="Identity" asp-controller="Account" asp-action="Login" class="text-center"> I already have a membership</a>
+                <a class="text-center">@GlobalConstants.SystemName - <vc:company-name></vc:company-name> Ltd.</a>
             </div>
         </div>
     </div>

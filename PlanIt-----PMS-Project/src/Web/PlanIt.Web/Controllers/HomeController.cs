@@ -26,6 +26,11 @@
                 return this.Redirect("/Identity/Account/InitialRegisterCompanyOwner");
             }
 
+            if (!this.User.Identity.IsAuthenticated)
+            {
+                return this.Redirect("/Identity/Account/Login");
+            }
+
             return this.View();
         }
 

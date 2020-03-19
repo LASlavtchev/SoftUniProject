@@ -45,7 +45,7 @@
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= this.Url.Content("~/");
+            returnUrl ??= this.Url.Content("~/Identity/Account/Login");
 
             // For safety
             if (this.userManager.Users.ToList().Count > 0)
