@@ -45,17 +45,16 @@
             services.AddDefaultIdentity<PlanItUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<PlanItRole>().AddEntityFrameworkStores<PlanItDbContext>();
 
-            services.Configure<CookiePolicyOptions>(
-                options =>
-                    {
-                        options.CheckConsentNeeded = context => true;
-                        options.MinimumSameSitePolicy = SameSiteMode.None;
-                    });
-
-            services.AddControllersWithViews(options =>
+            services.Configure<CookiePolicyOptions>(options =>
             {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); // CSRF
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            //services.AddControllersWithViews(options =>
+            //{
+            //    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); // CSRF
+            //});
 
             services.Configure<CookieAuthenticationOptions>(options =>
             {

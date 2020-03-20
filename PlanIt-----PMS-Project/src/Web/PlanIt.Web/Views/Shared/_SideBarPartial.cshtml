@@ -2,10 +2,16 @@
     <!-- Control sidebar content goes here -->
     <div class="p-3">
         <div>
-            <a class="d-block" asp-area="Identity" asp-page="/Account/Logout">
-                <h5>Logout</h5>
-            </a>
-        </div>        
+            <form id="form"                   
+                   asp-area="Identity"
+                   asp-page="/Account/Logout"
+                   asp-route-returnUrl="@this.Url.Page("/Login")"
+                   method="post">
+                <a href="#" class="d-block" onclick="document.getElementById('form').submit();" title="Logout">
+                    <h5>Logout</h5>
+                </a>
+            </form>
+        </div>
         <p>Sidebar content</p>
     </div>
 </aside>

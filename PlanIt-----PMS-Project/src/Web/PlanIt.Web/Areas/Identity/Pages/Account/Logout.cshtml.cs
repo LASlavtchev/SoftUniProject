@@ -26,12 +26,23 @@
             this.logger = logger;
         }
 
-        public async Task<IActionResult> OnPost()
+        public void OnGet()
+        {
+        }
+
+        public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await this.signInManager.SignOutAsync();
             this.logger.LogInformation("User logged out.");
 
-            return this.Redirect("/Identity/Account/Login");
+            if (returnUrl != null)
+            {
+                return this.LocalRedirect(returnUrl);
+            }
+            else
+            {
+                return this.RedirectToPage();
+            }
         }
     }
 }
