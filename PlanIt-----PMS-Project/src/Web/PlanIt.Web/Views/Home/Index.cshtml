@@ -1,9 +1,47 @@
 ﻿@using PlanIt.Common
 @{
     this.ViewData["Title"] = "Home Page";
+
+    var dateAndTime = DateTime.Now;
+    var date = dateAndTime.Date.ToShortDateString();
+    var dayOfWeek = dateAndTime.DayOfWeek;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@section Styles{
+    <partial name="_IdentityStylesPartial" />
+}
+
+@section CustomStyles{
+    <style>
+        #index {
+            background-image: url('../images/pw_maze_black_2X.png');
+            background-position: initial initial;
+            background-repeat: initial initial;
+        }
+    </style>
+}
+
+<div id="index" class="text-center">
+    <div class="p-4 animated fadeInDown delay-1s">
+        <div>
+            <img class="p-4" src="~/images/planit_logo.png" />
+        </div>
+        <h1 class="display-4 text-primary">Welcome to @GlobalConstants.SystemName!</h1>
+    </div>
+    <h3 class="display-5 badge-secondary animated fadeInDown">@date</h3>
+    <h3 class="display-5 badge-secondary animated fadeInUp">@dayOfWeek</h3>
+    <h3 id="clockDisplay" class="display-5 badge-secondary animated fadeInUp delay-1s"></h3>
+    <div class="p-5">
+        <form class="p-4">
+            <button asp-area="Administration" asp-controller="Dashboard" asp-action="Index"
+                    class="btn btn-outline-primary font-weight-bolder">
+                BEGIN PLANNING
+            </button>
+        </form>
+    </div>
 </div>
+
+
+@section Scripts {
+    <script src="~/js/displayClock.js"></script>
+}

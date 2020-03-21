@@ -6,20 +6,27 @@
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <div class="brand-link">
+    <a href="/" class="brand-link" title="Home">
         <img src="~/images/planit_logo.png" alt="PlanIt Logo" class="brand-image img-circle elevation-3"
              style="opacity: .8">
         <span class="brand-text font-weight-light">@GlobalConstants.SystemName - </span>
         <span class="brand-text font-weight-light"><vc:company-name></vc:company-name> Ltd.</span>
-    </div>
+    </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="info">
-                <div>
-                    <a class="d-block" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@(this.User.GetFullName()) - @(this.User.GetJobTitle())</a>
+            <div class="image">
+                <i class="far fa-id-badge fa-3x img-circle" style="background-color: lightgray;"></i>
+            </div>
+            <div class="info text-center">
+                <div class="text-capitalize">
+                    <a class="d-block" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                        <span class="font-weight-bolder">@(this.User.GetFullName())</span>
+                        <br />
+                        <span class="font-weight-bolder">@(this.User.GetJobTitle())</span>
+                    </a>
                 </div>
             </div>
         </div>
