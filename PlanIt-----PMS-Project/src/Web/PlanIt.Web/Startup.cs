@@ -1,6 +1,7 @@
 ﻿namespace PlanIt.Web
 {
     using System.Reflection;
+
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -51,10 +52,10 @@
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            //services.AddControllersWithViews(options =>
-            //{
-            //    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); // CSRF
-            //});
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); // CSRF
+            });
 
             services.Configure<CookieAuthenticationOptions>(options =>
             {

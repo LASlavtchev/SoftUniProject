@@ -1,24 +1,36 @@
-﻿
+﻿@{
+    string path = $"{ViewContext.HttpContext.Request.Path}";
+    List<string> tokens = path.Split("/", StringSplitOptions.RemoveEmptyEntries).ToList();
 
-@{ 
-    var controllerName = $"{ ViewContext.RouteData.Values["controller"]}";
-    var actionName = $"{ ViewContext.RouteData.Values["action"]}";
+    if (tokens.Count == 0)
+    {
+        tokens.Add("Home");
+        tokens.Add("Index");
+    }
 
+    string title = $"{ViewContext.ViewData["Title"]}";
+
+    string link = "/" + string.Join("/", tokens.SkipLast(1));
+
+    if (link.Contains("Identity") || link.Contains("Account"))
+    {
+        link = "/";
+    }    
 }
-
-
-
 
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">@actionName</h1>
+                <h1 class="m-0 text-dark">@title</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">@controllerName</a></li>
-                    <li class="breadcrumb-item active">@actionName</li>
+                    @for (int i = 0; i < tokens.Count - 1; i++)
+                    {
+                        <li class="breadcrumb-item"><a href="@link">@tokens[i]</a></li>
+                    }
+                    <li class="breadcrumb-item active">@tokens[tokens.Count - 1]</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
