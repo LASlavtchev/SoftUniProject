@@ -1,4 +1,5 @@
 ﻿@using PlanIt.Common
+@using PlanIt.Web.Extensions
 
 <!DOCTYPE html>
 <html>
@@ -106,6 +107,8 @@
     </environment>
 
     @this.RenderSection("Scripts", required: false)
+
+    @Html.RenderPartialSectionScripts()
 
 </body>
 

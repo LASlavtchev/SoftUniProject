@@ -54,4 +54,10 @@
   <ItemGroup>
     <Folder Include="wwwroot\lib\jquery\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\js\displayClock.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

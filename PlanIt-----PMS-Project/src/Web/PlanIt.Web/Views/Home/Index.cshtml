@@ -1,4 +1,5 @@
 ﻿@using PlanIt.Common
+@using PlanIt.Web.Extensions
 @{
     this.ViewData["Title"] = "Home Page";
 
@@ -30,7 +31,8 @@
     </div>
     <h3 class="display-5 badge-secondary animated fadeInDown">@date</h3>
     <h3 class="display-5 badge-secondary animated fadeInUp">@dayOfWeek</h3>
-    <h3 id="clockDisplay" class="display-5 badge-secondary animated fadeInUp delay-1s"></h3>
+    <h3 id="clockDisplay" class="display-5 badge-secondary animated fadeInUp delay-1s">
+    </h3>
     <div class="p-5">
         <form class="p-4">
             <button asp-area="Administration" asp-controller="Dashboard" asp-action="Index"
@@ -41,7 +43,14 @@
     </div>
 </div>
 
-
 @section Scripts {
-    <script src="~/js/displayClock.js"></script>
+    <environment names="Development">
+        <!-- Custom Clock -->
+        <script src="~/js/displayClock.js" asp-append-version="true"></script>        
+    </environment>
+    <environment names="Staging,Production">
+        <!-- Custom Clock -->
+        <script src="~/js/displayClock.min.js" asp-append-version="true"></script>        
+    </environment>
 }
+
