@@ -28,6 +28,7 @@
                 <ol class="breadcrumb float-sm-right">
                     @for (int i = 0; i < tokens.Count - 1; i++)
                     {
+                        // TODO correct the link
                         <li class="breadcrumb-item"><a href="@link">@tokens[i]</a></li>
                     }
                     <li class="breadcrumb-item active">@tokens[tokens.Count - 1]</li>

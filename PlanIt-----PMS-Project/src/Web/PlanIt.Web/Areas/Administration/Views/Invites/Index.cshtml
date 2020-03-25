@@ -4,29 +4,156 @@
     ViewData["Title"] = "Invites";
 }
 
-<h1>Invites</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Id</th>
-            <th>Id</th>
-            <th>Id</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Invites) {
-        <tr>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+@section Styles {
+    <environment names="Development">
+        <!-- Ionicons -->
+        <link href="~/lib/ionicons/css/ionicons.css" rel="stylesheet" asp-append-version="true" />
+        <!-- DataTables -->
+        <link href="~/lib/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/datatables-responsive/css/responsive.bootstrap4.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <!-- Font Awesome Icons -->
+        <link href="~/lib/ionicons/css/ionicons.min.css" rel="stylesheet" asp-append-version="true" />
+        <!-- DataTables -->
+        <link href="~/lib/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
 }
-    </tbody>
-</table>
+
+<div class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <button class="btn btn-primary btn-sm">
+                        <i class="fas fa-user-lock">
+                        </i>
+                        Invite user
+                    </button>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="table" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Purpose</th>
+                                <th>Has invitation</th>
+                                <th>Invitation expires on</th>
+                                <th>Request expires on</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var invite in Model.Invites)
+                            {
+                                <tr>
+                                    <td>@invite.Email</td>
+                                    <td>@invite.Purpose</td>
+                                    <td>@invite.HaveInvitation</td>
+                                    <td>@invite.InviteExpiredOn</td>
+                                    <td>@invite.RequestExpiredOn</td>
+                                    <td>
+                                        @if (!invite.IsInvited && invite.RequestExpiredOn >= DateTime.UtcNow)
+                                        {
+                                            <a class="btn btn-primary btn-sm" href="#">
+                                                <i class="fas fa-lock-open">
+                                                </i>
+                                                Approve
+                                            </a>
+                                        }
+                                        <a class="btn btn-primary btn-sm" href="#">
+                                            <i class="fas fa-pencil-alt">
+                                            </i>
+                                            Edit
+                                        </a>
+                                        <a class="btn btn-danger btn-sm"
+                                           data-toggle="modal"
+                                           data-target="#deleteModal">
+                                            <i class="fas fa-trash">
+                                            </i>
+                                            Delete
+                                        </a>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Delete confirmation</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure want to delete this item?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <form asp-area="Administration"
+                                                              asp-controller="Invites"
+                                                              asp-action="Delete"
+                                                              asp-route-id="@invite.Id"
+                                                              method="post">
+                                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.Modal -->
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Email</th>
+                                <th>Purpose</th>
+                                <th>Has invitation</th>
+                                <th>Invitation expires on</th>
+                                <th>Request expires on</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</div>
+
+@section Scripts {
+    <environment include="Development">
+        <!-- DataTables -->
+        <script src="~/lib/datatables-bs4/js/jquery.dataTables.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/dataTables.responsive.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <!-- DataTables -->
+        <script src="~/lib/datatables-bs4/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <script>
+        $(function () {
+            $("#table").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "columnDefs": [{
+                    "targets": 5,
+                    "orderable": false,
+                    "searchable": false
+                }]
+            });
+        });
+    </script>
+}

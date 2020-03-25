@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\Data\PlanIt.Data.Common\PlanIt.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\PlanIt.Data.Models\PlanIt.Data.Models.csproj" />
     <ProjectReference Include="..\PlanIt.Services.Mapping\PlanIt.Services.Mapping.csproj" />
+    <ProjectReference Include="..\PlanIt.Services.Messaging\PlanIt.Services.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

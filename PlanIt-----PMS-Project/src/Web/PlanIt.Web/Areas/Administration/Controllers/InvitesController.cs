@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using PlanIt.Data.Common.Repositories;
-using PlanIt.Data.Models;
-using PlanIt.Services.Data;
-using PlanIt.Web.ViewModels.Invites;
-
-namespace PlanIt.Web.Areas.Administration.Controllers
+﻿namespace PlanIt.Web.Areas.Administration.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using PlanIt.Data.Common.Repositories;
+    using PlanIt.Data.Models;
+    using PlanIt.Services.Data;
+    using PlanIt.Web.ViewModels.Invites;
+
     public class InvitesController : AdministrationController
     {
         private readonly IInvitesService invitesService;
@@ -87,27 +88,25 @@ namespace PlanIt.Web.Areas.Administration.Controllers
             }
         }
 
-        // GET: Invites/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Invites/Delete/5
+        // POST: Invites/Delete/id
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int? id)
         {
-            try
+            if (id == null)
             {
-                // TODO: Add delete logic here
+                return this.NotFound();
+            }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            var invite = await this.invitesService.GetByIdAsync<InviteDeleteViewModel>(id);
+
+            if (invite == null)
             {
-                return View();
+                return this.NotFound();
             }
+
+            await this.invitesService.DeleteAsync(id);
+
+            return this.RedirectToAction(nameof(this.Index));
         }
     }
 }

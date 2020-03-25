@@ -72,7 +72,7 @@
 
             if (this.ModelState.IsValid)
             {
-                var invite = this.invitesServices.CreateInviteByUserAsync(this.Input.Email, this.Input.Purpose);
+                var invite = await this.invitesServices.CreateInviteByUserAsync(this.Input.Email, this.Input.Purpose);
 
                 return this.LocalRedirect(returnUrl);
             }

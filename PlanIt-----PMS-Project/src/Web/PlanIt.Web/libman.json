@@ -72,8 +72,48 @@
         "css/adminlte.min.css.map",
         "js/adminlte.js",
         "js/adminlte.min.js",
-        "js/adminlte.js.map", 
+        "js/adminlte.js.map",
         "js/adminlte.min.js.map"
+      ]
+    },
+    {
+      "library": "ionicons@2.0.1",
+      "destination": "wwwroot/lib/ionicons/",
+      "files": [
+        "css/ionicons.css",
+        "css/ionicons.min.css"
+      ]
+    },
+    {
+      "library": "datatables@1.10.20",
+      "destination": "wwwroot/lib/datatables-bs4/",
+      "files": [
+        "css/dataTables.bootstrap4.css",
+        "css/dataTables.bootstrap4.min.css",
+        "js/dataTables.bootstrap4.js",
+        "js/dataTables.bootstrap4.min.js",
+        "js/jquery.dataTables.js",
+        "js/jquery.dataTables.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "datatables.net-responsive-bs4@2.2.3",
+      "destination": "wwwroot/lib/datatables-responsive/",
+      "files": [
+        "css/responsive.bootstrap4.css",
+        "css/responsive.bootstrap4.min.css",
+        "js/responsive.bootstrap4.js",
+        "js/responsive.bootstrap4.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "datatables.net-responsive@2.2.3",
+      "destination": "wwwroot/lib/datatables-responsive/",
+      "files": [
+        "js/dataTables.responsive.js",
+        "js/dataTables.responsive.min.js"
       ]
     },
     {
