@@ -1,30 +1,68 @@
-﻿
+﻿@model PlanIt.Web.ViewModels.Invites.InviteSelectViewModel
 
 @{
-    Layout = null;
+    this.ViewData["Title"] = "Delete";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Delete</title>
-</head>
-<body>
-
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>InviteDeleteViewModel</h4>
-    <hr />
-    <dl class="row">
-        
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+<div class="form-row align-items-center">
+    <div class="col-auto my-1">
+        <label class="mr-sm-2" for="inlineFormCustomSelect">Preference</label>
+        <select asp-for="InviteId" asp-items="Model.Invites" class="custom-select mr-sm-2">
+            <option value="0" selected disabled="disabled">Choose email...</option>
+        </select>
+    </div>
+    <button onclick="checkValue()" data-toggle="modal" data-target="#deleteModal" class="btn btn-danger">Delete</button>
 </div>
-</body>
-</html>
+<!-- ModalDelete -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalTitle">Delete confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="warningText" class="modal-body">
+                Are you sure want to delete invite request with email: ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form id="deleteForm" method="post">
+                    <div class="col-auto">
+                        <button type="submit" onclick="addRouteValue()" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.ModalDelete -->
+
+
+@section Scripts {
+    <script>
+        function checkValue() {
+            let select = document.getElementById("InviteId");
+            let selectedOptionValue = select.options[select.selectedIndex].value;
+            let selectedOptionText = select.options[select.selectedIndex].text;
+            let warningText = document.getElementById("warningText");            
+
+            if (selectedOptionValue == 0) {
+                alert("Take another value!!!");
+                event.stopPropagation();
+            }
+
+            warningText.innerText = `Are you sure want to delete invite request with email: ${selectedOptionText}`;
+        }
+
+        function addRouteValue() {
+            let form = document.getElementById("deleteForm");
+            let inputValue = document.getElementById("InviteId");            
+            let value = inputValue.value;
+                        
+            form.setAttribute("action", "/Administration/Invites/Delete/" + String(value));
+            form.submit();
+        }
+    </script>
+}

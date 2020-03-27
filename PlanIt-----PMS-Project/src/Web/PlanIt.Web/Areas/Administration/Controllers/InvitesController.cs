@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using PlanIt.Data.Common.Repositories;
     using PlanIt.Data.Models;
     using PlanIt.Services.Data;
@@ -55,6 +56,7 @@
         {
             try
             {
+
                 // TODO: Add insert logic here
 
                 return RedirectToAction(nameof(Index));
@@ -86,6 +88,20 @@
             {
                 return View();
             }
+        }
+
+        // GET: Invites/Delete/
+        public async Task<ActionResult> Delete()
+        {
+            var invites = await this.invitesService
+                .GetAllAsync<InviteDeleteViewModel>();
+
+            var model = new InviteSelectViewModel
+            {
+                Invites = new SelectList(invites, "Id", "Email"),
+            };
+
+            return this.View(model);
         }
 
         // POST: Invites/Delete/id

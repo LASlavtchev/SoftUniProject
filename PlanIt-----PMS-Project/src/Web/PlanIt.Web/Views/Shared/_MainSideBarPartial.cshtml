@@ -44,29 +44,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview menu-open">
-                    <a href="" class="nav-link active">
-                        <i class="nav-icon fas fa-user-lock"></i>
-                        <p>
-                            Invites
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a asp-area="Administration" asp-controller="Invites" asp-action="Index" class="nav-link active">
-                                <i class="fas fa-lock-open nav-icon"></i>
-                                <p>All Invites</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-lock-open nav-icon"></i>
-                                <p>Inactive Page</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                <partial name="_InvitesMainSideBarPartial" />
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
@@ -85,8 +63,8 @@
 
 @using (Html.PartialSectionScripts())
 {
-    <script type="text/javascript" asp-append-version="true">
-        var navLinks = document.getElementsByClassName("nav-link")
+    <script type="text/javascript">
+        var navLinks = document.getElementsByClassName("menu-open")
 
         Array.prototype.forEach.call(navLinks, function (nav) {
             nav.addEventListener('click', function (event) {

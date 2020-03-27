@@ -31,6 +31,33 @@
                         </i>
                         Invite user
                     </button>
+                    <!-- ModalCreate -->
+                    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Delete confirmation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure want to delete invite request with email: ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <form asp-area="Administration"
+                                          asp-controller="Invites"
+                                          asp-action="Delete"
+                                          asp-route-id=""
+                                          method="post">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.ModalCreate -->
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -75,18 +102,18 @@
                                             </i>
                                             Delete
                                         </a>
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
+                                        <!-- ModalDelete -->
+                                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-sm" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title">Delete confirmation</h5>
+                                                        <h5 class="modal-title" id="deleteModalTitle">Delete confirmation</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        Are you sure want to delete this item?
+                                                        Are you sure want to delete invite request with email: @invite.Email?
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -101,7 +128,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- /.Modal -->
+                                        <!-- /.ModalDelete -->
                                     </td>
                                 </tr>
                             }
