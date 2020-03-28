@@ -4,15 +4,32 @@
     this.ViewData["Title"] = "Delete";
 }
 
-<div class="form-row align-items-center">
-    <div class="col-auto my-1">
-        <label class="mr-sm-2" for="inlineFormCustomSelect">Preference</label>
-        <select asp-for="InviteId" asp-items="Model.Invites" class="custom-select mr-sm-2">
-            <option value="0" selected disabled="disabled">Choose email...</option>
-        </select>
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Delete invite by email</h3>
+    <div class="container p-4">
+        <div class="row justify-content-md-center p-4">
+            <div class="col-md-auto">
+                <i class="fas fa-mail-bulk fa-2x"></i>
+            </div>
+            <div class="col col-md-6">
+                <select asp-for="InviteId" asp-items="Model.Invites" class="custom-select mr-sm-2">
+                    <option value="0" selected disabled="disabled">Choose email...</option>
+                </select>
+            </div>
+            <div class="col-md-auto">
+                <button onclick="checkValue()" data-toggle="modal" data-target="#deleteModal" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
     </div>
-    <button onclick="checkValue()" data-toggle="modal" data-target="#deleteModal" class="btn btn-danger">Delete</button>
 </div>
+
+
+
+
+
+
+
+
 <!-- ModalDelete -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
@@ -46,7 +63,7 @@
             let select = document.getElementById("InviteId");
             let selectedOptionValue = select.options[select.selectedIndex].value;
             let selectedOptionText = select.options[select.selectedIndex].text;
-            let warningText = document.getElementById("warningText");            
+            let warningText = document.getElementById("warningText");
 
             if (selectedOptionValue == 0) {
                 alert("Take another value!!!");
@@ -58,9 +75,9 @@
 
         function addRouteValue() {
             let form = document.getElementById("deleteForm");
-            let inputValue = document.getElementById("InviteId");            
+            let inputValue = document.getElementById("InviteId");
             let value = inputValue.value;
-                        
+
             form.setAttribute("action", "/Administration/Invites/Delete/" + String(value));
             form.submit();
         }
