@@ -30,5 +30,8 @@
         public const int MaxLengthString = 100;
         public const int MinLengthString = 3; // default 6
         public const string ErrorMessageStringLength = "The {0} must be at least {2} and at max {1} characters long.";
+
+        // DateTime
+        public const string ErrorMessageDateTime = "The date and time have to be after now!";
     }
 }

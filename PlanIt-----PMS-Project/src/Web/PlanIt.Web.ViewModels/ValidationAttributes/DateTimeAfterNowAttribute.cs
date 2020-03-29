@@ -7,6 +7,11 @@
     {
         public override bool IsValid(object value)
         {
+            if (value == null)
+            {
+                return true;
+            }
+
             var dateTimeNow = DateTime.UtcNow;
             var dateTime = (DateTime)value;
 

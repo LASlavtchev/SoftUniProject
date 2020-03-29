@@ -7,5 +7,7 @@
         public SelectList Invites { get; set; }
 
         public string InviteId { get; set; }
+
+        public InviteEditInputModel Invite { get; set; }
     }
 }

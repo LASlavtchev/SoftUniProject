@@ -9,9 +9,11 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
     using PlanIt.Data.Common.Repositories;
     using PlanIt.Data.Models;
     using PlanIt.Services.Data;
+    using PlanIt.Services.Mapping;
     using PlanIt.Web.ViewModels.Invites;
 
     public class InvitesController : AdministrationController
@@ -67,27 +69,62 @@
             }
         }
 
-        // GET: Invites/Edit/5
-        public ActionResult Edit(int id)
+        // GET: Invites/Edit/id?
+        public async Task<ActionResult> Edit(int? id)
         {
-            return View();
+            var invites = await this.invitesService
+                .GetAllAsync<InviteEditInputModel>();
+
+            this.ViewData["Invites"] = invites;
+
+            if (id == null)
+            {
+                return this.View();
+            }
+
+            var invite = await this.invitesService
+                .GetByIdAsync<InviteEditInputModel>(id);
+
+            if (invite == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(invite);
         }
 
         // POST: Invites/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, InviteEditInputModel inputModel)
         {
-            try
+            if (id != inputModel.Id)
             {
-                // TODO: Add update logic here
+                return this.NotFound();
+            }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            if (this.ModelState.IsValid)
             {
-                return View();
+                try
+                {
+                    await this.invitesService.EditAsync<InviteEditInputModel>(inputModel);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    var existInvite = await this.invitesService.GetByIdAsync<InviteEditInputModel>(inputModel.Id);
+                    if (existInvite == null)
+                    {
+                        return this.NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return this.RedirectToAction(nameof(this.Index));
             }
+
+            return this.View(inputModel);
         }
 
         // GET: Invites/Delete/

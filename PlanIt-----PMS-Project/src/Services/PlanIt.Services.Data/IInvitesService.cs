@@ -17,6 +17,8 @@
 
         Task<Invite> CreateInviteByUserAsync(string email, string purpose);
 
+        Task<Invite> EditAsync<TInputModel>(TInputModel model);
+
         Task DeleteAsync(int? id);
     }
 }

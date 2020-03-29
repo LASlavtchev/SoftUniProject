@@ -79,6 +79,28 @@
             return invite;
         }
 
+        public async Task<Invite> EditAsync<TInputModel>(TInputModel model)
+        {
+            var inputInvite = AutoMapperConfig.MapperInstance.Map<Invite>(model);
+
+            var invite = await this.invitesRepository
+                .All()
+                .Where(i => i.Id == inputInvite.Id)
+                .FirstOrDefaultAsync();
+
+            var udatedExiperdOn = inputInvite.ExpiredOn;
+            var udatedRequestExiperd = inputInvite.RequestExpiredOn;
+
+            invite.Email = inputInvite.Email;
+            invite.ExpiredOn = inputInvite.ExpiredOn;
+            invite.RequestExpiredOn = inputInvite.RequestExpiredOn;
+
+            this.invitesRepository.Update(invite);
+            await this.invitesRepository.SaveChangesAsync();
+
+            return invite;
+        }
+
         public async Task DeleteAsync(int? id)
         {
             var invite = await this.invitesRepository
@@ -96,6 +118,16 @@
             //   this.Input.Email,
             //   "Confirm your email",
             //   $"{messageToSend}");
+        }
+
+        private async Task SendEmailAsync(string messageToSend, string email)
+        {
+            await this.emailSender.SendEmailAsync(
+                "admin@admin.bg",
+                "admin",
+                email,
+                "Confirm your email",
+                $"{messageToSend}");
         }
     }
 }
