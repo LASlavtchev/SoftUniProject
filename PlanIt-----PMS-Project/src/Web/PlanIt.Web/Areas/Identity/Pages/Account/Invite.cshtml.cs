@@ -1,9 +1,6 @@
 ﻿namespace PlanIt.Web.Areas.Identity.Pages.Account
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
@@ -13,7 +10,6 @@
     using Microsoft.Extensions.Logging;
     using PlanIt.Common;
     using PlanIt.Data.Models;
-    using PlanIt.Data.Repositories;
     using PlanIt.Services.Data;
     using PlanIt.Services.Mapping;
     using PlanIt.Web.ViewModels.Invites;

@@ -16,7 +16,9 @@
     using Microsoft.Extensions.Logging;
     using PlanIt.Common;
     using PlanIt.Data.Models;
+    using PlanIt.Services.Data;
     using PlanIt.Services.Messaging;
+    using PlanIt.Web.ViewModels.Invites;
 
     [AllowAnonymous]
 #pragma warning disable SA1649 // File name should match first type name
@@ -26,18 +28,18 @@
         private readonly SignInManager<PlanItUser> signInManager;
         private readonly UserManager<PlanItUser> userManager;
         private readonly ILogger<RegisterModel> logger;
-        private readonly IEmailSender emailSender;
+        private readonly IInvitesService invitesService;
 
         public RegisterModel(
             UserManager<PlanItUser> userManager,
             SignInManager<PlanItUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IInvitesService invitesService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
-            this.emailSender = emailSender;
+            this.invitesService = invitesService;
         }
 
         [BindProperty]
@@ -47,14 +49,32 @@
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        public void OnGet(string returnUrl = null)
+        public async Task<IActionResult> OnGet(int? inviteId, string code)
         {
-            this.ReturnUrl = returnUrl;
+            if (inviteId == null || code == null)
+            {
+                return this.NotFound();
+            }
+
+            var invite = await this.invitesService.GetByIdAsync<InviteRegisterViewModel>(inviteId);
+            if (invite == null)
+            {
+                return this.NotFound($"Unable to find invite with email '{invite.Email}'.");
+            }
+
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+
+            if (!invite.IsInvited || invite.SecurityValue != code)
+            {
+                return this.NotFound($"Unable to find invite with email '{invite.Email}'.");
+            }
+
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= this.Url.Content("~/");
+            returnUrl ??= this.Url.Content("~/Identity/Account/Login");
 
             if (this.Input.JobTitle.ToLower() == "founder")
             {
@@ -73,6 +93,7 @@
                     CompanyName = this.Input.Company,
                     JobTitle = this.Input.JobTitle.ToLower(),
                     PhoneNumber = this.Input.PhoneNumber,
+                    EmailConfirmed = true,
                 };
 
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
@@ -89,25 +110,6 @@
                     await this.userManager.AddClaimAsync(user, new Claim("CompanyName", user.CompanyName));
 
                     this.logger.LogInformation("User created a new account with password.");
-
-                    var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-                    var callbackUrl = this.Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code },
-                        protocol: this.Request.Scheme);
-
-                    var messageToSend = $"Please confirm your account by " +
-                        $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
-
-                    //await this.emailSender.SendEmailAsync(
-                    //    "admin@admin.bg",
-                    //    "admin",
-                    //    this.Input.Email,
-                    //    "Confirm your email",
-                    //    $"{messageToSend}");
 
                     if (this.userManager.Options.SignIn.RequireConfirmedAccount)
                     {

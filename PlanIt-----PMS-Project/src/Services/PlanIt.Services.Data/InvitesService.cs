@@ -5,8 +5,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using AutoMapper;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using PlanIt.Data.Common.Repositories;
     using PlanIt.Data.Models;
@@ -16,14 +14,10 @@
     public class InvitesService : IInvitesService
     {
         private readonly IRepository<Invite> invitesRepository;
-        private readonly IEmailSender emailSender;
 
-        public InvitesService(
-            IRepository<Invite> invitesRepository,
-            IEmailSender emailSender)
+        public InvitesService(IRepository<Invite> invitesRepository)
         {
             this.invitesRepository = invitesRepository;
-            this.emailSender = emailSender;
         }
 
         public string GenerateUniqueSecurityValue()
@@ -80,8 +74,6 @@
             await this.invitesRepository.AddAsync(invite);
             await this.invitesRepository.SaveChangesAsync();
 
-            // TODO sendEmail
-
             return invite;
         }
 
@@ -127,9 +119,6 @@
                 .Where(i => i.Id == inputInvite.Id)
                 .FirstOrDefaultAsync();
 
-            var udatedExiperdOn = inputInvite.ExpiredOn;
-            var udatedRequestExiperd = inputInvite.RequestExpiredOn;
-
             invite.Email = inputInvite.Email;
             invite.ExpiredOn = inputInvite.ExpiredOn;
             invite.RequestExpiredOn = inputInvite.RequestExpiredOn;
@@ -148,25 +137,6 @@
 
             this.invitesRepository.Delete(invite);
             await this.invitesRepository.SaveChangesAsync();
-
-            // var messageToSend = "Your request invitation has been rejected";
-
-            // await this.emailSender.SendEmailAsync(
-            //   "admin@admin.bg",
-            //   "admin",
-            //   this.Input.Email,
-            //   "Confirm your email",
-            //   $"{messageToSend}");
-        }
-
-        private async Task SendEmailAsync(string messageToSend, string email)
-        {
-            await this.emailSender.SendEmailAsync(
-                "admin@admin.bg",
-                "admin",
-                email,
-                "Confirm your email",
-                $"{messageToSend}");
         }
     }
 }

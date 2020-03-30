@@ -1,26 +1,35 @@
 ﻿namespace PlanIt.Web.Areas.Administration.Controllers
 {
+    using System.Text;
+    using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.EntityFrameworkCore;
+    using PlanIt.Common;
     using PlanIt.Data.Models;
     using PlanIt.Services.Data;
+    using PlanIt.Services.Messaging;
+    using PlanIt.Web.Extensions;
     using PlanIt.Web.ViewModels.Invites;
 
     public class InvitesController : AdministrationController
     {
         private readonly IInvitesService invitesService;
         private readonly UserManager<PlanItUser> userManager;
+        private readonly IEmailSender emailSender;
 
         public InvitesController(
             IInvitesService invitesService,
-            UserManager<PlanItUser> userManager)
+            UserManager<PlanItUser> userManager,
+            IEmailSender emailSender)
         {
             this.invitesService = invitesService;
             this.userManager = userManager;
+            this.emailSender = emailSender;
         }
 
         // GET: Invites
@@ -66,7 +75,19 @@
             {
                 try
                 {
-                    await this.invitesService.CreateAsync<InviteCreateInputModel>(inputModel);
+                    var invite = await this.invitesService.CreateAsync<InviteCreateInputModel>(inputModel);
+
+                    var code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(invite.SecurityValue));
+                    var callbackUrl = this.Url.Page(
+                        "/Account/Register",
+                        pageHandler: null,
+                        values: new { area = "Identity", inviteId = invite.Id, code },
+                        protocol: this.Request.Scheme);
+
+                    var messageToSend = $"You are invited to our platform. Please register till {invite.ExpiredOn} by: " +
+                            $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+
+                    await this.SendEmailAsync(messageToSend, invite.Email);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -83,15 +104,27 @@
         [HttpPost]
         public async Task<ActionResult> Approve(int id)
         {
-            var invite = await this.invitesService
+            var inputInvite = await this.invitesService
                 .GetByIdAsync<InviteApproveInputModel>(id);
 
-            if (invite == null)
+            if (inputInvite == null)
             {
                 return this.NotFound();
             }
 
-            await this.invitesService.ApproveAsync(id);
+            var invite = await this.invitesService.ApproveAsync(id);
+
+            var code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(invite.SecurityValue));
+            var callbackUrl = this.Url.Page(
+                "/Account/Register",
+                pageHandler: null,
+                values: new { area = "Identity", inviteId = invite.Id, code },
+                protocol: this.Request.Scheme);
+
+            var messageToSend = $"Your request invitation was approved. Please register till {invite.ExpiredOn} by: " +
+                            $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+
+            await this.SendEmailAsync(messageToSend, invite.Email);
 
             return this.RedirectToAction(nameof(this.Index));
         }
@@ -147,7 +180,12 @@
             {
                 try
                 {
-                    await this.invitesService.EditAsync<InviteEditInputModel>(inputModel);
+                    var invite = await this.invitesService.EditAsync<InviteEditInputModel>(inputModel);
+
+                    var messageToSend = $"Your request invitation was extended to {invite.RequestExpiredOn}. " +
+                        $"If you had been approved please respond to our previous email";
+
+                    await this.SendEmailAsync(messageToSend, invite.Email);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -200,7 +238,21 @@
 
             await this.invitesService.DeleteAsync(id);
 
+            var messageToSend = $"Your request invitation was denied.";
+
+            await this.SendEmailAsync(messageToSend, invite.Email);
+
             return this.RedirectToAction(nameof(this.Index));
+        }
+
+        private async Task SendEmailAsync(string messageToSend, string email)
+        {
+            await this.emailSender.SendEmailAsync(
+                $"{this.User.Identity.Name}",
+                $"{this.User.GetFullName()}",
+                email,
+                $"Invitation to {GlobalConstants.SystemName}",
+                $"{messageToSend}");
         }
     }
 }
