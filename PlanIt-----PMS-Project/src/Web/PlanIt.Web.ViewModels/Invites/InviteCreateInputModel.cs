@@ -8,14 +8,21 @@
     using PlanIt.Services.Mapping;
     using PlanIt.Web.ViewModels.ValidationAttributes;
 
-    public class InviteCreateViewModel : IMapTo<Invite>
+    public class InviteCreateInputModel : IMapTo<Invite>, IMapFrom<Invite>
     {
         [Required]
         [EmailAddress(ErrorMessage = GlobalConstants.EmailAddressErrorMessage)]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [DateTimeAfterNow]
+        [DateTimeAfterNow(ErrorMessage = GlobalConstants.ErrorMessageDateTime)]
         public DateTime ExpiredOn { get; set; }
+
+        [Required]
+        [StringLength(
+            GlobalConstants.MaxLengthString,
+            ErrorMessage = GlobalConstants.ErrorMessageStringLength,
+            MinimumLength = GlobalConstants.MinLengthString)]
+        public string Purpose { get; set; }
     }
 }

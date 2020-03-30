@@ -2,7 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using AutoMapper;
+
     using PlanIt.Common;
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;

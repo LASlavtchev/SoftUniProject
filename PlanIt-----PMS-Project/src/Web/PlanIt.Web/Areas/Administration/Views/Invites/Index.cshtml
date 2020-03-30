@@ -26,11 +26,15 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <button class="btn btn-primary btn-sm">
+                    <a class="btn btn-primary btn-sm"
+                       href="#createInvite"
+                       data-toggle="modal"
+                       id="create"
+                       onclick="Create()">
                         <i class="fas fa-user-lock">
                         </i>
                         Invite user
-                    </button>
+                    </a>
                 </div>
                 <div class="card-body">
                     <table id="table" class="table table-bordered table-striped text-center">
@@ -56,14 +60,21 @@
                                     <td>
                                         @if (!invite.IsInvited && invite.RequestExpiredOn >= DateTime.UtcNow)
                                         {
-                                            <a class="btn btn-primary btn-sm" href="#">
+                                            <a class="btn btn-primary btn-sm"
+                                               href="#approveInvite"
+                                               data-toggle="modal"
+                                               id="approve"
+                                               onclick="Approve()">
                                                 <i class="fas fa-lock-open">
                                                 </i>
                                                 Approve
                                             </a>
                                         }
-                                        <a class="btn btn-primary btn-sm">
-
+                                        <a class="btn btn-primary btn-sm"
+                                           href="#editInvite"
+                                           data-toggle="modal"
+                                           id="edit"
+                                           onclick="Edit()">
                                             <i class="fas fa-pencil-alt"></i>
                                             Edit
                                         </a>
@@ -97,6 +108,131 @@
     </div>
 </div>
 
+<!-- ModalCreate -->
+<div class="modal fade" id="createInvite" tabindex="-1" role="dialog" aria-labelledby="createModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="craeteModalTitle">Create invite</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-area="Administration" asp-controller="Invites" asp-action="Create" method="post">
+                <div class="modal-body">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group row">
+                        <div class="col-4 text-right">
+                            <i class="fas fa-envelope fa-2x" style="line-height:1.25;"></i>
+                        </div>
+                        <div class="col-4">
+                            <input type="email" name="email" class="form-control">
+                        </div>
+                        <label class="col-4 col-form-label text-left">Email</label>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-4 text-right">
+                            <i class="fas fa-calendar-check fa-2x" style="line-height:1.25;"></i>
+                        </div>
+                        <div class="col-4">
+                            <input type="datetime-local" class="form-control" name="expiredOn">
+                        </div>
+                        <label class="col-4 col-form-label text-left">Exipered On</label>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-4 text-right">
+                            <i class="fas fa-pencil-alt fa-2x" style="line-height:1.25;"></i>
+                        </div>
+                        <div class="col-4">
+                            <textarea class="form-control" name="purpose"></textarea>
+                        </div>
+                        <label class="col-4 col-form-label text-left">Purpose</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /.ModalCreate -->
+<!-- ModalApprove -->
+<div class="modal fade" id="approveInvite" tabindex="-1" role="dialog" aria-labelledby="approveModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveModalTitle">Approve confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="textBodyApprove" class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form id="approveForm" method="post">
+                    <button type="submit" class="btn btn-danger">Approve</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.ModalApprove -->
+<!-- ModalEdit -->
+<div class="modal fade" id="editInvite" tabindex="-1" role="dialog" aria-labelledby="EditModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalTitle">Edit request invite.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editForm" method="post">
+                <div id="textBody" class="modal-body">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group row">
+                        <div class="col-4 text-right">
+                            <i class="fas fa-envelope fa-2x" style="line-height:1.25;"></i>
+                        </div>
+                        <div class="col-4">
+                            <input id="editInviteEmail" class="form-control" name="email" />
+                        </div>
+                        <label id="editInviteEmailLabel" class="col-4 col-form-label text-left"></label>
+                        <span class="text-danger"></span>
+                    </div>
+                    <div id="invited" class="form-group row" style="visibility:hidden;">
+                        <div class="col-4 text-right">
+                            <i class="fas fa-calendar-check fa-2x" style="line-height:1.25;"></i>
+                        </div>
+                        <div class="col-4">
+                            <input id="editInviteExpiredOn" class="form-control" name="expiredOn" />
+                        </div>
+                        <label id="editInviteExpiredOnLabel" class="col-4 col-form-label text-left"></label>
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-4 text-right">
+                            <i class="fas fa-calendar-check fa-2x" style="line-height:1.25;"></i>
+                        </div>
+                        <div class="col-4">
+                            <input id="editInviteRequestExpiredOn" class="form-control" name="requestExpiredOn" />
+                        </div>
+                        <label id="editInviteRequestExpiredOnLabel" class="col-4 col-form-label text-left"></label>
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /.ModalEdit -->
 <!-- ModalDelete -->
 <div class="modal fade" id="deleteInvite" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
@@ -165,6 +301,59 @@
             let path = `/Administration/Invites/Delete/${id}`;
             let deleteForm = modal.querySelector("#deleteForm");
             deleteForm.setAttribute("action", path);
+        }
+    </script>
+    <script>
+        function Edit() {
+            let modal = document.querySelector("#editInvite");
+            let element = event.target;
+            let td = element.parentNode;
+
+            let id = td.querySelector("#invite_Id").value;
+
+            let path = `/Administration/Invites/Find/${id}`;
+
+            fetch(path)
+                .then(response => response.json())
+                .then(data => {
+                    modal.querySelector("#editInviteEmail").value = data.email;
+                    modal.querySelector("#editInviteEmailLabel").innerText = data.email;
+
+                    if (data.expiredOn != null) {
+                        modal.querySelector("#invited").style.visibility = "visible";
+                        modal.querySelector("#editInviteExpiredOn").value = data.expiredOn.toLocaleString();
+                        modal.querySelector("#editInviteExpiredOnLabel").innerText = "Expired On";
+                    }
+                    else {
+                        modal.querySelector("#invited").style.visibility = "hidden";
+                    }
+                    modal.querySelector("#editInviteRequestExpiredOn").value = data.requestExpiredOn.toLocaleString();
+                    modal.querySelector("#editInviteRequestExpiredOnLabel").innerText = "Request Expired On";
+                })
+                .catch(error => console.error(error));
+
+            let pathPost = `/Administration/Invites/Edit/${id}`;
+            let form = modal.querySelector("#editForm");
+            form.setAttribute("action", pathPost);
+
+        }
+    </script>
+    <script>
+        function Approve() {
+            let modal = document.querySelector("#approveInvite");
+            let element = event.target;
+            let td = element.parentNode;
+            let tr = td.parentNode;
+
+            let id = td.querySelector("#invite_Id").value;
+            let email = tr.querySelector("#email").innerText;
+
+            let bodyText = modal.querySelector("#textBodyApprove");
+            bodyText.innerText = `Do you really want to approve invite request with email: ${email}?`;
+
+            let path = `/Administration/Invites/Approve/${id}`;
+            let approveForm = modal.querySelector("#approveForm");
+            approveForm.setAttribute("action", path);
         }
     </script>
 }

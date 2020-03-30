@@ -13,9 +13,13 @@
 
         Task<TViewModel> GetByIdAsync<TViewModel>(int? id);
 
+        Task<Invite> CreateAsync<TInputModel>(TInputModel model);
+
         string GenerateUniqueSecurityValue();
 
         Task<Invite> CreateInviteByUserAsync(string email, string purpose);
+
+        Task<Invite> ApproveAsync(int id);
 
         Task<Invite> EditAsync<TInputModel>(TInputModel model);
 
