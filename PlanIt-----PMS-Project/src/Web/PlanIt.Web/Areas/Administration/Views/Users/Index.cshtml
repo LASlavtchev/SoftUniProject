@@ -1,0 +1,142 @@
+﻿@using PlanIt.Data.Models
+@model IEnumerable<PlanItUser>
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+@section Styles {
+    <environment names="Development">
+        <!-- Ionicons -->
+        <link href="~/lib/ionicons/css/ionicons.css" rel="stylesheet" asp-append-version="true" />
+        <!-- DataTables -->
+        <link href="~/lib/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/datatables-responsive/css/responsive.bootstrap4.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <!-- Font Awesome Icons -->
+        <link href="~/lib/ionicons/css/ionicons.min.css" rel="stylesheet" asp-append-version="true" />
+        <!-- DataTables -->
+        <link href="~/lib/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+
+
+<div class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <a class="btn btn-primary btn-sm"
+                       href="#createInvite"
+                       data-toggle="modal"
+                       id="create"
+                       onclick="Create()">
+                        <i class="fas fa-user-lock">
+                        </i>
+                        Invite user
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table id="table" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Purpose</th>
+                                <th>Has invitation</th>
+                                <th>Invitation expires on</th>
+                                <th>Request expires on</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td id="email">@user.Email</td>
+                                    <td>@user.FirstName</td>
+                                    <td>@user.MiddleName</td>
+                                    <td>@user.LastName</td>
+                                    <td>@user.Roles</td>
+                                    <td>
+                                        @if (true)
+                                        {
+                                            <a class="btn btn-primary btn-sm"
+                                               href="#approveInvite"
+                                               data-toggle="modal"
+                                               id="approve"
+                                               onclick="Approve()">
+                                                <i class="fas fa-lock-open">
+                                                </i>
+                                                Approve
+                                            </a>
+                                        }
+                                        <a class="btn btn-primary btn-sm"
+                                           href="#editInvite"
+                                           data-toggle="modal"
+                                           id="edit"
+                                           onclick="Edit()">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            Edit
+                                        </a>
+                                        <a class="btn btn-danger btn-sm"
+                                           href="#deleteInvite"
+                                           data-toggle="modal"
+                                           id="delete"
+                                           onclick="Delete()">
+                                            <i class="fas fa-trash"></i>
+                                            Delete
+                                        </a>
+                                        <input type="hidden" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Email</th>
+                                <th>Purpose</th>
+                                <th>Has invitation</th>
+                                <th>Invitation expires on</th>
+                                <th>Request expires on</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <environment include="Development">
+        <!-- DataTables -->
+        <script src="~/lib/datatables-bs4/js/jquery.dataTables.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/dataTables.responsive.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <!-- DataTables -->
+        <script src="~/lib/datatables-bs4/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <script>
+        $(function () {
+            $("#table").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "columnDefs": [{
+                    "targets": 5,
+                    "orderable": false,
+                    "searchable": false
+                }]
+            });
+        });
+    </script>   
+}

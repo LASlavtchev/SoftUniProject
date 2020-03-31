@@ -74,7 +74,7 @@
                     // Assign to user roles
                     await this.userManager.AddToRoleAsync(user, GlobalConstants.CompanyOwnerRoleName);
 
-                    // Assign to user claims - needed for the _loginPartial
+                    // Assign to user claims
                     string fullName = $"{user.FirstName} {user.LastName}";
                     await this.userManager.AddClaimAsync(user, new Claim("FullName", fullName));
                     await this.userManager.AddClaimAsync(user, new Claim("JobTitle", user.JobTitle));

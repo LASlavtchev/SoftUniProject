@@ -1,0 +1,29 @@
+﻿<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-user"></i>
+        <p>
+            Users
+            <i class="right fas fa-angle-left"></i>
+        </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a asp-area="Administration" asp-controller="Users" asp-action="Index" class="nav-link">
+                <i class="fas fa-users nav-icon"></i>
+                <p>All users</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a asp-area="Administration" asp-controller="Invites" asp-action="Create" class="nav-link">
+                <i class="fas fa-lock-open nav-icon"></i>
+                <p>Details</p>
+            </a>
+        </li>        
+        <li class="nav-item">
+            <a asp-area="Administration" asp-controller="Invites" asp-action="Delete" class="nav-link">
+                <i class="fas fa-lock-open nav-icon"></i>
+                <p>Delete</p>
+            </a>
+        </li>
+    </ul>    
+</li>

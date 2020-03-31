@@ -1,5 +1,6 @@
 ﻿namespace PlanIt.Web.Areas.Identity.Pages.Account
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Security.Claims;
@@ -49,6 +50,12 @@
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
+        [BindProperty]
+        [Required]
+        [EmailAddress(ErrorMessage = GlobalConstants.EmailAddressErrorMessage)]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
         public async Task<IActionResult> OnGet(int? inviteId, string code)
         {
             if (inviteId == null || code == null)
@@ -69,12 +76,26 @@
                 return this.NotFound($"Unable to find invite with email '{invite.Email}'.");
             }
 
+            if (invite.ExpiredOn < DateTime.UtcNow)
+            {
+                return this.RedirectToPage("/Account/Login");
+            }
+
+            this.Email = invite.Email;
+
             return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= this.Url.Content("~/Identity/Account/Login");
+
+            var invite = await this.invitesService.GetByEmailAsync<InviteRegisterViewModel>(this.Email);
+
+            if (invite == null)
+            {
+                this.ModelState.AddModelError(string.Empty, "Invalid invite email");
+            }
 
             if (this.Input.JobTitle.ToLower() == "founder")
             {
@@ -85,8 +106,8 @@
             {
                 var user = new PlanItUser
                 {
-                    UserName = this.Input.Email,
-                    Email = this.Input.Email,
+                    UserName = this.Email,
+                    Email = this.Email,
                     FirstName = this.Input.FirstName,
                     MiddleName = this.Input.MiddleName,
                     LastName = this.Input.LastName,
@@ -111,15 +132,9 @@
 
                     this.logger.LogInformation("User created a new account with password.");
 
-                    if (this.userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email });
-                    }
-                    else
-                    {
-                        await this.signInManager.SignInAsync(user, isPersistent: false);
-                        return this.LocalRedirect(returnUrl);
-                    }
+                    await this.invitesService.DeleteAsync(invite.Id);
+
+                    return this.LocalRedirect(returnUrl);
                 }
 
                 foreach (var error in result.Errors)
@@ -134,11 +149,6 @@
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress(ErrorMessage = GlobalConstants.EmailAddressErrorMessage)]
-            [Display(Name = "Email")]
-            public string Email { get; set; }
-
             [Required]
             [StringLength(
                 GlobalConstants.MaxLengthPassword,
@@ -190,6 +200,7 @@
                 GlobalConstants.MaxLengthString,
                 ErrorMessage = GlobalConstants.ErrorMessageStringLength,
                 MinimumLength = GlobalConstants.MinLengthString)]
+            [Display(Name = "Job Title")]
             public string JobTitle { get; set; }
 
             [Required]
