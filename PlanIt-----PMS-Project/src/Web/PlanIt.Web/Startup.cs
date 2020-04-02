@@ -76,6 +76,7 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IInvitesService, InvitesService>();
+            services.AddTransient<IUsersService, UsersService>();
 
             var sendGridApiKey = this.configuration["SendGrid:ApiKey"];
             services

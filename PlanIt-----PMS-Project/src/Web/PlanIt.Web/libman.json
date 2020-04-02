@@ -81,7 +81,9 @@
       "destination": "wwwroot/lib/ionicons/",
       "files": [
         "css/ionicons.css",
-        "css/ionicons.min.css"
+        "css/ionicons.min.css",
+        "fonts/ionicons.ttf",
+        "fonts/ionicons.woff"
       ]
     },
     {
@@ -127,4 +129,3 @@
     }
   ]
 }
-    

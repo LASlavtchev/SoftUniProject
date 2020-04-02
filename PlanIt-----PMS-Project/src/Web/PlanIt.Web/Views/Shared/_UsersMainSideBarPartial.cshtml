@@ -1,29 +1,40 @@
 ﻿<li class="nav-item has-treeview">
     <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-user"></i>
+        <i class="nav-icon fas fa-users"></i>
         <p>
             Users
             <i class="right fas fa-angle-left"></i>
         </p>
     </a>
     <ul class="nav nav-treeview">
-        <li class="nav-item">
-            <a asp-area="Administration" asp-controller="Users" asp-action="Index" class="nav-link">
-                <i class="fas fa-users nav-icon"></i>
-                <p>All users</p>
+        <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-user-check"></i>
+                <p>
+                    Active Users
+                    <i class="right fas fa-angle-left"></i>
+                </p>
             </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a asp-area="Administration" asp-controller="Users" asp-action="All" class="nav-link">
+                        <i class="fas fa-user nav-icon"></i>
+                        <p>View all users</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-area="Administration" asp-controller="Invites" asp-action="Create" class="nav-link">
+                        <i class="fas fa-user-edit nav-icon"></i>
+                        <p>Add to role</p>
+                    </a>
+                </li>
+            </ul>
         </li>
         <li class="nav-item">
-            <a asp-area="Administration" asp-controller="Invites" asp-action="Create" class="nav-link">
-                <i class="fas fa-lock-open nav-icon"></i>
-                <p>Details</p>
+            <a asp-area="Administration" asp-controller="Users" asp-action="Deleted" class="nav-link">
+                <i class="fas fa-user-minus nav-icon"></i>
+                <p>Deleted Users</p>
             </a>
         </li>        
-        <li class="nav-item">
-            <a asp-area="Administration" asp-controller="Invites" asp-action="Delete" class="nav-link">
-                <i class="fas fa-lock-open nav-icon"></i>
-                <p>Delete</p>
-            </a>
-        </li>
     </ul>    
 </li>

@@ -1,5 +1,5 @@
-﻿@using PlanIt.Data.Models
-@model IEnumerable<PlanItUser>
+﻿@using PlanIt.Web.ViewModels.Users
+@model UsersListAdminViewModel
 
 @{
     ViewData["Title"] = "Users";
@@ -28,78 +28,57 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <a class="btn btn-primary btn-sm"
-                       href="#createInvite"
-                       data-toggle="modal"
-                       id="create"
-                       onclick="Create()">
-                        <i class="fas fa-user-lock">
+                    <a asp-area="Administration"
+                       asp-controller="Users"
+                       asp-action="All"
+                       class="btn btn-primary btn-sm">
+                        <i class="fas fa-user">
                         </i>
-                        Invite user
+                        All active users
                     </a>
                 </div>
                 <div class="card-body">
                     <table id="table" class="table table-bordered table-striped text-center">
                         <thead>
                             <tr>
+                                <th>Full name</th>
+                                <th>Company name</th>
+                                <th>Job Title</th>
                                 <th>Email</th>
-                                <th>Purpose</th>
-                                <th>Has invitation</th>
-                                <th>Invitation expires on</th>
-                                <th>Request expires on</th>
+                                <th>Role</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var user in Model)
+                            @foreach (var user in Model.Users)
                             {
                                 <tr>
+                                    <td>@user.FullName</td>
+                                    <td>@user.CompanyName</td>
+                                    <td>@user.JobTitle</td>
                                     <td id="email">@user.Email</td>
-                                    <td>@user.FirstName</td>
-                                    <td>@user.MiddleName</td>
-                                    <td>@user.LastName</td>
-                                    <td>@user.Roles</td>
+                                    <td>@user.UserRoleRoleName</td>
                                     <td>
-                                        @if (true)
-                                        {
-                                            <a class="btn btn-primary btn-sm"
-                                               href="#approveInvite"
-                                               data-toggle="modal"
-                                               id="approve"
-                                               onclick="Approve()">
-                                                <i class="fas fa-lock-open">
-                                                </i>
-                                                Approve
-                                            </a>
-                                        }
-                                        <a class="btn btn-primary btn-sm"
-                                           href="#editInvite"
-                                           data-toggle="modal"
-                                           id="edit"
-                                           onclick="Edit()">
-                                            <i class="fas fa-pencil-alt"></i>
-                                            Edit
-                                        </a>
                                         <a class="btn btn-danger btn-sm"
-                                           href="#deleteInvite"
+                                           href="#restoreUser"
                                            data-toggle="modal"
                                            id="delete"
-                                           onclick="Delete()">
+                                           onclick="Restore()">
                                             <i class="fas fa-trash"></i>
-                                            Delete
+                                            Restore
                                         </a>
-                                        <input type="hidden" />
+                                        <input type="hidden" asp-for="@user.Id" />
                                     </td>
                                 </tr>
                             }
                         </tbody>
                         <tfoot>
                             <tr>
+                                <th>Full name</th>
+                                <th>Company name</th>
+                                <th>Job Title</th>
                                 <th>Email</th>
-                                <th>Purpose</th>
-                                <th>Has invitation</th>
-                                <th>Invitation expires on</th>
-                                <th>Request expires on</th>
+                                <th>Role</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>
@@ -109,6 +88,29 @@
         </div>
     </div>
 </div>
+
+<!-- ModalDelete -->
+<div class="modal fade" id="restoreUser" tabindex="-1" role="dialog" aria-labelledby="restoreModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="restoreModalTitle">Restore confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="textBody" class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form id="restoreForm" method="post">
+                    <button type="submit" class="btn btn-danger">Restore</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.ModalDelete -->
 
 @section Scripts {
     <environment include="Development">
@@ -138,5 +140,24 @@
                 }]
             });
         });
-    </script>   
+    </script>
+
+    <script>
+        function Restore() {
+            let modal = document.querySelector("#restoreUser");
+            let element = event.target;
+            let td = element.parentNode;
+            let tr = td.parentNode;
+
+            let id = td.querySelector("#user_Id").value;
+            let email = tr.querySelector("#email").innerText;
+
+            let bodyText = modal.querySelector("#textBody");
+            bodyText.innerText = `You will restore user with email: ${email}. Are you sure?`;
+
+            let path = `/Administration/Users/Restore/${id}`;
+            let deleteForm = modal.querySelector("#restoreForm");
+            deleteForm.setAttribute("action", path);
+        }
+    </script>
 }

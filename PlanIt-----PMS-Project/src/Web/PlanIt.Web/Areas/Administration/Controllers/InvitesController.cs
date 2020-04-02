@@ -245,6 +245,7 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
+        [NonAction]
         private async Task SendEmailAsync(string messageToSend, string email)
         {
             await this.emailSender.SendEmailAsync(
