@@ -14,7 +14,7 @@
     using PlanIt.Services.Data;
     using PlanIt.Services.Messaging;
     using PlanIt.Web.Extensions;
-    using PlanIt.Web.ViewModels.Invites;
+    using PlanIt.Web.ViewModels.Administration.Invites;
 
     public class InvitesController : AdministrationController
     {
@@ -84,8 +84,9 @@
                         values: new { area = "Identity", inviteId = invite.Id, code },
                         protocol: this.Request.Scheme);
 
-                    var messageToSend = $"You are invited to our platform. Please register till {invite.ExpiredOn} by: " +
-                            $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+                    var messageToSend = $"You are invited to our platform. " +
+                        $"Please register till {invite.ExpiredOn?.ToLocalTime()} by: " +
+                        $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
 
                     await this.SendEmailAsync(messageToSend, invite.Email);
                 }
@@ -129,25 +130,11 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        // GET: Invites/Find/id
-        public async Task<ActionResult> Find(int id)
-        {
-            var invite = await this.invitesService
-                 .GetByIdAsync<InviteEditInputModel>(id);
-
-            if (invite == null)
-            {
-                return this.NotFound();
-            }
-
-            return new JsonResult(invite);
-        }
-
-        // GET: Invites/Edit/id?
-        public async Task<ActionResult> Edit(int? id)
+        // GET: Invites/Extend/id?
+        public async Task<ActionResult> Extend(int? id)
         {
             var invites = await this.invitesService
-                .GetAllAsync<InviteEditInputModel>();
+                .GetAllAsync<InviteExtendInputModel>();
 
             this.ViewData["Invites"] = invites;
 
@@ -157,7 +144,7 @@
             }
 
             var invite = await this.invitesService
-                .GetByIdAsync<InviteEditInputModel>(id);
+                .GetByIdAsync<InviteExtendInputModel>(id);
 
             if (invite == null)
             {
@@ -167,9 +154,9 @@
             return this.View(invite);
         }
 
-        // POST: Invites/Edit/5
+        // POST: Invites/Extend/5
         [HttpPost]
-        public async Task<ActionResult> Edit(int id, InviteEditInputModel inputModel)
+        public async Task<ActionResult> Extend(int id, InviteExtendInputModel inputModel)
         {
             if (id != inputModel.Id)
             {
@@ -180,16 +167,16 @@
             {
                 try
                 {
-                    var invite = await this.invitesService.EditAsync<InviteEditInputModel>(inputModel);
+                    var invite = await this.invitesService.ExtendAsync<InviteExtendInputModel>(inputModel);
 
-                    var messageToSend = $"Your request invitation was extended to {invite.RequestExpiredOn}. " +
+                    var messageToSend = $"Your request invitation was extended to {invite.RequestExpiredOn.ToLocalTime()}. " +
                         $"If you had been approved please respond to our previous email";
 
                     await this.SendEmailAsync(messageToSend, invite.Email);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    var existInvite = await this.invitesService.GetByIdAsync<InviteEditInputModel>(inputModel.Id);
+                    var existInvite = await this.invitesService.GetByIdAsync<InviteExtendInputModel>(inputModel.Id);
                     if (existInvite == null)
                     {
                         return this.NotFound();
@@ -202,6 +189,11 @@
 
                 return this.RedirectToAction(nameof(this.Index));
             }
+
+            var invites = await this.invitesService
+                .GetAllAsync<InviteExtendInputModel>();
+
+            this.ViewData["Invites"] = invites;
 
             return this.View(inputModel);
         }

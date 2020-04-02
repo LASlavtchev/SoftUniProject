@@ -21,7 +21,7 @@
 
         Task<Invite> ApproveAsync(int id);
 
-        Task<Invite> EditAsync<TInputModel>(TInputModel model);
+        Task<Invite> ExtendAsync<TInputModel>(TInputModel model);
 
         Task DeleteAsync(int? id);
     }

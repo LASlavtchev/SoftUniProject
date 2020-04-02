@@ -59,13 +59,21 @@
                                     <td id="email">@user.Email</td>
                                     <td>@user.UserRoleRoleName</td>
                                     <td>
-                                        <a class="btn btn-danger btn-sm"
+                                        <a class="btn btn-primary btn-sm"
                                            href="#restoreUser"
                                            data-toggle="modal"
-                                           id="delete"
+                                           id="restore"
                                            onclick="Restore()">
-                                            <i class="fas fa-trash"></i>
+                                            <i class="fas fa-trash-restore"></i>
                                             Restore
+                                        </a>                                    
+                                        <a class="btn btn-danger btn-sm"
+                                           href="#deleteUser"
+                                           data-toggle="modal"
+                                           id="delete"
+                                           onclick="Delete()">
+                                            <i class="fas fa-trash-alt"></i>
+                                            Delete
                                         </a>
                                         <input type="hidden" asp-for="@user.Id" />
                                     </td>
@@ -89,7 +97,7 @@
     </div>
 </div>
 
-<!-- ModalDelete -->
+<!-- ModalRestore -->
 <div class="modal fade" id="restoreUser" tabindex="-1" role="dialog" aria-labelledby="restoreModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -99,12 +107,34 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div id="textBody" class="modal-body">
+            <div id="textBodyRestore" class="modal-body">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <form id="restoreForm" method="post">
                     <button type="submit" class="btn btn-danger">Restore</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.ModalRestore -->
+<!-- ModalDelete -->
+<div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalTitle">Permanently delete confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="textBodyDelete" class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form id="deleteForm" method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </div>
         </div>
@@ -152,11 +182,30 @@
             let id = td.querySelector("#user_Id").value;
             let email = tr.querySelector("#email").innerText;
 
-            let bodyText = modal.querySelector("#textBody");
+            let bodyText = modal.querySelector("#textBodyRestore");
             bodyText.innerText = `You will restore user with email: ${email}. Are you sure?`;
 
             let path = `/Administration/Users/Restore/${id}`;
             let deleteForm = modal.querySelector("#restoreForm");
+            deleteForm.setAttribute("action", path);
+        }
+    </script>
+
+    <script>
+        function Delete() {
+            let modal = document.querySelector("#deleteUser");
+            let element = event.target;
+            let td = element.parentNode;
+            let tr = td.parentNode;
+
+            let id = td.querySelector("#user_Id").value;
+            let email = tr.querySelector("#email").innerText;
+
+            let bodyText = modal.querySelector("#textBodyDelete");
+            bodyText.innerText = `You will permanently delete user with email: ${email}. Are you sure?`;
+
+            let path = `/Administration/Users/HardDelete/${id}`;
+            let deleteForm = modal.querySelector("#deleteForm");
             deleteForm.setAttribute("action", path);
         }
     </script>

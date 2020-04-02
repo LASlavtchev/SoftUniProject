@@ -99,8 +99,11 @@
                 .AllWithDeleted()
                 .SingleOrDefaultAsync(i => i.Id == id && i.IsDeleted);
 
-            this.userRepository.HardDelete(user);
-            await this.userRepository.SaveChangesAsync();
+            var claims = await this.userManager.GetClaimsAsync(user);
+
+            // await this.userManager.RemoveFromRolesAsync();
+            await this.userManager.RemoveClaimsAsync(user, claims);
+            await this.userManager.DeleteAsync(user);
         }
     }
 }

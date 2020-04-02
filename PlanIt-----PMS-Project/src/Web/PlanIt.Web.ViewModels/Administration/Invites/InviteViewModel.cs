@@ -1,4 +1,4 @@
-﻿namespace PlanIt.Web.ViewModels.Invites
+﻿namespace PlanIt.Web.ViewModels.Administration.Invites
 {
     using System;
 
@@ -38,7 +38,7 @@
 
         public DateTime? ExpiredOn { get; set; }
 
-        public string InviteExpiredOn
+        public string InviteExpiredOnLocalTime
         {
             get
             {
@@ -50,7 +50,7 @@
                 }
                 else
                 {
-                    result = this.ExpiredOn.ToString();
+                    result = this.ExpiredOn?.ToLocalTime().ToString();
                 }
 
                 return result;
@@ -58,5 +58,7 @@
         }
 
         public DateTime RequestExpiredOn { get; set; }
+
+        public string RequestExpiredOnLocalTime => this.RequestExpiredOn.ToLocalTime().ToString();
     }
 }

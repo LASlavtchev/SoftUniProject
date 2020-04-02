@@ -1,4 +1,4 @@
-﻿namespace PlanIt.Web.ViewModels.Invites
+﻿namespace PlanIt.Web.ViewModels.Administration.Invites
 {
     using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -8,6 +8,6 @@
 
         public string InviteId { get; set; }
 
-        public InviteEditInputModel Invite { get; set; }
+        public InviteExtendInputModel Invite { get; set; }
     }
 }

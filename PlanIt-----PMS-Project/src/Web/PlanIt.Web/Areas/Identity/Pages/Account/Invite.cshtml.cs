@@ -12,7 +12,7 @@
     using PlanIt.Data.Models;
     using PlanIt.Services.Data;
     using PlanIt.Services.Mapping;
-    using PlanIt.Web.ViewModels.Invites;
+    using PlanIt.Web.ViewModels.Administration.Invites;
 
 #pragma warning disable SA1649 // File name should match first type name
     public class InviteModel : PageModel

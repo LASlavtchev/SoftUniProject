@@ -96,14 +96,14 @@
                 return this.NotFound();
             }
 
-            var user = await this.usersService.GetByIdAsync<UserAdminDeleteViewModel>(id);
+            var user = await this.usersService.GetDeletedByIdAsync<UserAdminDeleteViewModel>(id);
 
             if (user == null)
             {
                 return this.NotFound();
             }
 
-            await this.usersService.SoftDeleteAsync(id);
+            await this.usersService.HardDeleteAsync(id);
 
             return this.RedirectToAction(nameof(this.Deleted));
         }

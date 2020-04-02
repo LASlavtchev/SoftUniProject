@@ -5,7 +5,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Security.Claims;
     using System.Text;
-    using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authentication;
@@ -18,27 +17,23 @@
     using PlanIt.Common;
     using PlanIt.Data.Models;
     using PlanIt.Services.Data;
-    using PlanIt.Services.Messaging;
-    using PlanIt.Web.ViewModels.Invites;
+    using PlanIt.Web.ViewModels.Administration.Invites;
 
     [AllowAnonymous]
 #pragma warning disable SA1649 // File name should match first type name
     public class RegisterModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
-        private readonly SignInManager<PlanItUser> signInManager;
         private readonly UserManager<PlanItUser> userManager;
         private readonly ILogger<RegisterModel> logger;
         private readonly IInvitesService invitesService;
 
         public RegisterModel(
             UserManager<PlanItUser> userManager,
-            SignInManager<PlanItUser> signInManager,
             ILogger<RegisterModel> logger,
             IInvitesService invitesService)
         {
             this.userManager = userManager;
-            this.signInManager = signInManager;
             this.logger = logger;
             this.invitesService = invitesService;
         }
@@ -66,14 +61,14 @@
             var invite = await this.invitesService.GetByIdAsync<InviteRegisterViewModel>(inviteId);
             if (invite == null)
             {
-                return this.NotFound($"Unable to find invite with email '{invite.Email}'.");
+                return this.NotFound();
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
 
             if (!invite.IsInvited || invite.SecurityValue != code)
             {
-                return this.NotFound($"Unable to find invite with email '{invite.Email}'.");
+                return this.NotFound();
             }
 
             if (invite.ExpiredOn < DateTime.UtcNow)
@@ -94,7 +89,14 @@
 
             if (invite == null)
             {
-                this.ModelState.AddModelError(string.Empty, "Invalid invite email");
+                this.ModelState.AddModelError(string.Empty, "Invalid invite email!");
+            }
+
+            var existingUser = await this.userManager.FindByEmailAsync(invite.Email);
+
+            if (existingUser != null)
+            {
+                this.ModelState.AddModelError(string.Empty, "Your account exist. Please email to support!");
             }
 
             if (this.Input.JobTitle.ToLower() == "founder")

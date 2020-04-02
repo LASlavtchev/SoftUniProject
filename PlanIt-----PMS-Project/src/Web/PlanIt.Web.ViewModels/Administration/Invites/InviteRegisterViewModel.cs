@@ -1,4 +1,4 @@
-﻿namespace PlanIt.Web.ViewModels.Invites
+﻿namespace PlanIt.Web.ViewModels.Administration.Invites
 {
     using System;
 

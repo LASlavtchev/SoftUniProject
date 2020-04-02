@@ -67,8 +67,8 @@
                 Purpose = inputInvite.Purpose,
                 SecurityValue = this.GenerateUniqueSecurityValue(),
                 IsInvited = true,
-                ExpiredOn = DateTime.UtcNow.AddHours(24),
-                RequestExpiredOn = DateTime.UtcNow.AddHours(24),
+                ExpiredOn = inputInvite.ExpiredOn?.ToUniversalTime(),
+                RequestExpiredOn = (DateTime)inputInvite.ExpiredOn?.ToUniversalTime(),
             };
 
             await this.invitesRepository.AddAsync(invite);
@@ -84,7 +84,7 @@
                 Email = email,
                 Purpose = purpose,
                 IsInvited = false,
-                RequestExpiredOn = DateTime.UtcNow.AddHours(24),
+                RequestExpiredOn = DateTime.Now.ToUniversalTime().AddHours(24),
             };
 
             await this.invitesRepository.AddAsync(invite);
@@ -103,6 +103,7 @@
             invite.IsInvited = true;
             invite.ExpiredOn = DateTime.UtcNow.AddHours(24);
             invite.RequestExpiredOn = DateTime.UtcNow.AddHours(24);
+            invite.SecurityValue = this.GenerateUniqueSecurityValue();
 
             this.invitesRepository.Update(invite);
             await this.invitesRepository.SaveChangesAsync();
@@ -110,7 +111,7 @@
             return invite;
         }
 
-        public async Task<Invite> EditAsync<TInputModel>(TInputModel model)
+        public async Task<Invite> ExtendAsync<TInputModel>(TInputModel model)
         {
             var inputInvite = AutoMapperConfig.MapperInstance.Map<Invite>(model);
 
@@ -119,9 +120,12 @@
                 .Where(i => i.Id == inputInvite.Id)
                 .FirstOrDefaultAsync();
 
-            invite.Email = inputInvite.Email;
-            invite.ExpiredOn = inputInvite.ExpiredOn;
-            invite.RequestExpiredOn = inputInvite.RequestExpiredOn;
+            if (invite.ExpiredOn != null)
+            {
+                invite.ExpiredOn = invite.ExpiredOn?.AddDays(1);
+            }
+
+            invite.RequestExpiredOn = invite.RequestExpiredOn.AddDays(1);
 
             this.invitesRepository.Update(invite);
             await this.invitesRepository.SaveChangesAsync();
