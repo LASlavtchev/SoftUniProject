@@ -1,5 +1,7 @@
 ﻿namespace PlanIt.Web.Areas.Administration.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using PlanIt.Data.Models;
@@ -22,9 +24,14 @@
             this.invitesService = invitesService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var viewModel = new IndexViewModel { SettingsCount = this.settingsService.GetCount(), };
+            var viewModel = new IndexViewModel
+            {
+                Invites = await this.invitesService.GetAllAsync<InviteViewModel>(),
+                SettingsCount = this.settingsService.GetCount(), 
+            };
+
             return this.View(viewModel);
         }
     }

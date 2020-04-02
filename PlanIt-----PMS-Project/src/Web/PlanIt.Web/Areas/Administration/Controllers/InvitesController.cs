@@ -122,7 +122,7 @@
                 values: new { area = "Identity", inviteId = invite.Id, code },
                 protocol: this.Request.Scheme);
 
-            var messageToSend = $"Your request invitation was approved. Please register till {invite.ExpiredOn} by: " +
+            var messageToSend = $"Your request invitation was approved. Please register till {invite.ExpiredOn?.ToLocalTime()} by: " +
                             $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
 
             await this.SendEmailAsync(messageToSend, invite.Email);
