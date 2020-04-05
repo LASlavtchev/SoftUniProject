@@ -124,7 +124,7 @@
                 if (result.Succeeded)
                 {
                     // Assign to user roles
-                    // await this.userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
+                    await this.userManager.AddToRoleAsync(user, GlobalConstants.UserRoleName);
 
                     // Assign to user claims - needed for the _loginPartial
                     string fullName = $"{user.FirstName} {user.LastName}";

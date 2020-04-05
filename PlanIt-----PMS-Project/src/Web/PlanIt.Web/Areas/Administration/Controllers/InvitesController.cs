@@ -85,7 +85,7 @@
                         protocol: this.Request.Scheme);
 
                     var messageToSend = $"You are invited to our platform. " +
-                        $"Please register till {invite.ExpiredOn?.ToLocalTime()} by: " +
+                        $"Please register till {invite.ExpiredOn}(UTC) by: " +
                         $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
 
                     await this.SendEmailAsync(messageToSend, invite.Email);
@@ -122,7 +122,7 @@
                 values: new { area = "Identity", inviteId = invite.Id, code },
                 protocol: this.Request.Scheme);
 
-            var messageToSend = $"Your request invitation was approved. Please register till {invite.ExpiredOn?.ToLocalTime()} by: " +
+            var messageToSend = $"Your request invitation was approved. Please register till {invite.ExpiredOn}(UTC) by: " +
                             $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
 
             await this.SendEmailAsync(messageToSend, invite.Email);
@@ -169,7 +169,7 @@
                 {
                     var invite = await this.invitesService.ExtendAsync<InviteExtendInputModel>(inputModel);
 
-                    var messageToSend = $"Your request invitation was extended to {invite.RequestExpiredOn.ToLocalTime()}. " +
+                    var messageToSend = $"Your request invitation was extended to {invite.RequestExpiredOn}(UTC). " +
                         $"If you had been approved please respond to our previous email";
 
                     await this.SendEmailAsync(messageToSend, invite.Email);

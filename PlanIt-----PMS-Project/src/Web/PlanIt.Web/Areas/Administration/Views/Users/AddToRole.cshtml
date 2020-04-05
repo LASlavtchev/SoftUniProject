@@ -1,0 +1,54 @@
+﻿@using PlanIt.Web.ViewModels.Administration.Users
+@using PlanIt.Web.ViewModels.Administration.Roles
+@model PlanIt.Web.ViewModels.Administration.Users.UserAddToRoleInputModel
+
+@{
+    this.ViewData["Title"] = "Add To Role";
+    var users = (IEnumerable<UserAddToRoleViewModel>)this.ViewData["Users"];
+    var roles = (IEnumerable<RoleAddToRoleViewModel>)this.ViewData["Roles"];
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Add user to role</h3>
+    <hr class="bg-dark" />
+    <form asp-area="Administration" asp-controller="Users" asp-action="AddToRole" method="post">
+        <div class="container p-4">
+            <hr class="bg-dark" />
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-users fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <select asp-for="@Model.UserId" class="custom-select mr-sm-2">
+                        <option selected disabled>Choose email...</option>
+                        @foreach (var user in users)
+                        {
+                            <option value="@user.Id">@user.Email</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <hr class="bg-dark" />
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-users fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <select asp-for="@Model.Role" class="custom-select mr-sm-2">
+                        <option selected disabled>Choose role...</option>
+                        @foreach (var role in roles)
+                        {
+                            <option value="@role.Name">@role.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <hr class="bg-dark" />
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Add user to role</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

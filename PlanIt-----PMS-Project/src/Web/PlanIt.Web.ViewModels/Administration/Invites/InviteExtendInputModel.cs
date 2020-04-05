@@ -15,10 +15,6 @@
 
         public DateTime? ExpiredOn { get; set; }
 
-        public string InviteExpiredOnLocalTime => this.ExpiredOn?.ToLocalTime().ToString();
-
         public DateTime RequestExpiredOn { get; set; }
-
-        public string RequestExpiredOnLocalTime => this.RequestExpiredOn.ToLocalTime().ToString();
     }
 }

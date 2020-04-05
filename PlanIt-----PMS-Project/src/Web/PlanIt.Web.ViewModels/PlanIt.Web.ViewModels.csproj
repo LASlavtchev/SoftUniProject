@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\Services\PlanIt.Services.Mapping\PlanIt.Services.Mapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Administration\Clients\" />
+  </ItemGroup>
+
 </Project>

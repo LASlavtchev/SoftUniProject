@@ -38,27 +38,6 @@
 
         public DateTime? ExpiredOn { get; set; }
 
-        public string InviteExpiredOnLocalTime
-        {
-            get
-            {
-                string result;
-
-                if (this.ExpiredOn == null)
-                {
-                    result = "-";
-                }
-                else
-                {
-                    result = this.ExpiredOn?.ToLocalTime().ToString();
-                }
-
-                return result;
-            }
-        }
-
         public DateTime RequestExpiredOn { get; set; }
-
-        public string RequestExpiredOnLocalTime => this.RequestExpiredOn.ToLocalTime().ToString();
     }
 }

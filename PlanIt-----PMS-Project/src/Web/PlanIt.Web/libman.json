@@ -99,6 +99,16 @@
       ]
     },
     {
+      "library": "moment.js@2.24.0",
+      "destination": "wwwroot/lib/momentjs/",
+      "files": [
+        "moment.js",
+        "moment.min.js",
+        "moment-with-locales.js",
+        "moment-with-locales.min.js"
+      ]
+    },
+    {
       "provider": "jsdelivr",
       "library": "datatables.net-responsive-bs4@2.2.3",
       "destination": "wwwroot/lib/datatables-responsive/",

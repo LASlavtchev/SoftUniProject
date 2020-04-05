@@ -77,6 +77,7 @@
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IInvitesService, InvitesService>();
             services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IClientsServices, ClientsService>();
 
             var sendGridApiKey = this.configuration["SendGrid:ApiKey"];
             services
@@ -101,6 +102,7 @@
                 }
 
                 new PlanItDbContextSeeder().SeedAsync(mainDbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+                new InvitesDbContextSeeder().SeedAsync(inviteUserDbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
             if (env.IsDevelopment())

@@ -12,14 +12,10 @@
 
         Task<IEnumerable<TViewModel>> GetAllDeletedAsync<TViewModel>();
 
-        Task<TViewModel> GetByIdAsync<TViewModel>(string id);
-
         Task<TViewModel> GetDeletedByIdAsync<TViewModel>(string id);
 
         Task RestoreAsync(string id);
 
-        Task SoftDeleteAsync(string id);
-
-        Task HardDeleteAsync(string id);
+        Task DeleteAsync(string id);
     }
 }

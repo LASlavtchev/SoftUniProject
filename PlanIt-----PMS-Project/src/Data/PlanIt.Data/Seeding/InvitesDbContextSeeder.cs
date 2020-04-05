@@ -7,9 +7,9 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
-    public class PlanItDbContextSeeder : ISeeder
+    public class InvitesDbContextSeeder : ISeederInvites
     {
-        public async Task SeedAsync(PlanItDbContext dbContext, IServiceProvider serviceProvider)
+        public async Task SeedAsync(InvitesDbContext dbContext, IServiceProvider serviceProvider)
         {
             if (dbContext == null)
             {
@@ -21,15 +21,11 @@
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(typeof(PlanItDbContextSeeder));
+            var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(typeof(InvitesDbContext));
 
-            var seeders = new List<ISeeder>
+            var seeders = new List<ISeederInvites>
                           {
-                              new UsersSeeder(),
-                              new RolesSeeder(),
-                              new ProgressStatusesSeeder(),
-                              new SubProjectTypesSeeder(),
-                              new SettingsSeeder(),
+                              new InvitesSeeder(),
                           };
 
             foreach (var seeder in seeders)

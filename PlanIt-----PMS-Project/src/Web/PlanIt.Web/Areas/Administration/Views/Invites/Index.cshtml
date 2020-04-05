@@ -55,8 +55,16 @@
                                     <td id="email">@invite.Email</td>
                                     <td>@invite.Purpose</td>
                                     <td>@invite.HaveInvitation</td>
-                                    <td>@invite.InviteExpiredOnLocalTime</td>
-                                    <td>@invite.RequestExpiredOnLocalTime</td>
+                                    <td>
+                                        <time datetime="@invite.ExpiredOn?.ToString("O")">
+                                            @(invite.ExpiredOn == null ? "-" : invite.ExpiredOn?.ToString("dd/MM/yyyyHH:mm"))
+                                        </time>
+                                    </td>
+                                    <td>
+                                        <time datetime="@invite.RequestExpiredOn.ToString("O")">
+                                            @invite.RequestExpiredOn.ToString("dd/MM/yyyyHH:mm")
+                                        </time>
+                                    </td>
                                     <td>
                                         @if (!invite.IsInvited && invite.RequestExpiredOn >= DateTime.UtcNow)
                                         {
@@ -288,7 +296,7 @@
             let path = `/Administration/Invites/Extend/${id}`;
             let approveForm = modal.querySelector("#extendForm");
             approveForm.setAttribute("action", path);
-        }       
+        }
     </script>
     <script>
         function Approve() {
