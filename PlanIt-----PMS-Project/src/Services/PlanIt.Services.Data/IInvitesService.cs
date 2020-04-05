@@ -7,6 +7,14 @@
 
     public interface IInvitesService
     {
+        int GetAllCount();
+
+        int GetAllApprovedCount();
+
+        int GetAllInvitedExpiredOnCount();
+
+        int GetAllRequestExpiredOnCount();
+
         Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>();
 
         Task<TViewModel> GetByEmailAsync<TViewModel>(string email);

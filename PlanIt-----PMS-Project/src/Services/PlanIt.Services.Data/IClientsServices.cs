@@ -7,6 +7,8 @@
 
     public interface IClientsServices
     {
+        int GetAllCount();
+
         Task<Client> CreateAsync(string userId);
 
         Task DeleteAsync(string userId);

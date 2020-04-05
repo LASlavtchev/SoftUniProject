@@ -70,5 +70,14 @@
 
             return all;
         }
+
+        public int GetAllCount()
+        {
+            var allCount = this.clientRepository
+                .All()
+                .Count();
+
+            return allCount;
+        }
     }
 }

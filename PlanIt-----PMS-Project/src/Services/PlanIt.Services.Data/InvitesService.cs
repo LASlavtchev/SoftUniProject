@@ -27,6 +27,45 @@
             return uniqueInviteValue;
         }
 
+        public int GetAllCount()
+        {
+            var allCount = this.invitesRepository
+                .All()
+                .Count();
+
+            return allCount;
+        }
+
+        public int GetAllApprovedCount()
+        {
+            var allApprovedCount = this.invitesRepository
+                .All()
+                .Where(i => i.IsInvited && i.ExpiredOn > DateTime.UtcNow)
+                .Count();
+
+            return allApprovedCount;
+        }
+
+        public int GetAllInvitedExpiredOnCount()
+        {
+            var allInvitedExpiredOnCount = this.invitesRepository
+                .All()
+                .Where(i => i.IsInvited && i.ExpiredOn <= DateTime.UtcNow)
+                .Count();
+
+            return allInvitedExpiredOnCount;
+        }
+
+        public int GetAllRequestExpiredOnCount()
+        {
+            var allRequestExpiredOnCount = this.invitesRepository
+                .All()
+                .Where(i => !i.IsInvited && i.RequestExpiredOn <= DateTime.UtcNow)
+                .Count();
+
+            return allRequestExpiredOnCount;
+        }
+
         public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
         {
             var all = await this.invitesRepository

@@ -8,6 +8,12 @@
 
     public interface IUsersService
     {
+        int GetAllWithDeletedCount();
+
+        int GetAllCount();
+
+        int GetAllDeletedCount();
+
         Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>(ClaimsPrincipal user);
 
         Task<IEnumerable<TViewModel>> GetAllDeletedAsync<TViewModel>();

@@ -19,6 +19,34 @@
             this.userRepository = userRepository;
         }
 
+        public int GetAllWithDeletedCount()
+        {
+            var allWithDeletedCount = this.userRepository
+                .AllWithDeleted()
+                .Count();
+
+            return allWithDeletedCount;
+        }
+
+        public int GetAllCount()
+        {
+            var allWithDeletedCount = this.userRepository
+                .All()
+                .Count();
+
+            return allWithDeletedCount;
+        }
+
+        public int GetAllDeletedCount()
+        {
+            var allDeletedCount = this.userRepository
+                .AllWithDeleted()
+                .Where(u => u.IsDeleted == true)
+                .Count();
+
+            return allDeletedCount;
+        }
+
         public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>(ClaimsPrincipal user)
         {
             var currentUser = await this.userRepository

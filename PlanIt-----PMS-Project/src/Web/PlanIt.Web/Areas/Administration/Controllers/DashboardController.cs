@@ -13,23 +13,39 @@
         private readonly UserManager<PlanItUser> usermanager;
         private readonly ISettingsService settingsService;
         private readonly IInvitesService invitesService;
+        private readonly IUsersService usersService;
+        private readonly IClientsServices clientsServices;
 
         public DashboardController(
             UserManager<PlanItUser> usermanager,
             ISettingsService settingsService,
-            IInvitesService invitesService)
+            IInvitesService invitesService,
+            IUsersService usersService,
+            IClientsServices clientsServices)
         {
             this.usermanager = usermanager;
             this.settingsService = settingsService;
             this.invitesService = invitesService;
+            this.usersService = usersService;
+            this.clientsServices = clientsServices;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var viewModel = new IndexViewModel
             {
-                Invites = await this.invitesService.GetAllAsync<InviteViewModel>(),
-                SettingsCount = this.settingsService.GetCount(), 
+                InvitesCount = this.invitesService.GetAllCount(),
+                InvitesApprovedCount = this.invitesService.GetAllApprovedCount(),
+                InvitesInvitedExpiredOnCount = this.invitesService.GetAllInvitedExpiredOnCount(),
+                InvitesRequestExpiredOnCount = this.invitesService.GetAllRequestExpiredOnCount(),
+                UsersWithDeletedCount = this.usersService.GetAllWithDeletedCount(),
+                UsersCount = this.usersService.GetAllCount(),
+                UsersDeletedCount = this.usersService.GetAllDeletedCount(),
+                ClientsCount = this.clientsServices.GetAllCount(),
+
+
+
+                SettingsCount = this.settingsService.GetCount(),
             };
 
             return this.View(viewModel);
