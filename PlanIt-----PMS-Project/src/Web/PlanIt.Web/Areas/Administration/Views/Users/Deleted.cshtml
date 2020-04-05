@@ -1,4 +1,5 @@
-﻿@using PlanIt.Web.ViewModels.Administration.Users
+﻿@using PlanIt.Common
+@using PlanIt.Web.ViewModels.Administration.Users
 @model UsersListViewModel
 
 @{
@@ -52,24 +53,33 @@
                         <tbody>
                             @foreach (var user in Model.Users)
                             {
-                            <tr>
-                                <td>@user.FullName</td>
-                                <td>@user.CompanyName</td>
-                                <td>@user.JobTitle</td>
-                                <td id="email">@user.Email</td>
-                                <td>@user.RoleName</td>
-                                <td>
-                                    <a class="btn btn-primary btn-sm"
-                                       href="#restoreUser"
-                                       data-toggle="modal"
-                                       id="restore"
-                                       onclick="Restore()">
-                                        <i class="fas fa-trash-restore"></i>
-                                        Restore
-                                    </a>
-                                    <input type="hidden" asp-for="@user.Id" />
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>@user.FullName</td>
+                                    <td>@user.CompanyName</td>
+                                    <td>@user.JobTitle</td>
+                                    <td id="email">@user.Email</td>
+                                    <td>@user.RoleName</td>
+
+                                    @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) &&
+                                         user.RoleName == GlobalConstants.CompanyOwnerRoleName)
+                                    {
+                                        <td class="text-center"> - </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <a class="btn btn-primary btn-sm"
+                                               href="#restoreUser"
+                                               data-toggle="modal"
+                                               id="restore"
+                                               onclick="Restore()">
+                                                <i class="fas fa-trash-restore"></i>
+                                                Restore
+                                            </a>
+                                            <input type="hidden" asp-for="@user.Id" />
+                                        </td>
+                                    }
+                                </tr>
                             }
                         </tbody>
                         <tfoot>

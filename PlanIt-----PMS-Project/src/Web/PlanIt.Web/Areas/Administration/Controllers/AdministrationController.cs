@@ -5,7 +5,7 @@
     using PlanIt.Common;
     using PlanIt.Web.Controllers;
 
-    [Authorize(Roles = GlobalConstants.CompanyOwnerRoleName)]
+    [Authorize(Roles = GlobalConstants.AdministrationAreaRoleNames)]
     [Area("Administration")]
     public class AdministrationController : BaseController
     {

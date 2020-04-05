@@ -34,6 +34,26 @@
 
         public async Task<ActionResult> All()
         {
+            var roles = new List<PlanItRole>();
+            var companyOwnerRole = await this.roleManager
+                .FindByNameAsync(GlobalConstants.CompanyOwnerRoleName);
+
+            if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName))
+            {
+                roles = this.roleManager.Roles.ToList();
+            }
+            else
+            {
+                roles = this.roleManager
+                    .Roles.Where(r => r.Name != GlobalConstants.CompanyOwnerRoleName)
+                    .ToList();
+            }
+
+            this.ViewData["Roles"] = roles.Select(role => new RoleAddToRoleViewModel
+            {
+                Name = role.Name,
+            });
+
             var users = await this.usersService.GetAllAsync<UserViewModel>(this.User);
             await this.AddRolesToUsers(users);
 
@@ -42,7 +62,9 @@
                 Users = users,
             };
 
-            return this.View(model);
+            this.ViewData["Users"] = model;
+
+            return this.View();
         }
 
         public async Task<ActionResult> Deleted()
@@ -67,8 +89,26 @@
             var currentUser = await this.userManager
                 .GetUserAsync(this.User);
 
-            var roles = this.roleManager.Roles.ToList();
-            var users = this.userManager.Users.Where(u => u.Id != currentUser.Id).ToList();
+            var roles = new List<PlanItRole>();
+            var users = new List<PlanItUser>();
+            var companyOwnerRole = await this.roleManager
+                .FindByNameAsync(GlobalConstants.CompanyOwnerRoleName);
+
+            if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName))
+            {
+                roles = this.roleManager.Roles.ToList();
+                users = this.userManager.Users.Where(u => u.Id != currentUser.Id).ToList();
+            }
+            else
+            {
+                roles = this.roleManager
+                    .Roles.Where(r => r.Name != GlobalConstants.CompanyOwnerRoleName)
+                    .ToList();
+                users = this.userManager
+                    .Users
+                    .Where(u => u.Id != currentUser.Id && !u.Roles.Select(r => r.RoleId).Contains(companyOwnerRole.Id))
+                    .ToList();
+            }
 
             this.ViewData["Roles"] = roles.Select(role => new RoleAddToRoleViewModel
             {

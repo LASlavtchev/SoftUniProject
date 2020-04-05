@@ -9,6 +9,7 @@
         public const string ProjectManagerRoleName = "Project manager";
         public const string ClientRoleName = "Client";
         public const string UserRoleName = "User";
+        public const string AdministrationAreaRoleNames = "Company owner, Administrator";
 
         // EmailAddress validation
         public const string EmailAddressErrorMessage = "Invalid email";

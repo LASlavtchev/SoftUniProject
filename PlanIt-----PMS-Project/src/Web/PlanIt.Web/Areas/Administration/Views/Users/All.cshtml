@@ -1,8 +1,12 @@
-﻿@using PlanIt.Web.ViewModels.Administration.Users
-@model UsersListViewModel
+﻿@using PlanIt.Common
+@using PlanIt.Web.ViewModels.Administration.Roles
+@using PlanIt.Web.ViewModels.Administration.Users
+@model UserAddToRoleInputModel
 
 @{
     ViewData["Title"] = "Users";
+    var roles = (IEnumerable<RoleAddToRoleViewModel>)this.ViewData["Roles"];
+    var users = (UsersListViewModel)this.ViewData["Users"];
 }
 
 @section Styles {
@@ -49,35 +53,44 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var user in Model.Users)
+                            @foreach (var user in users.Users)
                             {
-                            <tr>
-                                <td>@user.FullName</td>
-                                <td>@user.CompanyName</td>
-                                <td>@user.JobTitle</td>
-                                <td id="email">@user.Email</td>
-                                <td>@user.RoleName</td>
+                                <tr>
+                                    <td>@user.FullName</td>
+                                    <td>@user.CompanyName</td>
+                                    <td>@user.JobTitle</td>
+                                    <td id="email">@user.Email</td>
+                                    <td>@user.RoleName</td>
 
-                                <td>
-                                    <a class="btn btn-primary btn-sm"
-                                       href="#addToRoleUser"
-                                       data-toggle="modal"
-                                       id="addToRole"
-                                       onclick="AddToRole()">
-                                        <i class="fas fa-user-edit"></i>
-                                        Add to role
-                                    </a>
-                                    <a class="btn btn-danger btn-sm"
-                                       href="#deleteUser"
-                                       data-toggle="modal"
-                                       id="delete"
-                                       onclick="Delete()">
-                                        <i class="fas fa-trash"></i>
-                                        Delete
-                                    </a>
-                                    <input type="hidden" asp-for="@user.Id" />
-                                </td>
-                            </tr>
+                                    @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) &&
+                                   user.RoleName == GlobalConstants.CompanyOwnerRoleName)
+                                    {
+                                        <td class="text-center"> - </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <a class="btn btn-primary btn-sm"
+                                               href="#addToRoleUser"
+                                               data-toggle="modal"
+                                               id="addToRole"
+                                               onclick="AddToRole()">
+                                                <i class="fas fa-user-edit"></i>
+                                                Add to role
+                                            </a>
+                                            <a class="btn btn-danger btn-sm"
+                                               href="#deleteUser"
+                                               data-toggle="modal"
+                                               id="delete"
+                                               onclick="Delete()">
+                                                <i class="fas fa-trash"></i>
+                                                Delete
+                                            </a>
+                                            <input type="hidden" asp-for="@user.Id" />
+                                        </td>
+                                    }
+
+                                </tr>
                             }
                         </tbody>
                         <tfoot>
@@ -107,14 +120,30 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div id="textBodyAddToRole" class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <form id="addToRoleForm" method="post">
-                    <button type="submit" class="btn btn-danger">Add</button>
-                </form>
-            </div>
+            <form id="addToRoleForm" method="post">
+                <div class="modal-body">
+                    <div id="textBodyAddToRole" class="text-center"></div>
+                    <div class="form-group row">
+                        <div class="col-4 text-right">
+                            <i class="fas fa-user-edit fa-2x" style="line-height:1.25;"></i>
+                        </div>
+                        <div class="col-4">
+                            <select asp-for="@Model.Role" class="custom-select mr-sm-2">
+                                <option selected disabled>Choose role...</option>
+                                @foreach (var role in roles)
+                                {
+                                    <option value="@role.Name">@role.Name</option>
+                                }
+                            </select>
+                            <input id="userId" type ="hidden" asp-for="@Model.UserId" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add to role</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -191,7 +220,25 @@
         }
     </script>
 
+    <script>
+        function AddToRole() {
+            let modal = document.querySelector("#addToRoleUser");
+            let element = event.target;
+            let td = element.parentNode;
+            let tr = td.parentNode;
+           
+            let id = td.querySelector("#user_Id").value;
+            let email = tr.querySelector("#email").innerText;
 
+            let bodyText = modal.querySelector("#textBodyAddToRole");
+            bodyText.innerText = `Change role for user with email: ${email}.`;
+            
+            let path = `/Administration/Users/AddToRole`;
+            let addToRoleForm = modal.querySelector("#addToRoleForm");
+            addToRoleForm.setAttribute("action", path);
 
-
+            let input = addToRoleForm.querySelector("#userId");
+            input.value = id;
+        }
+    </script>
 }
