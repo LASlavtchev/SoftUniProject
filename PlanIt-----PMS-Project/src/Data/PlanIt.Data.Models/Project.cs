@@ -22,7 +22,9 @@
         public DateTime? DueDate { get; set; }
 
         [Column(TypeName = "decimal(15,4)")]
-        public decimal Budjet { get; set; }
+        public decimal Budget { get; set; }
+
+        public bool IsBudgetApproved { get; set; }
 
         public virtual ProgressStatus ProgressStatus { get; set; }
 
@@ -33,6 +35,11 @@
         public int ClientId { get; set; }
 
         public virtual Client Client { get; set; }
+
+        [Column(TypeName = "decimal(15,4)")]
+        public decimal ClientBudget { get; set; }
+
+        public DateTime ClientDueDate { get; set; }
 
         public virtual ICollection<SubProject> SubProjects { get; set; }
     }

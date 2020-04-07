@@ -33,7 +33,7 @@
         }
 
         // GET: Invites
-        public async Task<ActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             var invites = await this.invitesService.GetAllAsync<InviteViewModel>();
             var model = new InvitesListViewModel
@@ -45,14 +45,14 @@
         }
 
         // GET: Invites/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return this.View();
         }
 
         // POST: Invites/Create
         [HttpPost]
-        public async Task<ActionResult> Create(InviteCreateInputModel inputModel)
+        public async Task<IActionResult> Create(InviteCreateInputModel inputModel)
         {
             var existingUser = await this.userManager
                 .Users
@@ -103,7 +103,7 @@
 
         // POST: Invites/Approve/id
         [HttpPost]
-        public async Task<ActionResult> Approve(int id)
+        public async Task<IActionResult> Approve(int id)
         {
             var inputInvite = await this.invitesService
                 .GetByIdAsync<InviteApproveInputModel>(id);
@@ -131,7 +131,7 @@
         }
 
         // GET: Invites/Extend/id?
-        public async Task<ActionResult> Extend(int? id)
+        public async Task<IActionResult> Extend(int? id)
         {
             var invites = await this.invitesService
                 .GetAllAsync<InviteExtendInputModel>();
@@ -156,7 +156,7 @@
 
         // POST: Invites/Extend/5
         [HttpPost]
-        public async Task<ActionResult> Extend(int id, InviteExtendInputModel inputModel)
+        public async Task<IActionResult> Extend(int id, InviteExtendInputModel inputModel)
         {
             if (id != inputModel.Id)
             {
@@ -199,7 +199,7 @@
         }
 
         // GET: Invites/Delete/
-        public async Task<ActionResult> Delete()
+        public async Task<IActionResult> Delete()
         {
             var invites = await this.invitesService
                 .GetAllAsync<InviteDeleteViewModel>();
@@ -214,7 +214,7 @@
 
         // POST: Invites/Delete/id
         [HttpPost]
-        public async Task<ActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {

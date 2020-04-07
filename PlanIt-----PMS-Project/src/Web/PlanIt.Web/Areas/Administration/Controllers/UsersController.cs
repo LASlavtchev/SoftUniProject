@@ -32,7 +32,7 @@
             this.clientsService = clientsService;
         }
 
-        public async Task<ActionResult> All()
+        public async Task<IActionResult> All()
         {
             var roles = new List<PlanItRole>();
             var companyOwnerRole = await this.roleManager
@@ -67,7 +67,7 @@
             return this.View();
         }
 
-        public async Task<ActionResult> Deleted()
+        public async Task<IActionResult> Deleted()
         {
             var deletedUsers = await this.usersService.GetAllDeletedAsync<UserViewModel>();
 
@@ -84,7 +84,7 @@
             return this.View(model);
         }
 
-        public async Task<ActionResult> AddToRoleAsync()
+        public async Task<IActionResult> AddToRoleAsync()
         {
             var currentUser = await this.userManager
                 .GetUserAsync(this.User);
@@ -125,7 +125,7 @@
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddToRoleAsync(UserAddToRoleInputModel inputModel)
+        public async Task<IActionResult> AddToRoleAsync(UserAddToRoleInputModel inputModel)
         {
             var isRoleExist = await this.roleManager.RoleExistsAsync(inputModel.Role);
 
@@ -172,7 +172,7 @@
         }
 
         [HttpPost]
-        public async Task<ActionResult> Restore(string id)
+        public async Task<IActionResult> Restore(string id)
         {
             if (id == null)
             {
@@ -199,7 +199,7 @@
         }
 
         [HttpPost]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {

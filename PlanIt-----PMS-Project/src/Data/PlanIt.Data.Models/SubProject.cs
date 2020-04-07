@@ -21,7 +21,7 @@
 
         // Set by ProjectManager
         [Column(TypeName = "decimal(15,4)")]
-        public decimal Budjet { get; set; }
+        public decimal Budget { get; set; }
 
         public int ProgressStatusId { get; set; }
 

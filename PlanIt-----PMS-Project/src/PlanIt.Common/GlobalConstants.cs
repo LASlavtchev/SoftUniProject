@@ -10,6 +10,7 @@
         public const string ClientRoleName = "Client";
         public const string UserRoleName = "User";
         public const string AdministrationAreaRoleNames = "Company owner, Administrator";
+        public const string ManagementAreaRoleNames = "Company owner, Administrator, Project manager";
 
         // EmailAddress validation
         public const string EmailAddressErrorMessage = "Invalid email";
@@ -35,5 +36,8 @@
 
         // DateTime
         public const string ErrorMessageDateTime = "The date and time have to be after now!";
+
+        // Currency
+        public const string ErrorMessageNonNegativeNumber = "The number has to be positive";
     }
 }
