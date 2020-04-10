@@ -1,0 +1,100 @@
+﻿@using PlanIt.Common
+
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-clipboard"></i>
+        <p>
+            Projects
+            <i class="right fas fa-angle-left"></i>
+        </p>
+    </a>
+    @if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
+     this.User.IsInRole(GlobalConstants.AdministratorRoleName) ||
+     this.User.IsInRole(GlobalConstants.ProjectManagerRoleName))
+    {
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a asp-area="Management" asp-controller="Projects" asp-action="All" class="nav-link">
+                    <i class="fas fa-clipboard-list nav-icon"></i>
+                    <p>All Projects</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Management" asp-controller="Projects" asp-action="Index" class="nav-link">
+                    <i class="fas fa-clipboard-list nav-icon"></i>
+                    <p>My Projects</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Management" asp-controller="Projects" asp-action="Create" class="nav-link">
+                    <i class="fas fa-clipboard-check nav-icon"></i>
+                    <p>Create</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Administration" asp-controller="Invites" asp-action="Extend" class="nav-link">
+                    <i class="fas fa-clipboard-check nav-icon"></i>
+                    <p>Edit</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Administration" asp-controller="Invites" asp-action="Delete" class="nav-link">
+                    <i class="fas fa-clipboard-check nav-icon"></i>
+                    <p>Delete</p>
+                </a>
+            </li>
+        </ul>
+    }
+    else if (this.User.IsInRole(GlobalConstants.ClientRoleName))
+    {
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a asp-area="Client" asp-controller="Projects" asp-action="Index" class="nav-link">
+                    <i class="fas fa-clipboard-list nav-icon"></i>
+                    <p>My Projects</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Client" asp-controller="Projects" asp-action="Create" class="nav-link">
+                    <i class="fas fa-clipboard-check nav-icon"></i>
+                    <p>Create</p>
+                </a>
+            </li>
+        </ul>
+    }
+    else
+    {
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a asp-area="Management" asp-controller="Projects" asp-action="All" class="nav-link">
+                    <i class="fas fa-clipboard-list nav-icon"></i>
+                    <p>All Projects</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Management" asp-controller="Projects" asp-action="Index" class="nav-link">
+                    <i class="fas fa-clipboard-list nav-icon"></i>
+                    <p>My Projects</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Management" asp-controller="Projects" asp-action="Create" class="nav-link">
+                    <i class="fas fa-clipboard-check nav-icon"></i>
+                    <p>Create</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Administration" asp-controller="Invites" asp-action="Extend" class="nav-link">
+                    <i class="fas fa-clipboard-check nav-icon"></i>
+                    <p>Edit</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Administration" asp-controller="Invites" asp-action="Delete" class="nav-link">
+                    <i class="fas fa-clipboard-check nav-icon"></i>
+                    <p>Delete</p>
+                </a>
+            </li>
+        </ul>
+    }
+</li>

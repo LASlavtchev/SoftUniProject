@@ -1,0 +1,47 @@
+﻿@model PlanIt.Web.ViewModels.Client.Projects.ProjectCreateInputModel
+
+@{
+    this.ViewData["Title"] = "Create";
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Create Project</h3>
+    <div class="container p-4">
+        <hr class="bg-dark" />
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger text-center"></div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fab fa-accusoft fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <textarea class="form-control" asp-for="@Model.Name"></textarea>
+                </div>
+                <label asp-for="@Model.Name" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-calendar-check fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <input type="datetime-local" class="form-control" asp-for="@Model.ClientDueDate">
+                </div>
+                <label asp-for="@Model.ClientDueDate" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-coins fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <input class="form-control" asp-for="@Model.ClientBudget" />                    
+                </div>
+                <label asp-for="@Model.ClientBudget" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
