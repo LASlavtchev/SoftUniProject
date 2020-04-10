@@ -51,14 +51,18 @@
             await this.clientRepository.SaveChangesAsync();
         }
 
-        public async Task HardDeleteAsync(string userId)
+        public bool IsDeletedClientExist(string userId)
         {
-            var client = await this.clientRepository
-                .All()
-                .FirstOrDefaultAsync(c => c.PlantItUserId == userId);
+            var client = this.clientRepository
+                .AllWithDeleted()
+                .FirstOrDefault(c => c.PlantItUserId == userId);
 
-            this.clientRepository.HardDelete(client);
-            await this.clientRepository.SaveChangesAsync();
+            if (client == null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
@@ -78,6 +82,27 @@
                 .Count();
 
             return allCount;
+        }
+
+        public async Task<TViewModel> GetClientByUserIdAsync<TViewModel>(string userId)
+        {
+            var client = await this.clientRepository
+                .All()
+                .Where(c => c.PlantItUserId == userId)
+                .To<TViewModel>()
+                .FirstOrDefaultAsync();
+
+            return client;
+        }
+
+        public async Task<int> GetClientIdByUserIdAsync(string userId)
+        {
+            var client = await this.clientRepository
+                .All()
+                .Where(c => c.PlantItUserId == userId)
+                .FirstOrDefaultAsync();
+
+            return client.Id;
         }
     }
 }

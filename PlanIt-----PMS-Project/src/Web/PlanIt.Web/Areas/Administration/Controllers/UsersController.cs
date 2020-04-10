@@ -158,14 +158,21 @@
 
             if (currentUserRole == GlobalConstants.ClientRoleName && removeResult.Succeeded)
             {
-                await this.clientsService.HardDeleteAsync(inputModel.UserId);
+                await this.clientsService.DeleteAsync(inputModel.UserId);
             }
 
             var addResult = await this.userManager.AddToRoleAsync(existingUser, inputModel.Role);
 
             if (inputModel.Role == GlobalConstants.ClientRoleName && addResult.Succeeded)
             {
-                await this.clientsService.CreateAsync(inputModel.UserId);
+                if (!this.clientsService.IsDeletedClientExist(inputModel.UserId))
+                {
+                    await this.clientsService.CreateAsync(inputModel.UserId);
+                }
+                else
+                {
+                    await this.clientsService.RestoreAsync(inputModel.UserId);
+                }
             }
 
             return this.RedirectToAction(nameof(this.All));

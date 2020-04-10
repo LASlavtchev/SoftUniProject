@@ -15,8 +15,12 @@
 
         Task RestoreAsync(string userId);
 
-        Task HardDeleteAsync(string userId);
+        bool IsDeletedClientExist(string userId);
 
         Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>();
+
+        Task<TViewModel> GetClientByUserIdAsync<TViewModel>(string userId);
+
+        Task<int> GetClientIdByUserIdAsync(string userId);
     }
 }
