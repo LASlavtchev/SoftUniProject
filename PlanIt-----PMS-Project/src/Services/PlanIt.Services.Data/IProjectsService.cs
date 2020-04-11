@@ -9,6 +9,14 @@
     {
         int AllCount();
 
+        int AllCountByClientId(int clientId);
+
+        int AllApprovedCountByClientId(int clientId);
+
+        int AllNotApprovedCountByClientId(int clientId);
+
+        decimal CalculateApprovedProjectsBudgetByClientId(int clientId);
+
         Task<IEnumerable<TViewModel>> GetAllByClientIdAsync<TViewModel>(int clientId);
 
         Task<IEnumerable<TViewModel>> GetAllApprovedByClientIdAsync<TViewModel>(int clientId);

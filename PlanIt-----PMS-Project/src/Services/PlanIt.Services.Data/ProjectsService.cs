@@ -30,6 +30,47 @@
             return allCount;
         }
 
+        public int AllCountByClientId(int clientId)
+        {
+            var allCount = this.projectsRepository
+                .All()
+                .Where(p => p.ClientId == clientId)
+                .Count();
+
+            return allCount;
+        }
+
+        public int AllApprovedCountByClientId(int clientId)
+        {
+            var allCount = this.projectsRepository
+                .All()
+                .Where(p => p.ClientId == clientId && p.IsBudgetApproved)
+                .Count();
+
+            return allCount;
+        }
+
+        public int AllNotApprovedCountByClientId(int clientId)
+        {
+            var allCount = this.projectsRepository
+                .All()
+                .Where(p => p.ClientId == clientId && !p.IsBudgetApproved)
+                .Count();
+
+            return allCount;
+        }
+
+        public decimal CalculateApprovedProjectsBudgetByClientId(int clientId)
+        {
+            var sumBudget = this.projectsRepository
+                .All()
+                .Where(p => p.ClientId == clientId && p.IsBudgetApproved)
+                .Select(p => p.Budget)
+                .Sum();
+
+            return sumBudget;
+        }
+
         public async Task<IEnumerable<TViewModel>> GetAllByClientIdAsync<TViewModel>(int clientId)
         {
             var clientProjects = await this.projectsRepository
