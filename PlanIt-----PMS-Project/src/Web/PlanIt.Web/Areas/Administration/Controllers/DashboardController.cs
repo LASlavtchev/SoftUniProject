@@ -11,20 +11,17 @@
     public class DashboardController : AdministrationController
     {
         private readonly UserManager<PlanItUser> usermanager;
-        private readonly ISettingsService settingsService;
         private readonly IInvitesService invitesService;
         private readonly IUsersService usersService;
         private readonly IClientsServices clientsServices;
 
         public DashboardController(
             UserManager<PlanItUser> usermanager,
-            ISettingsService settingsService,
             IInvitesService invitesService,
             IUsersService usersService,
             IClientsServices clientsServices)
         {
             this.usermanager = usermanager;
-            this.settingsService = settingsService;
             this.invitesService = invitesService;
             this.usersService = usersService;
             this.clientsServices = clientsServices;
@@ -45,7 +42,7 @@
 
 
 
-                SettingsCount = this.settingsService.GetCount(),
+                
             };
 
             return this.View(viewModel);

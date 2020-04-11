@@ -29,7 +29,6 @@
                               new RolesSeeder(),
                               new ProgressStatusesSeeder(),
                               new SubProjectTypesSeeder(),
-                              new SettingsSeeder(),
                           };
 
             foreach (var seeder in seeders)

@@ -67,7 +67,7 @@
         {
             var managerProjects = await this.projectsRepository
                 .All()
-                .Where(p => p.PlantItUserId == managerId)
+                .Where(p => p.ProjectManagerId == managerId)
                 .To<TViewModel>()
                 .ToListAsync();
 

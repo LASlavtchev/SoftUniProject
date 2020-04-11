@@ -28,7 +28,7 @@
 
         public virtual ProgressStatus ProgressStatus { get; set; }
 
-        public string PlantItUserId { get; set; }
+        public string ProjectManagerId { get; set; }
 
         public virtual PlanItUser ProjectManager { get; set; }
 

@@ -41,8 +41,6 @@
 
         public DbSet<Hour> Hours { get; set; }
 
-        public DbSet<Setting> Settings { get; set; }
-
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

@@ -35,10 +35,10 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
-    with font-awesome or any other icon font library -->
+                with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     @if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
-                      this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                     {
                         <a asp-area="Administration" asp-controller="Dashboard" asp-action="Index" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -56,12 +56,24 @@
                             </p>
                         </a>
                     }
-                    <a asp-area="Administration" asp-controller="Dashboard" asp-action="Index" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                        </p>
-                    </a>
+                    else if (this.User.IsInRole(GlobalConstants.ClientRoleName))
+                    {
+                        <a asp-area="Client" asp-controller="Dashboard" asp-action="Index" class="nav-link">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Dashboard
+                            </p>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-area="Administration" asp-controller="Dashboard" asp-action="Index" class="nav-link">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Dashboard
+                            </p>
+                        </a>
+                    }
                 </li>
                 <partial name="_InvitesMainSideBarPartial" />
                 <partial name="_UsersMainSideBarPartial" />
