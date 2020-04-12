@@ -42,6 +42,7 @@
 
         // ProgressStatusses
         public const string ProgressStatusNotAssigned = "Not Assigned";
+        public const string ProgressStatusAssigned = "Assigned";
         public const string ProgressStatusInProgress = "In progress";
         public const string ProgressStatusCompleted = "Completed";
         public const string ProgressStatusSuspended = "Suspended";

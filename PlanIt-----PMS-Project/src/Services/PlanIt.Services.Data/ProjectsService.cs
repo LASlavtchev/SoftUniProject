@@ -205,6 +205,22 @@
             return project;
         }
 
+        public async Task<Project> AssignManagerAsync(int projectId, string projectManagerId)
+        {
+            var project = this.projectsRepository
+                .All()
+                .Where(p => p.Id == projectId)
+                .FirstOrDefault();
+
+            project.ProjectManagerId = projectManagerId;
+            project.ProgressStatus = await this.progressStatusesService.GetByNameAsync(GlobalConstants.ProgressStatusAssigned);
+
+            this.projectsRepository.Update(project);
+            await this.projectsRepository.SaveChangesAsync();
+
+            return project;
+        }
+
         public async Task DeleteAsync(int projectId)
         {
             var project = this.projectsRepository
@@ -284,11 +300,6 @@
         }
 
 
-
-        //public async Task<Project> CreateAsync(string userId)
-        //{
-
-        //}
 
         private decimal SumBudgetBySubProjectsBudget(Project project)
         {

@@ -1,0 +1,223 @@
+﻿@using System.Globalization
+@using PlanIt.Web.ViewModels.Management.SubProjects
+@model PlanIt.Web.ViewModels.Management.Projects.ProjectDetailsViewModel
+
+@{
+    this.ViewData["Title"] = "Details";
+
+    var status = Model.IsBudgetApproved == false ? "Not Approved" : "Approved";
+    var projectManagerFullName = "Not assigned";
+    var projectManagerCompanyName = "-";
+    var projectManagerJobTitle = "-";
+    var projectManagerEmail = "-";
+    var projectManagerPhoneNumber = "-";
+
+    if (Model.ProjectManager != null)
+    {
+        projectManagerFullName = Model.ProjectManager.FullName;
+        projectManagerCompanyName = Model.ProjectManager.CompanyName;
+        projectManagerJobTitle = Model.ProjectManager.JobTitle;
+        projectManagerEmail = Model.ProjectManager.Email;
+        projectManagerPhoneNumber = Model.ProjectManager.PhoneNumber;
+    }
+
+    var subProjects = (List<ProjectSubProjectViewModel>)Model.SubProjects;
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Project Details</h3>
+    <div class="container p-4">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <span class="float-left">
+                        <strong>Project status: </strong>
+                        @(Model.ProgressStatusName == null ? "-" : Model.ProgressStatusName)
+                    </span>
+                    Project name:
+                    <strong> @Model.Name</strong>
+                    <span class="float-right">
+                        <strong>Budget:</strong> @status
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-sm-4">
+                            <h6 class="mb-3">Client:</h6>
+                            <div>
+                                <strong>@Model.Client.FullName</strong>
+                            </div>
+                            <div>Company name: @Model.Client.PlantItUserCompanyName</div>
+                            <div>Job title: @Model.Client.PlantItUserJobTitle</div>
+                            <div>Email: @Model.Client.PlantItUserEmail</div>
+                            <div>Phone: @Model.Client.PlantItUserPhoneNumber</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <h6 class="mb-3">Project Manager:</h6>
+                            <div>
+                                <strong>@projectManagerFullName</strong>
+                            </div>
+                            <div>Company name: @projectManagerCompanyName</div>
+                            <div>Job title: @projectManagerCompanyName</div>
+                            <div>Email: @projectManagerEmail</div>
+                            <div>Phone: @projectManagerPhoneNumber</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <h6 class="mb-3">Schedule:</h6>
+                            <div>
+                                <strong>
+                                    Required due date:
+                                    <time datetime="@Model.ClientDueDate.ToString("O")">
+                                        @(Model.ClientDueDate.ToString("dd/MM/yyyy"))
+                                    </time>
+                                </strong>
+                            </div>
+                            <div>
+                                Scheduled start date:
+                                <time datetime="@Model.StartDate?.ToString("O")">
+                                    @(Model.StartDate == null ? "-" : Model.StartDate?.ToString("dd/MM/yyyy"))
+                                </time>
+                            </div>
+                            <div>
+                                Scheduled due date:
+                                <time datetime="@Model.DueDate?.ToString("O")">
+                                    @(Model.DueDate == null ? "-" : Model.DueDate?.ToString("dd/MM/yyyy"))
+                                </time>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive-sm">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="center">#</th>
+                                    <th>Project part</th>
+                                    <th>Project part status</th>
+                                    <th class="right">Budget</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (subProjects.Count == 0)
+                                {
+                                    <tr>
+                                        <td align="center" colspan="4">
+                                            <strong>No project parts assigned</strong>
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < subProjects.Count; i++)
+                                    {
+                                        <tr>
+                                            <td class="center">@(i + 1)</td>
+                                            <td>@subProjects[i].SubProjectTypeName</td>
+                                            <td>@subProjects[i].ProgressStatusName</td>
+                                            <td class="right">@subProjects[i].Budget</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-5">
+                        </div>
+                        <div class="col-lg-4 col-sm-5 ml-auto">
+                            <table class="table table-clear">
+                                <tbody>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>Total:</strong>
+                                        </td>
+                                        <td class="right">
+                                            <strong>
+                                                @Model.Budget.ToString("F2", CultureInfo.InvariantCulture)
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>Required:</strong>
+                                        </td>
+                                        <td class="right">
+                                            <strong>
+                                                @Model.ClientBudget.ToString("F2", CultureInfo.InvariantCulture)
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr />
+                    @if (!Model.IsBudgetApproved && Model.ProjectManager == null)
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <a asp-area="Management"
+                                   asp-controller="Projects"
+                                   asp-action="Assign"
+                                   asp-route-id="@Model.Id"
+                                   class="btn btn-primary float-right">
+                                    Assign Manager
+                                </a>
+                            </div>
+                        </div>
+                        <hr />
+                    }
+                    <div class="row">
+                        <div class="col-8">
+                            <a asp-action="Index"
+                               class="btn btn-dark float-left">
+                                Back to projects
+                            </a>
+                        </div>
+                        <div class="col-4 btn-group">
+                            <a asp-area="Client"
+                               asp-controller="Projects"
+                               asp-action="Edit"
+                               asp-route-id="@Model.Id"
+                               class="btn btn-primary">
+                                Edit
+                            </a>
+                            <a href="#deleteConfirm"
+                               data-toggle="modal"
+                               class="btn btn-danger">
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ModalDelete -->
+<div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalTitle">Delete confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete Project: <strong>@Model.Name</strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form asp-area="Client"
+                      asp-controller="Projects"
+                      asp-action="Delete"
+                      asp-route-id="@Model.Id"
+                      method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.ModalDelete -->

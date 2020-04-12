@@ -1,0 +1,64 @@
+﻿@using PlanIt.Web.ViewModels.Management.Clients
+@model PlanIt.Web.ViewModels.Management.Projects.ProjectCreateInputModel
+
+@{
+    this.ViewData["Title"] = "Create";
+    var clients = (IEnumerable<ProjectCreateClientViewModel>)this.ViewData["Clients"];
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Create Project</h3>
+    <div class="container p-4">
+        <hr class="bg-dark" />
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger text-center"></div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fab fa-accusoft fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <textarea class="form-control" asp-for="@Model.Name"></textarea>
+                </div>
+                <label asp-for="@Model.Name" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-calendar-check fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <input type="date" class="form-control" asp-for="@Model.StartDate">
+                </div>
+                <label asp-for="@Model.StartDate" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-calendar-check fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <input type="date" class="form-control" asp-for="@Model.DueDate">
+                </div>
+                <label asp-for="@Model.DueDate" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-user-cog fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <select asp-for="@Model.ClientId" class="custom-select mr-sm-2">
+                        <option value="0" selected>Choose client...</option>
+                        @foreach (var client in clients)
+                        {
+                            <option value="@client.Id">@client.FullName</option>
+                        }
+                    </select>
+                </div>
+                <label asp-for="@Model.ClientId" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

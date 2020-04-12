@@ -41,6 +41,8 @@
 
         Task<Project> ApproveAsync(int projectId);
 
+        Task<Project> AssignManagerAsync(int projectId, string projectManagerId);
+
         Task DeleteAsync(int projectId);
 
         Task RestoreAsync(int projectId);

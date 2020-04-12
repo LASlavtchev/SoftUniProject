@@ -1,0 +1,35 @@
+﻿@using PlanIt.Data.Models
+@model PlanIt.Web.ViewModels.Management.Projects.ProjectAssignInputModel
+
+@{
+    this.ViewData["Title"] = "Assign";
+    var users = (IEnumerable<PlanItUser>)this.ViewData["Users"];
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Assign Project Manager</h3>
+    <div class="container p-4">
+        <hr class="bg-dark" />
+        <form method="post">           
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-user-cog fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <select asp-for="@Model.ProjectManagerId" class="custom-select mr-sm-2">
+                        <option value="0" selected>Choose client...</option>
+                        @foreach (var user in users)
+                        {
+                            <option value="@user.Id">@user.Email</option>
+                        }
+                    </select>
+                </div>                
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Assign Manager</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

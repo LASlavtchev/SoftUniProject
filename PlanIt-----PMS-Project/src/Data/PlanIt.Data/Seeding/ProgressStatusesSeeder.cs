@@ -18,6 +18,7 @@
 
             await dbContext.ProgressStatuses.AddRangeAsync(
                 new ProgressStatus { Name = GlobalConstants.ProgressStatusNotAssigned },
+                new ProgressStatus { Name = GlobalConstants.ProgressStatusAssigned },
                 new ProgressStatus { Name = GlobalConstants.ProgressStatusInProgress },
                 new ProgressStatus { Name = GlobalConstants.ProgressStatusCompleted },
                 new ProgressStatus { Name = GlobalConstants.ProgressStatusSuspended },
