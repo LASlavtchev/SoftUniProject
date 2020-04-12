@@ -33,11 +33,17 @@
 
         Task<TViewModel> GetByIdAsync<TViewModel>(int projectId);
 
+        Task<TViewModel> GetDeletedByIdAsync<TViewModel>(int projectId);
+
         Task<Project> CreateByClientAsync<TInputModel>(TInputModel model);
+
+        Task<Project> CreateByManagerAsync<TInputModel>(TInputModel inputModel);
 
         Task<Project> ApproveAsync(int projectId);
 
         Task DeleteAsync(int projectId);
+
+        Task RestoreAsync(int projectId);
 
         Task<Project> EditByClientAsync<TInputModel>(TInputModel inputModel);
     }

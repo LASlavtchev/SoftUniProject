@@ -97,18 +97,3 @@
     </div>
     <!-- /.sidebar -->
 </aside>
-
-@using (Html.PartialSectionScripts())
-{
-    <script type="text/javascript">
-        var navLinks = document.getElementsByClassName("menu-open")
-
-        Array.prototype.forEach.call(navLinks, function (nav) {
-            nav.addEventListener('click', function (event) {
-                nav.classList.toggle("active")
-            })
-        })
-
-
-    </script>
-}

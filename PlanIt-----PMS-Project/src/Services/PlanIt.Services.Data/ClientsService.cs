@@ -104,5 +104,16 @@
 
             return client.Id;
         }
+
+        public async Task<TViewModel> GetClientByIdAsync<TViewModel>(int clientId)
+        {
+            var client = await this.clientRepository
+               .All()
+               .Where(c => c.Id == clientId)
+               .To<TViewModel>()
+               .FirstOrDefaultAsync();
+
+            return client;
+        }
     }
 }

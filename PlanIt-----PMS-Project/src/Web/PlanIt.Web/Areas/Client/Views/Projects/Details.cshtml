@@ -30,13 +30,10 @@
         <div class="container">
             <div class="card">
                 <div class="card-header">
-
                     <span class="float-left">
                         <strong>Project status: </strong>
                         @(Model.ProgressStatusName == null ? "-" : Model.ProgressStatusName)
                     </span>
-
-
                     Project name:
                     <strong> @Model.Name</strong>
                     <span class="float-right">
@@ -51,7 +48,7 @@
                                 <strong>@projectManagerFullName</strong>
                             </div>
                             <div>Company name: @projectManagerCompanyName</div>
-                            <div>Job title: @projectManagerCompanyName</div>
+                            <div>Job title: @projectManagerJobTitle</div>
                             <div>Email: @projectManagerEmail</div>
                             <div>Phone: @projectManagerPhoneNumber</div>
                         </div>
@@ -144,7 +141,7 @@
                         </div>
                     </div>
                     <hr />
-                    @if (!Model.IsBudgetApproved)
+                    @if (!Model.IsBudgetApproved && Model.ProjectManager != null)
                     {
                         <div class="row">
                             <div class="col-12">

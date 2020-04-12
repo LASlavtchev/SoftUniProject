@@ -11,7 +11,7 @@
     public class ProjectsController : ClientsController
     {
         private readonly UserManager<PlanItUser> userManager;
-        private readonly IProjectsService projectService;
+        private readonly IProjectsService projectsService;
         private readonly IProgressStatusesService progressStatusesService;
         private readonly IClientsServices clientsServices;
 
@@ -22,7 +22,7 @@
             IClientsServices clientsServices)
         {
             this.userManager = userManager;
-            this.projectService = projectService;
+            this.projectsService = projectService;
             this.progressStatusesService = progressStatusesService;
             this.clientsServices = clientsServices;
         }
@@ -34,8 +34,8 @@
 
             var allProjects = new ProjectsListViewModel
             {
-                ApprovedProjects = await this.projectService.GetAllApprovedByClientIdAsync<ProjectViewModel>(clientId),
-                NotApprovedProjects = await this.projectService.GetAllNotApprovedByClientIdAsync<ProjectViewModel>(clientId),
+                ApprovedProjects = await this.projectsService.GetAllApprovedByClientIdAsync<ProjectViewModel>(clientId),
+                NotApprovedProjects = await this.projectsService.GetAllNotApprovedByClientIdAsync<ProjectViewModel>(clientId),
             };
 
             return this.View(allProjects);
@@ -59,14 +59,14 @@
 
             inputModel.ClientId = clientId;
 
-            await this.projectService.CreateByClientAsync<ProjectCreateInputModel>(inputModel);
+            await this.projectsService.CreateByClientAsync<ProjectCreateInputModel>(inputModel);
 
             return this.RedirectToAction(nameof(this.Index));
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var project = await this.projectService.GetByIdAsync<ProjectDetailsViewModel>(id);
+            var project = await this.projectsService.GetByIdAsync<ProjectDetailsViewModel>(id);
 
             if (project == null)
             {
@@ -79,14 +79,14 @@
         [HttpPost]
         public async Task<IActionResult> Approve(int id)
         {
-            var project = await this.projectService.GetByIdAsync<ProjectViewModel>(id);
+            var project = await this.projectsService.GetByIdAsync<ProjectViewModel>(id);
 
             if (project == null)
             {
                 return this.NotFound();
             }
 
-            await this.projectService.ApproveAsync(id);
+            await this.projectsService.ApproveAsync(id);
 
             return this.RedirectToAction(nameof(this.Index));
         }
@@ -94,21 +94,21 @@
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            var project = await this.projectService.GetByIdAsync<ProjectViewModel>(id);
+            var project = await this.projectsService.GetByIdAsync<ProjectViewModel>(id);
 
             if (project == null)
             {
                 return this.NotFound();
             }
 
-            await this.projectService.DeleteAsync(id);
+            await this.projectsService.DeleteAsync(id);
 
             return this.RedirectToAction(nameof(this.Index));
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var project = await this.projectService.GetByIdAsync<ProjectEditInputModel>(id);
+            var project = await this.projectsService.GetByIdAsync<ProjectEditInputModel>(id);
 
             if (project == null)
             {
@@ -131,7 +131,7 @@
                 return this.View(inputModel);
             }
 
-            var project = await this.projectService.EditByClientAsync<ProjectEditInputModel>(inputModel);
+            var project = await this.projectsService.EditByClientAsync<ProjectEditInputModel>(inputModel);
 
             return this.RedirectToAction(nameof(this.Details), new { project.Id });
         }

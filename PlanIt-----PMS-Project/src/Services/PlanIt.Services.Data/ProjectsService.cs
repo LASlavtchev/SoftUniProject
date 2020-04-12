@@ -130,6 +130,17 @@
             return project;
         }
 
+        public async Task<TViewModel> GetDeletedByIdAsync<TViewModel>(int projectId)
+        {
+            var project = await this.projectsRepository
+                .AllWithDeleted()
+                .Where(p => p.Id == projectId && p.IsDeleted)
+                .To<TViewModel>()
+                .FirstOrDefaultAsync();
+
+            return project;
+        }
+
         public async Task<Project> CreateByClientAsync<TInputModel>(TInputModel inputModel)
         {
             var model = AutoMapperConfig.MapperInstance.Map<Project>(inputModel);
@@ -152,6 +163,25 @@
             return project;
         }
 
+        public async Task<Project> CreateByManagerAsync<TInputModel>(TInputModel inputModel)
+        {
+            var model = AutoMapperConfig.MapperInstance.Map<Project>(inputModel);
+
+            var project = new Project
+            {
+                Name = model.Name,
+                StartDate = model.StartDate?.ToUniversalTime(),
+                DueDate = model.DueDate?.ToUniversalTime(),
+                ClientId = model.ClientId,
+                ProgressStatus = await this.progressStatusesService.GetByNameAsync(GlobalConstants.ProgressStatusNotAssigned),
+            };
+
+            await this.projectsRepository.AddAsync(project);
+            await this.projectsRepository.SaveChangesAsync();
+
+            return project;
+        }
+
         public async Task<Project> ApproveAsync(int projectId)
         {
             var project = this.projectsRepository
@@ -167,6 +197,8 @@
                 project.DueDate = project.ClientDueDate;
             }
 
+            project.ProgressStatus = await this.progressStatusesService.GetByNameAsync(GlobalConstants.ProgressStatusInProgress);
+
             this.projectsRepository.Update(project);
             await this.projectsRepository.SaveChangesAsync();
 
@@ -180,7 +212,22 @@
                 .Where(p => p.Id == projectId)
                 .FirstOrDefault();
 
+            project.ProgressStatus = await this.progressStatusesService.GetByNameAsync(GlobalConstants.ProgressStatusCanceled);
+
             this.projectsRepository.Delete(project);
+            await this.projectsRepository.SaveChangesAsync();
+        }
+
+        public async Task RestoreAsync(int projectId)
+        {
+            var project = this.projectsRepository
+                .AllWithDeleted()
+                .Where(p => p.Id == projectId && p.IsDeleted)
+                .FirstOrDefault();
+
+            project.ProgressStatus = await this.progressStatusesService.GetByNameAsync(GlobalConstants.ProgressStatusSuspended);
+
+            this.projectsRepository.Undelete(project);
             await this.projectsRepository.SaveChangesAsync();
         }
 

@@ -21,6 +21,8 @@
 
         Task<TViewModel> GetClientByUserIdAsync<TViewModel>(string userId);
 
+        Task<TViewModel> GetClientByIdAsync<TViewModel>(int clientId);
+
         Task<int> GetClientIdByUserIdAsync(string userId);
     }
 }
