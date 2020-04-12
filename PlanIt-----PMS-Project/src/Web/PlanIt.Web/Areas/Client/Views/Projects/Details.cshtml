@@ -7,12 +7,16 @@
 
     var status = Model.IsBudgetApproved == false ? "Not Approved" : "Approved";
     var projectManagerFullName = "Not assigned";
+    var projectManagerCompanyName = "-";
+    var projectManagerJobTitle = "-";
     var projectManagerEmail = "-";
     var projectManagerPhoneNumber = "-";
 
     if (Model.ProjectManager != null)
     {
         projectManagerFullName = Model.ProjectManager.FullName;
+        projectManagerCompanyName = Model.ProjectManager.CompanyName;
+        projectManagerJobTitle = Model.ProjectManager.JobTitle;
         projectManagerEmail = Model.ProjectManager.Email;
         projectManagerPhoneNumber = Model.ProjectManager.PhoneNumber;
     }
@@ -46,11 +50,13 @@
                             <div>
                                 <strong>@projectManagerFullName</strong>
                             </div>
+                            <div>Company name: @projectManagerCompanyName</div>
+                            <div>Job title: @projectManagerCompanyName</div>
                             <div>Email: @projectManagerEmail</div>
                             <div>Phone: @projectManagerPhoneNumber</div>
                         </div>
                         <div class="col-sm-6">
-                            <h6 class="mb-3">Schedule</h6>
+                            <h6 class="mb-3">Schedule:</h6>
                             <div>
                                 <strong>
                                     Required due date:

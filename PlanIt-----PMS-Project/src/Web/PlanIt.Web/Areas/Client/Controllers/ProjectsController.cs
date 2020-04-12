@@ -131,7 +131,7 @@
                 return this.View(inputModel);
             }
 
-            var project = await this.projectService.EditAsync<ProjectEditInputModel>(inputModel);
+            var project = await this.projectService.EditByClientAsync<ProjectEditInputModel>(inputModel);
 
             return this.RedirectToAction(nameof(this.Details), new { project.Id });
         }

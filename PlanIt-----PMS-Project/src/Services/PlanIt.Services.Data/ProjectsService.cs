@@ -7,6 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
+    using PlanIt.Common;
     using PlanIt.Data.Common.Repositories;
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
@@ -14,11 +15,14 @@
     public class ProjectsService : IProjectsService
     {
         private readonly IDeletableEntityRepository<Project> projectsRepository;
+        private readonly IProgressStatusesService progressStatusesService;
 
         public ProjectsService(
-            IDeletableEntityRepository<Project> projectsRepository)
+            IDeletableEntityRepository<Project> projectsRepository,
+            IProgressStatusesService progressStatusesService)
         {
             this.projectsRepository = projectsRepository;
+            this.progressStatusesService = progressStatusesService;
         }
 
         public int AllCount()
@@ -137,6 +141,7 @@
                 ClientDueDate = model.ClientDueDate.ToUniversalTime(),
                 ClientId = model.ClientId,
                 IsBudgetApproved = false,
+                ProgressStatus = await this.progressStatusesService.GetByNameAsync(GlobalConstants.ProgressStatusNotAssigned),
             };
 
             project.Budget = this.SumBudgetBySubProjectsBudget(project);
@@ -179,7 +184,7 @@
             await this.projectsRepository.SaveChangesAsync();
         }
 
-        public async Task<Project> EditAsync<TInputModel>(TInputModel inputModel)
+        public async Task<Project> EditByClientAsync<TInputModel>(TInputModel inputModel)
         {
             var inputProject = AutoMapperConfig.MapperInstance.Map<Project>(inputModel);
 
@@ -198,15 +203,40 @@
             return project;
         }
 
-        public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
+        public async Task<IEnumerable<TViewModel>> GetAllApprovedAsync<TViewModel>()
         {
             var projects = await this.projectsRepository
                 .All()
+                .Where(p => p.IsBudgetApproved)
                 .To<TViewModel>()
                 .ToListAsync();
 
             return projects;
         }
+
+        public async Task<IEnumerable<TViewModel>> GetAllNotApprovedAsync<TViewModel>()
+        {
+            var projects = await this.projectsRepository
+                .All()
+                .Where(p => !p.IsBudgetApproved)
+                .To<TViewModel>()
+                .ToListAsync();
+
+            return projects;
+        }
+
+        public async Task<IEnumerable<TViewModel>> GetAllDeletedAsync<TViewModel>()
+        {
+            var projects = await this.projectsRepository
+                .AllWithDeleted()
+                .Where(p => p.IsDeleted && !p.Client.IsDeleted)
+                .To<TViewModel>()
+                .ToListAsync();
+
+            return projects;
+        }
+
+
 
         //public async Task<Project> CreateAsync(string userId)
         //{

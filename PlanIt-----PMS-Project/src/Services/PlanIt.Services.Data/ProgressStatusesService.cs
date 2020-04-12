@@ -1,6 +1,7 @@
 ﻿namespace PlanIt.Services.Data
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,16 @@
                 .ToListAsync();
 
             return all;
+        }
+
+        public async Task<ProgressStatus> GetByNameAsync(string progressStatusName)
+        {
+            var status = await this.progressStatusesRepository
+                .All()
+                .Where(s => s.Name == progressStatusName)
+                .FirstOrDefaultAsync();
+
+            return status;
         }
     }
 }

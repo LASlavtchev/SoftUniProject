@@ -39,5 +39,13 @@
 
         // Currency
         public const string ErrorMessageNonNegativeNumber = "The number has to be positive";
+
+        // ProgressStatusses
+        public const string ProgressStatusNotAssigned = "Not Assigned";
+        public const string ProgressStatusInProgress = "In progress";
+        public const string ProgressStatusCompleted = "Completed";
+        public const string ProgressStatusSuspended = "Suspended";
+        public const string ProgressStatusCanceled = "Canceled";
+        public const string ProgressStatusApproving = "Approving";
     }
 }

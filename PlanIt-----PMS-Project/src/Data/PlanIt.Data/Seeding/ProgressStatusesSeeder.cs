@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using PlanIt.Common;
     using PlanIt.Data.Models;
 
     internal class ProgressStatusesSeeder : ISeeder
@@ -16,12 +17,12 @@
             }
 
             await dbContext.ProgressStatuses.AddRangeAsync(
-                new ProgressStatus { Name = "Not Assigned" },
-                new ProgressStatus { Name = "In Progress" },
-                new ProgressStatus { Name = "Completed" },
-                new ProgressStatus { Name = "Suspended" },
-                new ProgressStatus { Name = "Approving" },
-                new ProgressStatus { Name = "Canceled" });
+                new ProgressStatus { Name = GlobalConstants.ProgressStatusNotAssigned },
+                new ProgressStatus { Name = GlobalConstants.ProgressStatusInProgress },
+                new ProgressStatus { Name = GlobalConstants.ProgressStatusCompleted },
+                new ProgressStatus { Name = GlobalConstants.ProgressStatusSuspended },
+                new ProgressStatus { Name = GlobalConstants.ProgressStatusApproving },
+                new ProgressStatus { Name = GlobalConstants.ProgressStatusCanceled });
         }
     }
 }

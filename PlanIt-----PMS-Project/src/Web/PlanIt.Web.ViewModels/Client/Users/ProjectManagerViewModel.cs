@@ -16,6 +16,10 @@
         [DisplayName("Full name")]
         public string FullName => $"{this.FirstName} {this.MiddleName} {this.LastName}";
 
+        public string CompanyName { get; set; }
+
+        public string JobTitle { get; set; }
+
         public string Email { get; set; }
 
         public string PhoneNumber { get; set; }

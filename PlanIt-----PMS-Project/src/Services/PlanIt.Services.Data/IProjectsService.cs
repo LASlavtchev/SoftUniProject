@@ -25,7 +25,11 @@
 
         Task<IEnumerable<TViewModel>> GetAllByManagerIdAsync<TViewModel>(string managerId);
 
-        Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>();
+        Task<IEnumerable<TViewModel>> GetAllApprovedAsync<TViewModel>();
+
+        Task<IEnumerable<TViewModel>> GetAllNotApprovedAsync<TViewModel>();
+
+        Task<IEnumerable<TViewModel>> GetAllDeletedAsync<TViewModel>();
 
         Task<TViewModel> GetByIdAsync<TViewModel>(int projectId);
 
@@ -35,6 +39,6 @@
 
         Task DeleteAsync(int projectId);
 
-        Task<Project> EditAsync<TInputModel>(TInputModel inputModel);
+        Task<Project> EditByClientAsync<TInputModel>(TInputModel inputModel);
     }
 }
