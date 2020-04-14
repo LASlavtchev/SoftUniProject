@@ -38,7 +38,7 @@
     with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     @if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
-                   this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                  this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                     {
                         <a asp-area="Administration" asp-controller="Dashboard" asp-action="Index" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -76,22 +76,27 @@
                     }
                 </li>
                 @if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
-                 this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                 {
                     <partial name="_InvitesMainSideBarPartial" />
                     <partial name="_UsersMainSideBarPartial" />
                 }
+
+                @if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
                     <partial name="_ProjectsMainSideBarPartial" />
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-th"></i>
-                            <p>
-                                Simple Link
-                                <span class="right badge badge-danger">New</span>
-                            </p>
-                        </a>
-                    </li>
-                </ul>
+                }
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Simple Link
+                            <span class="right badge badge-danger">New</span>
+                        </p>
+                    </a>
+                </li>
+            </ul>
         </nav>
         <!-- /.sidebar-menu -->
     </div>

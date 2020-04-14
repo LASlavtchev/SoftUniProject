@@ -48,5 +48,7 @@
         Task RestoreAsync(int projectId);
 
         Task<Project> EditByClientAsync<TInputModel>(TInputModel inputModel);
+
+        Task<Project> EditByManagerAsync<TInputModel>(TInputModel inputModel);
     }
 }

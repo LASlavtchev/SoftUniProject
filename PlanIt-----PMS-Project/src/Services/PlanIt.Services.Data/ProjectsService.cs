@@ -266,6 +266,28 @@
             return project;
         }
 
+        public async Task<Project> EditByManagerAsync<TInputModel>(TInputModel inputModel)
+        {
+            var inputProject = AutoMapperConfig.MapperInstance.Map<Project>(inputModel);
+
+            var project = await this.projectsRepository
+                .All()
+                .Where(i => i.Id == inputProject.Id)
+                .FirstOrDefaultAsync();
+
+            project.Name = inputProject.Name;
+            project.StartDate = inputProject.StartDate?.ToUniversalTime();
+            project.DueDate = inputProject.DueDate?.ToUniversalTime();
+
+
+            project.ClientBudget = inputProject.ClientBudget;
+
+            this.projectsRepository.Update(project);
+            await this.projectsRepository.SaveChangesAsync();
+
+            return project;
+        }
+
         public async Task<IEnumerable<TViewModel>> GetAllApprovedAsync<TViewModel>()
         {
             var projects = await this.projectsRepository

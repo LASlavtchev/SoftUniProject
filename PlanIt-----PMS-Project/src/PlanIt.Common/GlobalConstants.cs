@@ -10,7 +10,8 @@
         public const string ClientRoleName = "Client";
         public const string UserRoleName = "User";
         public const string AdministrationAreaRoleNames = "Company owner, Administrator";
-        public const string ManagementAreaRoleNames = "Company owner, Administrator, Project manager";
+        public const string ManagementAreaRoleNames = "Company owner, User, Project manager";
+        public const string ManagementRoleNames = "Company owner, Project manager";
 
         // EmailAddress validation
         public const string EmailAddressErrorMessage = "Invalid email";
