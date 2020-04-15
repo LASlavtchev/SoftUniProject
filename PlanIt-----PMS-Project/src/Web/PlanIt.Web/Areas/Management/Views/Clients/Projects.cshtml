@@ -1,0 +1,165 @@
+﻿@using System.Globalization
+@using PlanIt.Web.ViewModels.Management.Projects
+@model IEnumerable<ClientProjectViewModel>
+
+@{
+    ViewData["Title"] = "Projects";
+    decimal sumBudgetApprovedProjects = 0;
+    decimal sumBudgetNotApprovedProjects = 0;
+}
+
+@section Styles {
+    <environment names="Development">
+        <!-- Ionicons -->
+        <link href="~/lib/ionicons/css/ionicons.css" rel="stylesheet" asp-append-version="true" />
+        <!-- DataTables -->
+        <link href="~/lib/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/datatables-responsive/css/responsive.bootstrap4.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <!-- Font Awesome Icons -->
+        <link href="~/lib/ionicons/css/ionicons.min.css" rel="stylesheet" asp-append-version="true" />
+        <!-- DataTables -->
+        <link href="~/lib/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+
+<div class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="text-center"><strong>All client`s projects</strong></div>
+                </div>
+                <div class="card-body">
+                    <table id="tableClientProjects" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Budget approved</th>
+                                <th>Project status</th>
+                                <th>Start date</th>
+                                <th>Due date</th>
+                                <th>Budget</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var project in Model)
+                            {
+                                if (project.IsBudgetApproved)
+                                {
+                                    sumBudgetApprovedProjects += project.Budget;
+                                }
+                                else
+                                {
+                                    sumBudgetNotApprovedProjects += project.Budget;
+                                }
+                                <tr>
+                                    <td>@project.Name</td>
+                                    <td>@(project.IsBudgetApproved == true ? "Yes" : "No")</td>
+                                    <td>@project.ProgressStatusName</td>
+                                    <td>
+                                        <time datetime="@project.StartDate?.ToString("O")">
+                                            @(project.StartDate == null ? "-" : project.StartDate?.ToString("dd/MM/yyyy"))
+                                        </time>
+                                    </td>
+                                    <td>
+                                        <time datetime="@project.DueDate?.ToString("O")">
+                                            @(project.DueDate == null ? "-" : project.DueDate?.ToString("dd/MM/yyyy"))
+                                        </time>
+                                    </td>
+                                    <td>@project.Budget.ToString("F2", CultureInfo.InvariantCulture)</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm"
+                                           asp-area="Management"
+                                           asp-controller="Projects"
+                                           asp-action="Details"
+                                           asp-route-id="@project.Id">
+                                            <i class="fas fa-info"></i>
+                                            Details
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Budget approved</th>
+                                <th>Project status</th>
+                                <th>Start date</th>
+                                <th>Due date</th>
+                                <th>Budget</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4 col-sm-5">
+                    </div>
+                    <div class="col-lg-4 col-sm-5 ml-auto">
+                        <table class="table table-clear">
+                            <tbody>
+                                <tr>
+                                    <td class="left">
+                                        <strong>Total Approved Budget:</strong>
+                                    </td>
+                                    <td class="right">
+                                        <strong>
+                                            @sumBudgetApprovedProjects.ToString("F2", CultureInfo.InvariantCulture)
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="left">
+                                        <strong>Required:</strong>
+                                    </td>
+                                    <td class="right">
+                                        <strong>
+                                            @sumBudgetNotApprovedProjects.ToString("F2", CultureInfo.InvariantCulture)
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <environment include="Development">
+        <!-- DataTables -->
+        <script src="~/lib/datatables-bs4/js/jquery.dataTables.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/dataTables.responsive.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <!-- DataTables -->
+        <script src="~/lib/datatables-bs4/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <script>
+        $(function () {
+            $("#tableClientProjects").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "columnDefs": [{
+                    "targets": 5,
+                    "orderable": false,
+                    "searchable": false
+                }]
+            });
+        });
+    </script>
+}

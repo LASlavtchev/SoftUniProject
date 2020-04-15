@@ -9,8 +9,6 @@
     var status = Model.IsBudgetApproved == false ? "Not Approved" : "Approved";
     var subProjects = (List<ProjectSubProjectViewModel>)Model.SubProjects;
     var referrerPath = new Uri(Context.Request.Headers["Referer"].ToString()).AbsolutePath;
-    var referrerPathAsArray = referrerPath.Split("/", StringSplitOptions.RemoveEmptyEntries);
-    var previousAction = referrerPathAsArray.Skip(2).Take(1).SingleOrDefault() ?? "Index";
 }
 
 <div class="text-center">
@@ -171,7 +169,7 @@
                     }
                     <div class="row">
                         <div class="col-8">
-                            <a asp-action="@previousAction"
+                            <a href="@referrerPath"
                                class="btn btn-dark float-left">
                                 Back to projects
                             </a>
