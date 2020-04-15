@@ -275,12 +275,23 @@
                 .Where(i => i.Id == inputProject.Id)
                 .FirstOrDefaultAsync();
 
+            if (project.StartDate != inputProject.StartDate?.ToUniversalTime() ||
+                project.DueDate != inputProject.DueDate?.ToUniversalTime())
+            {
+                project.IsBudgetApproved = false;
+                project.ProgressStatus = await this.progressStatusesService
+                    .GetByNameAsync(GlobalConstants.ProgressStatusSuspended);
+            }
+
+            if (inputProject.ProjectManagerId != null)
+            {
+                project.ProjectManagerId = inputProject.ProjectManagerId;
+                project.ProgressStatusId = inputProject.ProgressStatusId;
+            }
+
             project.Name = inputProject.Name;
             project.StartDate = inputProject.StartDate?.ToUniversalTime();
             project.DueDate = inputProject.DueDate?.ToUniversalTime();
-
-
-            project.ClientBudget = inputProject.ClientBudget;
 
             this.projectsRepository.Update(project);
             await this.projectsRepository.SaveChangesAsync();

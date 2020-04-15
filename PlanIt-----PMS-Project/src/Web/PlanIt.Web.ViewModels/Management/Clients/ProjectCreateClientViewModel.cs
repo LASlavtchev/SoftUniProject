@@ -1,9 +1,5 @@
 ﻿namespace PlanIt.Web.ViewModels.Management.Clients
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
 

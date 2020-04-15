@@ -1,4 +1,5 @@
-﻿@using PlanIt.Data.Models
+﻿@using PlanIt.Common
+@using PlanIt.Data.Models
 @using PlanIt.Web.ViewModels.Management.ProgressStatuses
 @using PlanIt.Web.ViewModels.Management.Projects
 @model ProjectEditInputModel
@@ -42,36 +43,39 @@
                 </div>
                 <label asp-for="@Model.DueDate" class="col-4 col-form-label text-left"></label>
             </div>
-            <div class="form-group row">
-                <div class="col-4 text-right">
-                    <i class="fas fa-user-edit fa-2x" style="line-height:1.25;"></i>
+            @if (!this.User.IsInRole(GlobalConstants.UserRoleName))
+            {
+                <div class="form-group row">
+                    <div class="col-4 text-right">
+                        <i class="fas fa-user-edit fa-2x" style="line-height:1.25;"></i>
+                    </div>
+                    <div class="col-4">
+                        <select asp-for="@Model.ProjectManagerId" class="custom-select mr-sm-2">
+                            <option value="0" selected>Choose client...</option>
+                            @foreach (var user in selectedUsers)
+                            {
+                                <option value="@user.Id">@user.Email</option>
+                            }
+                        </select>
+                    </div>
+                    <label asp-for="@Model.ProjectManagerId" class="col-4 col-form-label text-left"></label>
                 </div>
-                <div class="col-4">
-                    <select asp-for="@Model.ProjectManagerId" class="custom-select mr-sm-2">
-                        <option value="0" selected>Choose client...</option>
-                        @foreach (var user in selectedUsers)
-                        {
-                            <option value="@user.Id">@user.Email</option>
-                        }
-                    </select>
+                <div class="form-group row">
+                    <div class="col-4 text-right">
+                        <i class="fas fa-edit fa-2x" style="line-height:1.25;"></i>
+                    </div>
+                    <div class="col-4">
+                        <select asp-for="@Model.ProgressStatusId" class="custom-select mr-sm-2">
+                            <option value="0" selected>Choose client...</option>
+                            @foreach (var status in statuses)
+                            {
+                                <option value="@status.Id">@status.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <label asp-for="@Model.ProgressStatusId" class="col-4 col-form-label text-left"></label>
                 </div>
-                <label asp-for="@Model.ProjectManagerId" class="col-4 col-form-label text-left"></label>
-            </div>
-            <div class="form-group row">
-                <div class="col-4 text-right">
-                    <i class="fas fa-edit fa-2x" style="line-height:1.25;"></i>
-                </div>
-                <div class="col-4">
-                    <select asp-for="@Model.ProgressStatusName" class="custom-select mr-sm-2">
-                        <option value="0" selected>Choose client...</option>
-                        @foreach (var status in statuses)
-                        {
-                            <option value="@status.Name">@status.Name</option>
-                        }
-                    </select>
-                </div>
-                <label asp-for="@Model.ProgressStatusName" class="col-4 col-form-label text-left"></label>
-            </div>
+            }
             <div class="form-group row">
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Edit</button>

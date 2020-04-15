@@ -1,5 +1,11 @@
 ﻿namespace PlanIt.Web.Areas.Management.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -9,13 +15,6 @@
     using PlanIt.Web.ViewModels.Management.Clients;
     using PlanIt.Web.ViewModels.Management.ProgressStatuses;
     using PlanIt.Web.ViewModels.Management.Projects;
-    using PlanIt.Web.ViewModels.Management.Users;
-    using PlanIt.Web.ViewModels.ProgressStatuses;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Threading.Tasks;
 
     public class ProjectsController : ManagementController
     {
@@ -136,7 +135,6 @@
             return this.RedirectToAction(nameof(this.Details), new { project.Id });
         }
 
-        [Authorize(Roles = GlobalConstants.ManagementRoleNames)]
         public async Task<IActionResult> Edit(int id)
         {
             var project = await this.projectsService.GetByIdAsync<ProjectEditInputModel>(id);
@@ -155,7 +153,6 @@
             return this.View(project);
         }
 
-        [Authorize(Roles = GlobalConstants.ManagementRoleNames)]
         [HttpPost]
         public async Task<IActionResult> Edit(int id, ProjectEditInputModel inputModel)
         {
@@ -167,7 +164,7 @@
             if (!this.ModelState.IsValid)
             {
                 var selectedUsers = await this.SelectUsersAsync(this.User);
-                var statuses = this.progressStatusesService.GetAllAsync<ProjectProgressStatusViewModel>();
+                var statuses = await this.progressStatusesService.GetAllAsync<ProjectProgressStatusViewModel>();
 
                 this.ViewData["Users"] = selectedUsers;
                 this.ViewData["Statuses"] = statuses;
@@ -228,11 +225,6 @@
             if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName))
             {
                 users = users.Where(u => !u.Roles.Select(r => r.RoleId).Contains(companyOwnerRole.Id));
-            }
-            else if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-            {
-                users = users.Where(u => !u.Roles.Select(r => r.RoleId).Contains(adminRole.Id) &&
-                                         !u.Roles.Select(r => r.RoleId).Contains(companyOwnerRole.Id));
             }
             else if (this.User.IsInRole(GlobalConstants.ProjectManagerRoleName))
             {

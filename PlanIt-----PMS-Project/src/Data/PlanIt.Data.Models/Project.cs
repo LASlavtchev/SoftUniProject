@@ -26,6 +26,8 @@
 
         public bool IsBudgetApproved { get; set; }
 
+        public int ProgressStatusId { get; set; }
+
         public virtual ProgressStatus ProgressStatus { get; set; }
 
         public string ProjectManagerId { get; set; }

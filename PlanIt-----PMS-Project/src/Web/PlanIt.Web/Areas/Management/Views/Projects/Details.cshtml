@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using PlanIt.Common
 @using PlanIt.Web.ViewModels.Management.SubProjects
 @model PlanIt.Web.ViewModels.Management.Projects.ProjectDetailsViewModel
 
@@ -6,22 +7,10 @@
     this.ViewData["Title"] = "Details";
 
     var status = Model.IsBudgetApproved == false ? "Not Approved" : "Approved";
-    var projectManagerFullName = "Not assigned";
-    var projectManagerCompanyName = "-";
-    var projectManagerJobTitle = "-";
-    var projectManagerEmail = "-";
-    var projectManagerPhoneNumber = "-";
-
-    if (Model.ProjectManager != null)
-    {
-        projectManagerFullName = Model.ProjectManager.FullName;
-        projectManagerCompanyName = Model.ProjectManager.CompanyName;
-        projectManagerJobTitle = Model.ProjectManager.JobTitle;
-        projectManagerEmail = Model.ProjectManager.Email;
-        projectManagerPhoneNumber = Model.ProjectManager.PhoneNumber;
-    }
-
     var subProjects = (List<ProjectSubProjectViewModel>)Model.SubProjects;
+    var referrerPath = new Uri(Context.Request.Headers["Referer"].ToString()).AbsolutePath;
+    var referrerPathAsArray = referrerPath.Split("/", StringSplitOptions.RemoveEmptyEntries);
+    var previousAction = referrerPathAsArray.Skip(2).Take(1).SingleOrDefault() ?? "Index";
 }
 
 <div class="text-center">
@@ -53,14 +42,28 @@
                             <div>Phone: @Model.Client.PlantItUserPhoneNumber</div>
                         </div>
                         <div class="col-sm-4">
-                            <h6 class="mb-3">Project Manager:</h6>
-                            <div>
-                                <strong>@projectManagerFullName</strong>
-                            </div>
-                            <div>Company name: @projectManagerCompanyName</div>
-                            <div>Job title: @projectManagerCompanyName</div>
-                            <div>Email: @projectManagerEmail</div>
-                            <div>Phone: @projectManagerPhoneNumber</div>
+                            @if (Model.ProjectManager == null)
+                            {
+                                <h6 class="mb-3">Project Manager:</h6>
+                                <div>
+                                    <strong>Not assigned</strong>
+                                </div>
+                                <div>Company name: - </div>
+                                <div>Job title: - </div>
+                                <div>Email: - </div>
+                                <div>Phone: - </div>
+                            }
+                            else if (Model.ProjectManager.Email != this.User.Identity.Name)
+                            {
+                                <h6 class="mb-3">Project Manager:</h6>
+                                <div>
+                                    <strong>@Model.ProjectManager.FullName</strong>
+                                </div>
+                                <div>Company name: @Model.ProjectManager.CompanyName</div>
+                                <div>Job title: @Model.ProjectManager.JobTitle</div>
+                                <div>Email: @Model.ProjectManager.Email</div>
+                                <div>Phone: @Model.ProjectManager.PhoneNumber</div>
+                            }
                         </div>
                         <div class="col-sm-4">
                             <h6 class="mb-3">Schedule:</h6>
@@ -168,7 +171,7 @@
                     }
                     <div class="row">
                         <div class="col-8">
-                            <a asp-action="Index"
+                            <a asp-action="@previousAction"
                                class="btn btn-dark float-left">
                                 Back to projects
                             </a>
@@ -181,11 +184,14 @@
                                class="btn btn-primary">
                                 Edit
                             </a>
-                            <a href="#deleteConfirm"
-                               data-toggle="modal"
-                               class="btn btn-danger">
-                                Delete
-                            </a>
+                            @if (!this.User.IsInRole(GlobalConstants.UserRoleName))
+                            {
+                                <a href="#deleteConfirm"
+                                   data-toggle="modal"
+                                   class="btn btn-danger">
+                                    Delete
+                                </a>
+                            }
                         </div>
                     </div>
                 </div>

@@ -25,11 +25,9 @@
         [DisplayName("Due date")]
         public DateTime DueDate { get; set; }
 
-        [Required]
         [DisplayName("Progress status")]
-        public string ProgressStatusName { get; set; }
+        public int ProgressStatusId { get; set; }
 
-        [Required]
         [DisplayName("Project manager")]
         public string ProjectManagerId { get; set; }
     }
