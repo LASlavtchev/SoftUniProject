@@ -1,5 +1,7 @@
-﻿using PlanIt.Data.Common.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using PlanIt.Data.Common.Repositories;
 using PlanIt.Data.Models;
+using PlanIt.Services.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,9 +18,14 @@ namespace PlanIt.Services.Data
             this.subProjectTypesServiceRepository = subProjectTypesServiceRepository;
         }
 
-        public Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
+        public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
         {
-            throw new NotImplementedException();
+            var types = await this.subProjectTypesServiceRepository
+                .All()
+                .To<TViewModel>()
+                .ToListAsync();
+
+            return types;
         }
     }
 }

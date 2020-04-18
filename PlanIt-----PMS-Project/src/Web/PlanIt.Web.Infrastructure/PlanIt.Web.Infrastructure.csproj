@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\PlanIt.Data.Models\PlanIt.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Services\PlanIt.Services.Data\PlanIt.Services.Data.csproj" />
   </ItemGroup>
 
 </Project>

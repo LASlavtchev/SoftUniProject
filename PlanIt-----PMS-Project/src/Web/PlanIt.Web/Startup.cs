@@ -78,6 +78,7 @@
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IClientsServices, ClientsService>();
             services.AddTransient<IProjectsService, ProjectsService>();
+            services.AddTransient<ISubProjectsService, SubProjectsService>();
             services.AddTransient<IProgressStatusesService, ProgressStatusesService>();
             services.AddTransient<ISubProjectTypesService, SubProjectTypesService>();
 

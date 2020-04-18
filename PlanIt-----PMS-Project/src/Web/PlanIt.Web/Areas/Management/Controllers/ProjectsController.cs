@@ -12,6 +12,7 @@
     using PlanIt.Common;
     using PlanIt.Data.Models;
     using PlanIt.Services.Data;
+    using PlanIt.Web.Infrastructure.Filters;
     using PlanIt.Web.ViewModels.Management.Clients;
     using PlanIt.Web.ViewModels.Management.ProgressStatuses;
     using PlanIt.Web.ViewModels.Management.Projects;
@@ -93,6 +94,7 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
+        [TypeFilter(typeof(MyProjectsOnlyAttribute))]
         public async Task<IActionResult> Details(int id)
         {
             var project = await this.projectsService.GetByIdAsync<ProjectDetailsViewModel>(id);
@@ -135,6 +137,7 @@
             return this.RedirectToAction(nameof(this.Details), new { project.Id });
         }
 
+        [TypeFilter(typeof(MyProjectsOnlyAttribute))]
         public async Task<IActionResult> Edit(int id)
         {
             var project = await this.projectsService.GetByIdAsync<ProjectEditInputModel>(id);
@@ -153,6 +156,7 @@
             return this.View(project);
         }
 
+        [TypeFilter(typeof(MyProjectsOnlyAttribute))]
         [HttpPost]
         public async Task<IActionResult> Edit(int id, ProjectEditInputModel inputModel)
         {

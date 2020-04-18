@@ -6,6 +6,7 @@
     using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
     using PlanIt.Common;
     using PlanIt.Data.Common.Repositories;
@@ -75,6 +76,16 @@
             return sumBudget;
         }
 
+        public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
+        {
+            var projects = await this.projectsRepository
+                .All()
+                .To<TViewModel>()
+                .ToListAsync();
+
+            return projects;
+        }
+
         public async Task<IEnumerable<TViewModel>> GetAllByClientIdAsync<TViewModel>(int clientId)
         {
             var clientProjects = await this.projectsRepository
@@ -119,12 +130,32 @@
             return managerProjects;
         }
 
+        public IEnumerable<Project> GetAllByManagerId(string managerId)
+        {
+            var managerProjects = this.projectsRepository
+                .All()
+                .Where(p => p.ProjectManagerId == managerId)
+                .ToList();
+
+            return managerProjects;
+        }
+
         public async Task<TViewModel> GetByIdAsync<TViewModel>(int projectId)
         {
             var project = await this.projectsRepository
                 .All()
                 .Where(p => p.Id == projectId)
                 .To<TViewModel>()
+                .FirstOrDefaultAsync();
+
+            return project;
+        }
+
+        public async Task<Project> GetByIdAsync(int projectId)
+        {
+            var project = await this.projectsRepository
+                .All()
+                .Where(p => p.Id == projectId)
                 .FirstOrDefaultAsync();
 
             return project;
@@ -332,7 +363,25 @@
             return projects;
         }
 
+        public async Task<Project> CalculateProjectBudget(int projectId)
+        {
+            var project = await this.projectsRepository
+                .All()
+                .Where(p => p.Id == projectId)
+                .FirstOrDefaultAsync();
 
+            project.Budget = this.SumBudgetBySubProjectsBudget(project);
+
+            if (project.IsBudgetApproved)
+            {
+                project.IsBudgetApproved = false;
+            }
+
+            this.projectsRepository.Update(project);
+            await this.projectsRepository.SaveChangesAsync();
+
+            return project;
+        }
 
         private decimal SumBudgetBySubProjectsBudget(Project project)
         {

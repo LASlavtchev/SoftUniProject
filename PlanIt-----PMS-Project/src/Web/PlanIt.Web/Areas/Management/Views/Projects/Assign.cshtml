@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-4">
                     <select asp-for="@Model.ProjectManagerId" class="custom-select mr-sm-2">
-                        <option value="0" selected>Choose client...</option>
+                        <option value="0" selected>Choose user...</option>
                         @foreach (var user in users)
                         {
                             <option value="@user.Id">@user.Email</option>

@@ -51,7 +51,7 @@
                     </div>
                     <div class="col-4">
                         <select asp-for="@Model.ProjectManagerId" class="custom-select mr-sm-2">
-                            <option value="0" selected>Choose client...</option>
+                            <option value="0" selected>Choose user...</option>
                             @foreach (var user in selectedUsers)
                             {
                                 <option value="@user.Id">@user.Email</option>
@@ -66,7 +66,7 @@
                     </div>
                     <div class="col-4">
                         <select asp-for="@Model.ProgressStatusId" class="custom-select mr-sm-2">
-                            <option value="0" selected>Choose client...</option>
+                            <option value="0" selected>Choose status...</option>
                             @foreach (var status in statuses)
                             {
                                 <option value="@status.Id">@status.Name</option>

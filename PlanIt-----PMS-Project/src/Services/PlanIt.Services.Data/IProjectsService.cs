@@ -17,6 +17,8 @@
 
         decimal CalculateApprovedProjectsBudgetByClientId(int clientId);
 
+        Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>();
+
         Task<IEnumerable<TViewModel>> GetAllByClientIdAsync<TViewModel>(int clientId);
 
         Task<IEnumerable<TViewModel>> GetAllApprovedByClientIdAsync<TViewModel>(int clientId);
@@ -25,6 +27,8 @@
 
         Task<IEnumerable<TViewModel>> GetAllByManagerIdAsync<TViewModel>(string managerId);
 
+        IEnumerable<Project> GetAllByManagerId(string managerId);
+
         Task<IEnumerable<TViewModel>> GetAllApprovedAsync<TViewModel>();
 
         Task<IEnumerable<TViewModel>> GetAllNotApprovedAsync<TViewModel>();
@@ -32,6 +36,8 @@
         Task<IEnumerable<TViewModel>> GetAllDeletedAsync<TViewModel>();
 
         Task<TViewModel> GetByIdAsync<TViewModel>(int projectId);
+
+        Task<Project> GetByIdAsync(int projectId);
 
         Task<TViewModel> GetDeletedByIdAsync<TViewModel>(int projectId);
 
@@ -50,5 +56,7 @@
         Task<Project> EditByClientAsync<TInputModel>(TInputModel inputModel);
 
         Task<Project> EditByManagerAsync<TInputModel>(TInputModel inputModel);
+
+        Task<Project> CalculateProjectBudget(int projectId);
     }
 }

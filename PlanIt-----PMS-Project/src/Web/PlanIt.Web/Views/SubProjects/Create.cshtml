@@ -1,0 +1,71 @@
+﻿@using PlanIt.Web.ViewModels.SubProjects
+@model SubProjectCreateInputModel
+
+@{
+    this.ViewData["Title"] = "Create";
+    var projects = (IEnumerable<SubProjectProjectViewModel>)this.ViewData["My Projects"];
+    var types = (IEnumerable<SubProjectSubProjectTypeViewModel>)this.ViewData["Types"];
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Create project part</h3>
+    <div class="container p-4">
+        <hr class="bg-dark" />
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger text-center"></div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-project-diagram fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <select asp-for="@Model.SubProjectTypeId" class="custom-select mr-sm-2">
+                        <option value="0" selected>Choose type...</option>
+                        @foreach (var type in types)
+                        {
+                            <option value="@type.Id">@type.Name</option>
+                        }
+                    </select>
+                </div>
+                <label asp-for="@Model.SubProjectTypeId" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-coins fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <input type="number" class="form-control" asp-for="@Model.Budget" />
+                </div>
+                <label asp-for="@Model.Budget" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-calendar-check fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <input type="date" class="form-control" asp-for="@Model.DueDate" />
+                </div>
+                <label asp-for="@Model.DueDate" class="col-4 col-form-label text-left"></label>
+            </div>            
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-clipboard fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <select asp-for="@Model.ProjectId" class="custom-select mr-sm-2">
+                        <option value="0" selected>Choose project...</option>
+                        @foreach (var project in projects)
+                        {
+                            <option value="@project.Id">@project.Name</option>
+                        }
+                    </select>
+                </div>
+                <label asp-for="@Model.ProjectId" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

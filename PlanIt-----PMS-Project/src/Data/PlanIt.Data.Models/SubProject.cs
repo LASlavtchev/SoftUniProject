@@ -14,6 +14,12 @@
             this.Hours = new HashSet<Hour>();
         }
 
+        public int ProjectId { get; set; }
+
+        public Project Project { get; set; }
+
+        public int SubProjectTypeId { get; set; }
+
         public SubProjectType SubProjectType { get; set; }
 
         // Set by ProjectManager for control - must be before Project DueDate
