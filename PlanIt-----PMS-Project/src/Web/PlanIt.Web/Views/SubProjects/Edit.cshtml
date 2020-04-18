@@ -1,0 +1,80 @@
+﻿@using PlanIt.Web.ViewModels.SubProjects
+@model SubProjectEditInputModel
+
+@{
+    this.ViewData["Title"] = "Edit";
+    var statuses = (IEnumerable<SubProjectProgressStatusViewModel>)this.ViewData["Statuses"];
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Edit project part</h3>
+    <div class="container p-4">
+        <hr class="bg-dark" />
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger text-center"></div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-project-diagram fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <span class="custom-select mr-sm-2">
+                        @Model.SubProjectTypeName
+                    </span>
+                    <input type="hidden" asp-for="@Model.SubProjectTypeName"/>
+                </div>
+                <label asp-for="@Model.SubProjectTypeName" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-coins fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <input type="number" class="form-control" asp-for="@Model.Budget" />
+                </div>
+                <label asp-for="@Model.Budget" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-calendar-check fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <input type="date" class="form-control" asp-for="@Model.DueDate" />
+                </div>
+                <label asp-for="@Model.DueDate" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fab fa-r-project fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <select asp-for="@Model.ProgressStatusId" class="custom-select mr-sm-2">
+                        <option value="0" selected>Choose status...</option>
+                        @foreach (var status in statuses)
+                        {
+                            <option value="@status.Id">@status.Name</option>
+                        }
+                    </select>
+                </div>
+                <label asp-for="@Model.ProgressStatusId" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-clipboard fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <span class="custom-select mr-sm-2">
+                        @Model.ProjectName
+                    </span>
+                    <input type="hidden" asp-for="@Model.ProjectName"/>
+                </div>
+                <label asp-for="@Model.ProjectName" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <input type="hidden" asp-for="@Model.ProjectId"/>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

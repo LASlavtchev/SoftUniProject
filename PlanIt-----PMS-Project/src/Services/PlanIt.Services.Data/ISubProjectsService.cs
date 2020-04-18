@@ -10,5 +10,11 @@
     public interface ISubProjectsService
     {
         Task<SubProject> CreateAsync<TInputModel>(TInputModel inputModel);
+
+        Task<TInputModel> GetByIdAsync<TInputModel>(int subProjectId);
+
+        Task<SubProject> EditAsync<TInputModel>(TInputModel inputModel);
+
+        Task DeleteAsync(int subProjectId);
     }
 }

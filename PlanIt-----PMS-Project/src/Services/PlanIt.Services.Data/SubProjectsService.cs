@@ -1,11 +1,9 @@
 ﻿namespace PlanIt.Services.Data
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore;
     using PlanIt.Data.Common.Repositories;
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
@@ -49,6 +47,47 @@
             await this.subProjectsRepository.SaveChangesAsync();
 
             return subProject;
+        }
+
+        public async Task<TInputModel> GetByIdAsync<TInputModel>(int subProjectId)
+        {
+            var subProject = await this.subProjectsRepository
+                .All()
+                .Where(sp => sp.Id == subProjectId)
+                .To<TInputModel>()
+                .FirstOrDefaultAsync();
+
+            return subProject;
+        }
+
+        public async Task<SubProject> EditAsync<TInputModel>(TInputModel inputModel)
+        {
+            var subProjectInputModel = AutoMapperConfig.MapperInstance.Map<SubProject>(inputModel);
+
+            var subProject = await this.subProjectsRepository
+                .All()
+                .Where(sp => sp.Id == subProjectInputModel.Id)
+                .FirstOrDefaultAsync();
+
+            subProject.Budget = subProjectInputModel.Budget;
+            subProject.DueDate = subProjectInputModel.DueDate?.ToUniversalTime();
+            subProject.ProgressStatusId = subProjectInputModel.ProgressStatusId;
+
+            this.subProjectsRepository.Update(subProject);
+            await this.subProjectsRepository.SaveChangesAsync();
+
+            return subProject;
+        }
+
+        public async Task DeleteAsync(int subProjectId)
+        {
+            var subProject = await this.subProjectsRepository
+                .All()
+                .Where(sp => sp.Id == subProjectId)
+                .FirstOrDefaultAsync();
+
+            this.subProjectsRepository.Delete(subProject);
+            await this.subProjectsRepository.SaveChangesAsync();
         }
     }
 }

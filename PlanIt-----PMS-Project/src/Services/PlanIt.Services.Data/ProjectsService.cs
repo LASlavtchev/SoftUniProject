@@ -368,6 +368,7 @@
             var project = await this.projectsRepository
                 .All()
                 .Where(p => p.Id == projectId)
+                .Include(p => p.SubProjects)
                 .FirstOrDefaultAsync();
 
             project.Budget = this.SumBudgetBySubProjectsBudget(project);
@@ -375,6 +376,8 @@
             if (project.IsBudgetApproved)
             {
                 project.IsBudgetApproved = false;
+                project.ProgressStatus = await this.progressStatusesService
+                    .GetByNameAsync(GlobalConstants.ProgressStatusSuspended);
             }
 
             this.projectsRepository.Update(project);
@@ -386,6 +389,7 @@
         private decimal SumBudgetBySubProjectsBudget(Project project)
         {
             var sum = project.SubProjects
+                .Where(sp => sp.IsDeleted == false)
                 .Select(sp => sp.Budget)
                 .Sum();
 
