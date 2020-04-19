@@ -12,6 +12,7 @@
         public Project()
         {
             this.SubProjects = new HashSet<SubProject>();
+            this.AdditionalCosts = new HashSet<AdditionalCost>();
         }
 
         [Required]
@@ -44,5 +45,7 @@
         public DateTime ClientDueDate { get; set; }
 
         public virtual ICollection<SubProject> SubProjects { get; set; }
+
+        public virtual ICollection<AdditionalCost> AdditionalCosts { get; set; }
     }
 }

@@ -106,6 +106,8 @@
                                     <th>#</th>
                                     <th>Project part</th>
                                     <th>Project part status</th>
+                                    <th>Due time</th>
+                                    <th>Additional costs</th>
                                     <th class="text-right">Budget</th>
                                 </tr>
                             </thead>
@@ -142,6 +144,21 @@
                                             <td>@(i + 1)</td>
                                             <td>@subProjects[i].SubProjectTypeName</td>
                                             <td>@subProjects[i].ProgressStatusName</td>
+                                            <td>
+                                                <time datetime="@subProjects[i].DueDate.ToString("O")">
+                                                    @(subProjects[i].DueDate.ToString("dd/MM/yyyy"))
+                                                </time>
+                                            </td>
+                                            <td>
+                                                <a asp-area=""
+                                                   asp-controller="AddCosts"
+                                                   asp-action="Details"
+                                                   asp-route-subProjectId="@subProjects[i].Id"
+                                                   title="Details"
+                                                   class="text-bold">
+                                                    @subProjects[i].TotalAdditionalCosts.ToString("F2", CultureInfo.InvariantCulture)
+                                                </a>
+                                            </td>
                                             <td align="right">
                                                 @subProjects[i].Budget.ToString("F2", CultureInfo.InvariantCulture)
                                             </td>
@@ -158,20 +175,36 @@
                             <table class="table table-clear">
                                 <tbody>
                                     <tr>
-                                        <td class="left">
-                                            <strong>Total:</strong>
+                                        <td class="text-left">
+                                            <strong>Total additional costs:</strong>
                                         </td>
-                                        <td class="right">
+                                        <td class="text-right">
+                                            <a asp-area=""
+                                               asp-controller="AddCosts"
+                                               asp-action="DetailsByProject"
+                                               asp-route-projectId="@Model.Id"
+                                               title="Details">
+                                                <strong>
+                                                    @Model.TotalAdditionalCosts.ToString("F2", CultureInfo.InvariantCulture)
+                                                </strong>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">
+                                            <strong>Total budget:</strong>
+                                        </td>
+                                        <td class="text-right">
                                             <strong>
                                                 @Model.Budget.ToString("F2", CultureInfo.InvariantCulture)
                                             </strong>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="left">
-                                            <strong>Required:</strong>
+                                        <td class="text-left">
+                                            <strong>Required budget:</strong>
                                         </td>
-                                        <td class="right">
+                                        <td class="text-right">
                                             <strong>
                                                 @Model.ClientBudget.ToString("F2", CultureInfo.InvariantCulture)
                                             </strong>
@@ -285,9 +318,9 @@
             let modal = document.querySelector("#removeSubProject");
             let element = event.target;
             let td = element.parentNode;
-            
+
             let id = td.querySelector("#subProjectId").value;
-            
+
             let path = `/SubProjects/Remove/${id}`;
             let removeForm = modal.querySelector("#removeForm");
             removeForm.setAttribute("action", path);

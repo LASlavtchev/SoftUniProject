@@ -2,10 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Linq;
 
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
+    using PlanIt.Web.ViewModels.Management.AdditionalCosts;
     using PlanIt.Web.ViewModels.Management.Clients;
     using PlanIt.Web.ViewModels.Management.SubProjects;
     using PlanIt.Web.ViewModels.Management.Users;
@@ -35,5 +36,9 @@
         public DateTime ClientDueDate { get; set; }
 
         public IEnumerable<ProjectSubProjectViewModel> SubProjects { get; set; }
+
+        public IEnumerable<ProjectAdditionalCostViewModel> AdditionalCosts { get; set; }
+
+        public decimal TotalAdditionalCosts => this.AdditionalCosts.Select(ac => ac.TotalCost).Sum();
     }
 }

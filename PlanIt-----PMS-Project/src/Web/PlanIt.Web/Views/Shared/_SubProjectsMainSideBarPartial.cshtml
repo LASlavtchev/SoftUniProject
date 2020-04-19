@@ -49,9 +49,15 @@
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a asp-area="Client" asp-controller="Projects" asp-action="Index" class="nav-link">
+                <a asp-area="" asp-controller="AddCosts" asp-action="AddToProject" class="nav-link">
                     <i class="fas fa-coins nav-icon"></i>
-                    <p>Create</p>
+                    <p>Add cost to project</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="" asp-controller="AddCosts" asp-action="AddToSubProject" class="nav-link">
+                    <i class="fas fa-coins nav-icon"></i>
+                    <p>Add cost to project part</p>
                 </a>
             </li>
         </ul>
@@ -69,14 +75,14 @@
         @if (hasAssignedProjects || this.User.IsInRole(GlobalConstants.ProjectManagerRoleName))
         {
             <li class="nav-item">
-                <a asp-area="Client" asp-controller="Projects" asp-action="Index" class="nav-link">
+                <a asp-area="" asp-controller="Tasks" asp-action="Create" class="nav-link">
                     <i class="fas fa-indent nav-icon"></i>
                     <p>Create</p>
                 </a>
             </li>
         }
         <li class="nav-item">
-            <a asp-area="Client" asp-controller="Projects" asp-action="Index" class="nav-link">
+            <a asp-area="" asp-controller="Tasks" asp-action="MyTasks" class="nav-link">
                 <i class="fas fa-clone nav-icon"></i>
                 <p>My Tasks</p>
             </a>

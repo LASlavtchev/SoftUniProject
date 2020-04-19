@@ -20,7 +20,7 @@
         [Column(TypeName = "decimal(15,4)")]
         public decimal TotalCost { get; set; }
 
-        public int SubProjectId { get; set; }
+        public int? SubProjectId { get; set; }
 
         public SubProject SubProject { get; set; }
 

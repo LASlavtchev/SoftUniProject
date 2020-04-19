@@ -49,12 +49,12 @@
             return subProject;
         }
 
-        public async Task<TInputModel> GetByIdAsync<TInputModel>(int subProjectId)
+        public async Task<TViewModel> GetByIdAsync<TViewModel>(int subProjectId)
         {
             var subProject = await this.subProjectsRepository
                 .All()
                 .Where(sp => sp.Id == subProjectId)
-                .To<TInputModel>()
+                .To<TViewModel>()
                 .FirstOrDefaultAsync();
 
             return subProject;

@@ -81,6 +81,7 @@
             services.AddTransient<ISubProjectsService, SubProjectsService>();
             services.AddTransient<IProgressStatusesService, ProgressStatusesService>();
             services.AddTransient<ISubProjectTypesService, SubProjectTypesService>();
+            services.AddTransient<IAdditionalCostsService, AdditionalCostsService>();
 
             var sendGridApiKey = this.configuration["SendGrid:ApiKey"];
             services

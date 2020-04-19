@@ -1,0 +1,73 @@
+﻿@using PlanIt.Web.ViewModels.AdditionalCosts
+@model AddCostAddToProjectInputModel
+
+@{
+    this.ViewData["Title"] = "Add Cost";
+    var projects = (IEnumerable<AddCostSelectProjectViewModel>)this.ViewData["Projects"];
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Add additional costs</h3>
+    <div class="container p-4">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger text-center"></div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fab fa-r-project fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <select asp-for="@Model.ProjectId" class="custom-select mr-sm-2">
+                        <option value="0" selected>Choose project...</option>
+                        @foreach (var project in projects)
+                        {
+                            <option value="@project.Id">@project.Name</option>
+                        }
+                    </select>
+                </div>
+                <label class="col-4 col-form-label text-left">Project</label>
+            </div>           
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="far fa-clipboard fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <input class="form-control" asp-for="@Model.Name">
+                </div>
+                <label asp-for="@Model.Name" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-clipboard-list fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <textarea class="form-control" asp-for="@Model.Description"></textarea>
+                </div>
+                <label asp-for="@Model.Description" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-clipboard-check fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <input type="number" class="form-control" asp-for="@Model.Quantity">
+                </div>
+                <label asp-for="@Model.Quantity" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 text-right">
+                    <i class="fas fa-coins fa-2x" style="line-height:1.25;"></i>
+                </div>
+                <div class="col-4">
+                    <input type="number" step="0.01" class="form-control" asp-for="@Model.PricePerQuantity">
+                </div>
+                <label asp-for="@Model.PricePerQuantity" class="col-4 col-form-label text-left"></label>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Add cost</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
