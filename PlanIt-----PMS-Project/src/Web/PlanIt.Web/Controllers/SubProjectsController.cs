@@ -1,6 +1,7 @@
 ﻿namespace PlanIt.Web.Controllers
 {
     using System.Collections.Generic;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -38,20 +39,7 @@
 
         public async Task<IActionResult> Create()
         {
-            var currentUserId = this.userManager.GetUserId(this.User);
-
-            var projects = new List<SubProjectProjectViewModel>();
-
-            if (this.User.IsInRole(GlobalConstants.UserRoleName))
-            {
-                projects = (List<SubProjectProjectViewModel>)await this.projectsService
-                .GetAllByManagerIdAsync<SubProjectProjectViewModel>(currentUserId);
-            }
-            else
-            {
-                projects = (List<SubProjectProjectViewModel>)await this.projectsService
-               .GetAllAsync<SubProjectProjectViewModel>();
-            }
+            var projects = await this.GetProjects(this.User);
 
             var subProjectTypes = await this.subProjectTypesService
                 .GetAllAsync<SubProjectSubProjectTypeViewModel>();
@@ -83,20 +71,7 @@
 
             if (!this.ModelState.IsValid)
             {
-                var currentUserId = this.userManager.GetUserId(this.User);
-
-                var projects = new List<SubProjectProjectViewModel>();
-
-                if (this.User.IsInRole(GlobalConstants.UserRoleName))
-                {
-                    projects = (List<SubProjectProjectViewModel>)await this.projectsService
-                    .GetAllByManagerIdAsync<SubProjectProjectViewModel>(currentUserId);
-                }
-                else
-                {
-                    projects = (List<SubProjectProjectViewModel>)await this.projectsService
-                   .GetAllAsync<SubProjectProjectViewModel>();
-                }
+                var projects = await this.GetProjects(this.User);
 
                 var subProjectTypes = await this.subProjectTypesService
                 .GetAllAsync<SubProjectSubProjectTypeViewModel>();
@@ -243,6 +218,26 @@
             await this.projectsService.CalculateProjectBudget(subProject.ProjectId);
 
             return this.RedirectToAction("Details", "Projects", new { area = "Management", id = subProject.ProjectId });
+        }
+
+        private async Task<IEnumerable<SubProjectProjectViewModel>> GetProjects(ClaimsPrincipal principal)
+        {
+            var currentUserId = this.userManager.GetUserId(principal);
+
+            var projects = new List<SubProjectProjectViewModel>();
+
+            if (principal.IsInRole(GlobalConstants.UserRoleName))
+            {
+                projects = (List<SubProjectProjectViewModel>)await this.projectsService
+                .GetAllByManagerIdAsync<SubProjectProjectViewModel>(currentUserId);
+            }
+            else
+            {
+                projects = (List<SubProjectProjectViewModel>)await this.projectsService
+               .GetAllAsync<SubProjectProjectViewModel>();
+            }
+
+            return projects;
         }
     }
 }
