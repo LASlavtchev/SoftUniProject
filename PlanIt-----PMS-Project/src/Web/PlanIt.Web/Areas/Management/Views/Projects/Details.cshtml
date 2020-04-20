@@ -115,7 +115,7 @@
                                 @if (subProjects.Count == 0)
                                 {
                                     <tr>
-                                        <td align="center" colspan="4">
+                                        <td align="center" colspan="7">
                                             <strong>No project parts assigned</strong>
                                         </td>
                                     </tr>
@@ -152,7 +152,7 @@
                                             <td>
                                                 <a asp-area=""
                                                    asp-controller="AddCosts"
-                                                   asp-action="Details"
+                                                   asp-action="CostsBySubProject"
                                                    asp-route-subProjectId="@subProjects[i].Id"
                                                    title="Details"
                                                    class="text-bold">
@@ -181,7 +181,7 @@
                                         <td class="text-right">
                                             <a asp-area=""
                                                asp-controller="AddCosts"
-                                               asp-action="DetailsByProject"
+                                               asp-action="CostsByProject"
                                                asp-route-projectId="@Model.Id"
                                                title="Details">
                                                 <strong>
@@ -276,7 +276,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <form asp-area="Client"
+                <form asp-area="Management"
                       asp-controller="Projects"
                       asp-action="Delete"
                       asp-route-id="@Model.Id"
@@ -310,7 +310,7 @@
         </div>
     </div>
 </div>
-<!-- /.ModalDelete -->
+<!-- /.ModalRemove -->
 
 @section Scripts {
     <script>

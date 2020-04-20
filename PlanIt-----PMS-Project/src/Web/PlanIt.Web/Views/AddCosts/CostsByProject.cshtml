@@ -1,0 +1,205 @@
+﻿@using System.Globalization
+@using PlanIt.Web.ViewModels.AdditionalCosts
+@model AddCostDetailsProjectViewModel
+
+@{
+    this.ViewData["Title"] = "Cost Details";
+    var additionalCostsToProjectOnly = Model.AdditionalCostsToProjectOnly;
+    var referrerPath = new Uri(Context.Request.Headers["Referer"].ToString()).AbsolutePath;
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Project additional costs details</h3>
+    <div class="container p-4">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    Project name:
+                    <strong> @Model.Name</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row p-4">
+                        <div class="col-6 btn-group">
+                            <a asp-area=""
+                               asp-controller="AddCosts"
+                               asp-action="AddToSubProject"
+                               asp-route-id="@Model.Id"
+                               class="btn btn-primary float-left">
+                                Add cost to project part
+                            </a>
+                        </div>
+                        <div class="col-6 btn-group">
+                            <a asp-area=""
+                               asp-controller="AddCosts"
+                               asp-action="AddToProject"                               
+                               class="btn btn-primary float-left">
+                                Add cost to project
+                            </a>
+                        </div>
+                    </div>
+                    <div class="table-responsive-sm">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Action</th>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>Price per quantity</th>
+                                    <th class="text-right">Total cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (additionalCostsToProjectOnly.Count() == 0)
+                                {
+                                    <tr>
+                                        <td align="center" colspan="7">
+                                            <strong>No costs available</strong>
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < additionalCostsToProjectOnly.Count(); i++)
+                                    {
+                                        <tr>
+                                            <td align="left">
+                                                <a asp-area=""
+                                                   asp-controller="AddCosts"
+                                                   asp-action="Edit"
+                                                   asp-route-id="@additionalCostsToProjectOnly[i].Id"
+                                                   class="btn btn-primary">
+                                                    Edit
+                                                </a>
+                                                <a href="#deleteCost"
+                                                   data-toggle="modal"
+                                                   class="btn btn-danger"
+                                                   onclick="Delete()">
+                                                    Delete
+                                                </a>
+                                                <input type="hidden" id="deleteCostId" value="@additionalCostsToProjectOnly[i].Id" />
+                                            </td>
+                                            <td>@(i + 1)</td>
+                                            <td>@additionalCostsToProjectOnly[i].Name</td>
+                                            <td>
+                                                @(additionalCostsToProjectOnly[i].Description == null ?
+                                                    "-" : additionalCostsToProjectOnly[i].Description)
+                                            </td>
+                                            <td>@additionalCostsToProjectOnly[i].Quantity</td>
+                                            <td>
+                                                @additionalCostsToProjectOnly[i].PricePerQuantity.ToString("F2", CultureInfo.InvariantCulture)
+                                            </td>
+                                            <td align="right">
+                                                @additionalCostsToProjectOnly[i].TotalCost.ToString("F2", CultureInfo.InvariantCulture)
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-5">
+                        </div>
+                        <div class="col-lg-4 col-sm-5 ml-auto">
+                            <table class="table table-clear">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left">
+                                            <strong>Project additional costs:</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong>
+                                                @Model.AdditionalCostsToProjectOnlyTotalCost.ToString("F2", CultureInfo.InvariantCulture)
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    @foreach (var subProject in Model.SubProjects)
+                                    {
+                                        <tr>
+                                            <td class="text-left">
+                                                <strong>@subProject.SubProjectTypeName additional costs:</strong>
+                                            </td>
+                                            <td class="text-right">
+                                                <a asp-area=""
+                                                   asp-controller="AddCosts"
+                                                   asp-action="CostsBySubProject"
+                                                   asp-route-subProjectId="@subProject.Id"
+                                                   title="Details">
+                                                    <strong>
+                                                        @subProject.AdditionalCostsSum.ToString("F2", CultureInfo.InvariantCulture)
+                                                    </strong>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td class="text-left">
+                                            <strong>Total additional costs:</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong>
+                                                @Model.TotalCost.ToString("F2", CultureInfo.InvariantCulture)
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-8">
+                            <a href="@referrerPath"
+                               class="btn btn-dark float-left">
+                                Back
+                            </a>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ModalDelete -->
+<div class="modal fade" id="deleteCost" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalTitle">Delete cost</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="textBodyRemove" class="modal-body">
+                Are you sure you want to delete this project cost?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form id="deleteForm" method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.ModalDelete -->
+
+@section Scripts {
+    <script>
+        function Delete() {
+            let modal = document.querySelector("#deleteCost");
+            let element = event.target;
+            let td = element.parentNode;
+
+            let id = td.querySelector("#deleteCostId").value;
+
+            let path = `/AddCosts/Delete/${id}`;
+            let removeForm = modal.querySelector("#deleteForm");
+            removeForm.setAttribute("action", path);
+        }
+    </script>
+}
+

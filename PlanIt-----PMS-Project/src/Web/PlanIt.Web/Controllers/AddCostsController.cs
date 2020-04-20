@@ -1,6 +1,5 @@
 ﻿namespace PlanIt.Web.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -13,7 +12,6 @@
     using PlanIt.Services.Data;
     using PlanIt.Web.Infrastructure.Filters;
     using PlanIt.Web.ViewModels.AdditionalCosts;
-    using PlanIt.Web.ViewModels.SubProjects;
 
     [Authorize]
     [TypeFilter(typeof(MyProjectsOnlyAttribute))]
@@ -22,15 +20,18 @@
         private readonly UserManager<PlanItUser> userManager;
         private readonly IAdditionalCostsService additionalCostsService;
         private readonly IProjectsService projectsService;
+        private readonly ISubProjectsService subProjectsService;
 
         public AddCostsController(
             UserManager<PlanItUser> userManager,
             IAdditionalCostsService additionalCostsService,
-            IProjectsService projectsService)
+            IProjectsService projectsService,
+            ISubProjectsService subProjectsService)
         {
             this.userManager = userManager;
             this.additionalCostsService = additionalCostsService;
             this.projectsService = projectsService;
+            this.subProjectsService = subProjectsService;
         }
 
         public async Task<IActionResult> AddToSubProject(int? id)
@@ -116,138 +117,85 @@
             return this.RedirectToAction("Details", "Projects", new { area = "Management", id = project.Id });
         }
 
-        public async Task<IActionResult> DetailsByProject(int projectId)
+        public async Task<IActionResult> CostsByProject(int projectId)
         {
-            //var subProject = await this.subProjectsService.GetByIdAsync<SubProjectEditInputModel>(id);
+            var projectCosts = await this.projectsService
+                .GetByIdAsync<AddCostDetailsProjectViewModel>(projectId);
 
-            //if (subProject == null)
-            //{
-            //    return this.NotFound();
-            //}
+            if (projectCosts == null)
+            {
+                return this.NotFound();
+            }
 
-            //var statuses = await this.progressStatusesService
-            //    .GetAllAsync<SubProjectProgressStatusViewModel>();
-
-            //this.ViewData["Statuses"] = statuses;
-
-            return this.View();
+            return this.View(projectCosts);
         }
 
+        public async Task<IActionResult> CostsBySubProject(int subProjectId)
+        {
+            var subProject = await this.subProjectsService
+                .GetByIdAsync<AddCostDetailsSubProjectViewModel>(subProjectId);
 
+            if (subProject == null)
+            {
+                return this.NotFound();
+            }
 
+            return this.View(subProject);
+        }
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var cost = await this.additionalCostsService.GetByIdAsync<AddCostEditInputModel>(id);
 
+            if (cost == null)
+            {
+                return this.NotFound();
+            }
 
-        //public async Task<IActionResult> Edit(int id)
-        //{
-        //    var subProject = await this.subProjectsService.GetByIdAsync<SubProjectEditInputModel>(id);
+            return this.View(cost);
+        }
 
-        //    if (subProject == null)
-        //    {
-        //        return this.NotFound();
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, AddCostEditInputModel inputModel)
+        {
+            if (id != inputModel.Id)
+            {
+                return this.NotFound();
+            }
 
-        //    var statuses = await this.progressStatusesService
-        //        .GetAllAsync<SubProjectProgressStatusViewModel>();
+            var cost = await this.additionalCostsService
+                .GetByIdAsync<AddCostViewModel>(inputModel.Id);
 
-        //    this.ViewData["Statuses"] = statuses;
+            if (cost == null)
+            {
+                return this.NotFound();
+            }
 
-        //    return this.View(subProject);
-        //}
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(inputModel);
+            }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Edit(int id, SubProjectEditInputModel inputModel)
-        //{
-        //    if (id != inputModel.Id)
-        //    {
-        //        return this.NotFound();
-        //    }
+            await this.additionalCostsService.EditAsync<AddCostEditInputModel>(inputModel);
 
-        //    var project = await this.projectsService
-        //        .GetByIdAsync<SubProjectProjectViewModel>(inputModel.ProjectId);
+            return this.RedirectToAction("Details", "Projects", new { area = "Management", id = cost.ProjectId });
+        }
 
-        //    if (project == null)
-        //    {
-        //        return this.NotFound();
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var cost = await this.additionalCostsService
+                .GetByIdAsync<AddCostDeleteViewModel>(id);
 
-        //    if (project.DueDate != null)
-        //    {
-        //        if (project.DueDate < inputModel.DueDate?.ToUniversalTime() || project.StartDate > inputModel.DueDate?.ToUniversalTime())
-        //        {
-        //            this.ModelState.AddModelError(string.Empty, "SubProject due date have to be before project due date or after start date");
-        //        }
-        //    }
+            if (cost == null)
+            {
+                this.NotFound();
+            }
 
-        //    if (!this.ModelState.IsValid)
-        //    {
-        //        var statuses = await this.progressStatusesService
-        //       .GetAllAsync<SubProjectProgressStatusViewModel>();
+            await this.additionalCostsService.DeleteAsync(id);
 
-        //        this.ViewData["Statuses"] = statuses;
-
-        //        return this.View(inputModel);
-        //    }
-
-        //    await this.subProjectsService.EditAsync<SubProjectEditInputModel>(inputModel);
-        //    await this.projectsService.CalculateProjectBudget(project.Id);
-
-        //    return this.RedirectToAction("Details", "Projects", new { area = "Management", id = project.Id });
-        //}
-
-
-
-        //[HttpPost]
-        //public async Task<IActionResult> Add(SubProjectAddInputModel inputModel)
-        //{
-        //    var project = await this.projectsService
-        //        .GetByIdAsync<SubProjectProjectViewModel>(inputModel.ProjectId);
-
-        //    if (project == null)
-        //    {
-        //        this.ModelState.AddModelError(string.Empty, "Project does not exist");
-        //    }
-
-        //    if (project.DueDate != null)
-        //    {
-        //        if (project.DueDate < inputModel.DueDate?.ToUniversalTime() || project.StartDate > inputModel.DueDate?.ToUniversalTime())
-        //        {
-        //            this.ModelState.AddModelError(string.Empty, "SubProject due date have to be before project due date or after start date");
-        //        }
-        //    }
-
-        //    if (!this.ModelState.IsValid)
-        //    {
-        //        var subProjectTypes = await this.subProjectTypesService
-        //        .GetAllAsync<SubProjectSubProjectTypeViewModel>();
-
-        //        this.ViewData["Types"] = subProjectTypes;
-
-        //        return this.View(inputModel);
-        //    }
-
-        //    await this.subProjectsService.CreateAsync<SubProjectAddInputModel>(inputModel);
-        //    await this.projectsService.CalculateProjectBudget(project.Id);
-
-        //    return this.RedirectToAction("Details", "Projects", new { area = "Management", id = project.Id });
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> Remove(int id)
-        //{
-        //    var subProject = await this.subProjectsService
-        //        .GetByIdAsync<SubProjectDeleteViewModel>(id);
-
-        //    if (subProject == null)
-        //    {
-        //        this.NotFound();
-        //    }
-
-        //    await this.subProjectsService.DeleteAsync(id);
-        //    await this.projectsService.CalculateProjectBudget(subProject.ProjectId);
-
-        //    return this.RedirectToAction("Details", "Projects", new { area = "Management", id = subProject.ProjectId });
-        //}
+            return this.RedirectToAction("Details", "Projects", new { area = "Management", id = cost.ProjectId });
+        }
 
         private async Task<IEnumerable<AddCostSelectProjectViewModel>> GetProjects(ClaimsPrincipal principal)
         {

@@ -11,6 +11,6 @@
 
         public string Name { get; set; }
 
-        public IEnumerable<AddCostsSubProjectViewModel> SubProjects { get; set; }
+        public IEnumerable<AddCostDetailsSubProjectViewModel> SubProjects { get; set; }
     }
 }
