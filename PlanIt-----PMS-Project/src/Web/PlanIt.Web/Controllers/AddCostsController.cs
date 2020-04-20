@@ -203,7 +203,7 @@
 
             var projects = new List<AddCostSelectProjectViewModel>();
 
-            if (this.User.IsInRole(GlobalConstants.UserRoleName))
+            if (principal.IsInRole(GlobalConstants.UserRoleName))
             {
                 projects = (List<AddCostSelectProjectViewModel>)await this.projectsService
                 .GetAllByManagerIdAsync<AddCostSelectProjectViewModel>(currentUserId);
