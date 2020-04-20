@@ -224,7 +224,8 @@
 
             var users = this.userManager
                 .Users
-                .Where(u => !u.Roles.Select(r => r.RoleId).Contains(clientRole.Id));
+                .Where(u => !u.Roles.Select(r => r.RoleId).Contains(clientRole.Id) &&
+                            !u.Roles.Select(r => r.RoleId).Contains(adminRole.Id));
 
             if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName))
             {
