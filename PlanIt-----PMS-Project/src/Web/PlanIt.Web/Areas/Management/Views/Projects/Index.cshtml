@@ -45,7 +45,6 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Progress</th>
                                 <th>Start Date</th>
                                 <th>Due Date</th>
                                 <th>Budget</th>
@@ -58,44 +57,42 @@
                         <tbody>
                             @foreach (var project in Model.ApprovedProjects)
                             {
-                            <tr>
-                                <td>@project.Name</td>
-                                <td>@project.ProgressStatusName</td>
-                                <td>
-                                    <time datetime="@project.StartDate?.ToString("O")">
-                                        @(project.StartDate == null ? "-" : project.StartDate?.ToString("dd/MM/yyyy"))
-                                    </time>
-                                </td>
-                                <td>
-                                    <time datetime="@project.DueDate?.ToString("O")">
-                                        @(project.DueDate == null ? "-" : project.DueDate?.ToString("dd/MM/yyyy"))
-                                    </time>
-                                </td>
-                                <td>@project.Budget.ToString("F2", CultureInfo.InvariantCulture)</td>
-                                <td>@project.Client.FullName</td>
-                                <td>
-                                    <time datetime="@project.ClientDueDate.ToString("O")">
-                                        @(project.ClientDueDate.ToString("dd/MM/yyyy"))
-                                    </time>
-                                </td>
-                                <td>@project.ClientBudget.ToString("F2", CultureInfo.InvariantCulture)</td>
-                                <td>
-                                    <a class="btn btn-primary btn-sm"
-                                       asp-area="Management"
-                                       asp-controller="Projects"
-                                       asp-action="Details"
-                                       asp-route-id="@project.Id">
-                                        <i class="fas fa-info"></i>
-                                        Details
-                                    </a>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>@project.Name</td>
+                                    <td>
+                                        <time datetime="@project.StartDate?.ToString("O")">
+                                            @(project.StartDate == null ? "-" : project.StartDate?.ToString("dd/MM/yyyy"))
+                                        </time>
+                                    </td>
+                                    <td>
+                                        <time datetime="@project.DueDate?.ToString("O")">
+                                            @(project.DueDate == null ? "-" : project.DueDate?.ToString("dd/MM/yyyy"))
+                                        </time>
+                                    </td>
+                                    <td>@project.Budget.ToString("F2", CultureInfo.InvariantCulture)</td>
+                                    <td>@project.Client.FullName</td>
+                                    <td>
+                                        <time datetime="@project.ClientDueDate.ToString("O")">
+                                            @(project.ClientDueDate.ToString("dd/MM/yyyy"))
+                                        </time>
+                                    </td>
+                                    <td>@project.ClientBudget.ToString("F2", CultureInfo.InvariantCulture)</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm"
+                                           asp-area="Management"
+                                           asp-controller="Projects"
+                                           asp-action="Details"
+                                           asp-route-id="@project.Id">
+                                            <i class="fas fa-info"></i>
+                                            Details
+                                        </a>
+                                    </td>
+                                </tr>
                             }
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th>Name</th>
-                                <th>Progress</th>
                                 <th>Start Date</th>
                                 <th>Due Date</th>
                                 <th>Budget</th>
@@ -297,7 +294,7 @@
                 "responsive": true,
                 "autoWidth": false,
                 "columnDefs": [{
-                    "targets": 5,
+                    "targets": 7,
                     "orderable": false,
                     "searchable": false
                 }]
@@ -309,7 +306,7 @@
                 "responsive": true,
                 "autoWidth": false,
                 "columnDefs": [{
-                    "targets": 5,
+                    "targets": 7,
                     "orderable": false,
                     "searchable": false
                 }]
@@ -321,7 +318,7 @@
                 "responsive": true,
                 "autoWidth": false,
                 "columnDefs": [{
-                    "targets": 5,
+                    "targets": 7,
                     "orderable": false,
                     "searchable": false
                 }]

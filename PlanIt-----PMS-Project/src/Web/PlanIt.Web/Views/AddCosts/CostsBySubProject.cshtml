@@ -5,7 +5,6 @@
 @{
     this.ViewData["Title"] = "Cost Details";
     var costs = (List<AddCostDetailsViewModel>)Model.AdditionalCosts;
-    var referrerPath = new Uri(Context.Request.Headers["Referer"].ToString()).AbsolutePath;
 }
 
 <div class="text-center">
@@ -31,7 +30,7 @@
                         <div class="col-6 btn-group">
                             <a asp-area=""
                                asp-controller="AddCosts"
-                               asp-action="AddToProject"                               
+                               asp-action="AddToProject"
                                class="btn btn-primary float-left">
                                 Add cost to project
                             </a>
@@ -114,7 +113,7 @@
                                                 @Model.AdditionalCostsSum.ToString("F2", CultureInfo.InvariantCulture)
                                             </strong>
                                         </td>
-                                    </tr>                                    
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -122,11 +121,13 @@
                     <hr />
                     <div class="row">
                         <div class="col-8">
-                            <a href="@referrerPath"
+                            <a asp-area="Management"
+                               asp-controller="Projects"
+                               asp-action="MyProjects"
                                class="btn btn-dark float-left">
-                                Back
+                                Back to My projects
                             </a>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>

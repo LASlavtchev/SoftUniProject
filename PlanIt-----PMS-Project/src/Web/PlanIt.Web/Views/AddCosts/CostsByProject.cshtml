@@ -5,7 +5,6 @@
 @{
     this.ViewData["Title"] = "Cost Details";
     var additionalCostsToProjectOnly = Model.AdditionalCostsToProjectOnly;
-    var referrerPath = new Uri(Context.Request.Headers["Referer"].ToString()).AbsolutePath;
 }
 
 <div class="text-center">
@@ -151,9 +150,11 @@
                     <hr />
                     <div class="row">
                         <div class="col-8">
-                            <a href="@referrerPath"
+                            <a asp-area="Management"
+                               asp-controller="Projects"
+                               asp-action="MyProjects"
                                class="btn btn-dark float-left">
-                                Back
+                                Back to My projects
                             </a>
                         </div>                        
                     </div>

@@ -29,6 +29,6 @@
 
         public decimal ClientBudget { get; set; }
 
-        public DateTime ClientDueDate { get; set; }
+        public DateTime? ClientDueDate { get; set; }
     }
 }

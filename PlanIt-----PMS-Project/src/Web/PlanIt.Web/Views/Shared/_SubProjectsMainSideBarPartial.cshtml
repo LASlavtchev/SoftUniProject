@@ -75,11 +75,17 @@
         @if (hasAssignedProjects || this.User.IsInRole(GlobalConstants.ProjectManagerRoleName))
         {
             <li class="nav-item">
-                <a asp-area="" asp-controller="Tasks" asp-action="Create" class="nav-link">
+                <a asp-area="" asp-controller="Tasks" asp-action="Index" class="nav-link">
                     <i class="fas fa-indent nav-icon"></i>
-                    <p>Create</p>
+                    <p>All Tasks</p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a asp-area="" asp-controller="Tasks" asp-action="Assign" class="nav-link">
+                    <i class="fas fa-indent nav-icon"></i>
+                    <p>Assign Task</p>
+                </a>
+            </li>            
         }
         <li class="nav-item">
             <a asp-area="" asp-controller="Tasks" asp-action="MyTasks" class="nav-link">
