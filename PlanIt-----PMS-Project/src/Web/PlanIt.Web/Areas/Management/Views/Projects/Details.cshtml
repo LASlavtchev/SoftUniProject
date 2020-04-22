@@ -7,6 +7,7 @@
     this.ViewData["Title"] = "Details";
 
     var status = Model.IsBudgetApproved == false ? "Not Approved" : "Approved";
+    var netBudget = Model.Budget - Model.TotalAdditionalCosts - Model.TotalCosts;
     var subProjects = (List<ProjectSubProjectViewModel>)Model.SubProjects;
     var referrerPath = new Uri(Context.Request.Headers["Referer"].ToString()).AbsolutePath;
 }
@@ -107,6 +108,7 @@
                                     <th>Project part</th>
                                     <th>Project part status</th>
                                     <th>Due time</th>
+                                    <th>Costs</th>
                                     <th>Additional costs</th>
                                     <th class="text-right">Budget</th>
                                 </tr>
@@ -151,6 +153,15 @@
                                             </td>
                                             <td>
                                                 <a asp-area=""
+                                                   asp-controller="Tasks"
+                                                   asp-action="Index"
+                                                   title="Details"
+                                                   class="text-bold">
+                                                    @subProjects[i].TotalSubProjectCosts.ToString("F2", CultureInfo.InvariantCulture)
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a asp-area=""
                                                    asp-controller="AddCosts"
                                                    asp-action="CostsBySubProject"
                                                    asp-route-subProjectId="@subProjects[i].Id"
@@ -192,6 +203,16 @@
                                     </tr>
                                     <tr>
                                         <td class="text-left">
+                                            <strong>Total costs:</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong>
+                                                @Model.TotalCosts.ToString("F2", CultureInfo.InvariantCulture)
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">
                                             <strong>Total budget:</strong>
                                         </td>
                                         <td class="text-right">
@@ -202,11 +223,31 @@
                                     </tr>
                                     <tr>
                                         <td class="text-left">
+                                            <strong>Net budget:</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong>
+                                                @netBudget.ToString("F2", CultureInfo.InvariantCulture)
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">
                                             <strong>Client`s budget:</strong>
                                         </td>
                                         <td class="text-right">
                                             <strong>
                                                 @Model.ClientBudget.ToString("F2", CultureInfo.InvariantCulture)
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">
+                                            <strong>Difference:</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong>
+                                                @((Model.ClientBudget - netBudget).ToString("F2", CultureInfo.InvariantCulture))
                                             </strong>
                                         </td>
                                     </tr>

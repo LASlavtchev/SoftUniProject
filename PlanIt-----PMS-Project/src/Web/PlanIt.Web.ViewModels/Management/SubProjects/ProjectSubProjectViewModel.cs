@@ -7,6 +7,7 @@
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
     using PlanIt.Web.ViewModels.Management.AdditionalCosts;
+    using PlanIt.Web.ViewModels.Management.Tasks;
 
     public class ProjectSubProjectViewModel : IMapFrom<SubProject>
     {
@@ -19,6 +20,10 @@
         public string ProgressStatusName { get; set; }
 
         public DateTime DueDate { get; set; }
+
+        public IEnumerable<ProjectSubProjectProblemViewModel> Problems { get; set; }
+
+        public decimal TotalSubProjectCosts => this.Problems.Select(p => p.Cost).Sum();
 
         public IEnumerable<ProjectSubProjectAdditionalCostViewModel> AdditionalCosts { get; set; }
 

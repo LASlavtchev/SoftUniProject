@@ -37,6 +37,8 @@
 
         public IEnumerable<ProjectSubProjectViewModel> SubProjects { get; set; }
 
+        public decimal TotalCosts => this.SubProjects.Select(sb => sb.TotalSubProjectCosts).Sum();
+
         public IEnumerable<ProjectAdditionalCostViewModel> AdditionalCosts { get; set; }
 
         public decimal TotalAdditionalCosts => this.AdditionalCosts.Select(ac => ac.TotalCost).Sum();

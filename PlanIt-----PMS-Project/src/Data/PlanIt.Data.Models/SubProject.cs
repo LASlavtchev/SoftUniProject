@@ -11,6 +11,7 @@
         public SubProject()
         {
             this.AdditionalCosts = new HashSet<AdditionalCost>();
+            this.Problems = new HashSet<Problem>();
         }
 
         public int ProjectId { get; set; }
@@ -33,5 +34,7 @@
         public virtual ProgressStatus ProgressStatus { get; set; }
 
         public virtual ICollection<AdditionalCost> AdditionalCosts { get; set; }
+
+        public virtual ICollection<Problem> Problems { get; set; }
     }
 }
