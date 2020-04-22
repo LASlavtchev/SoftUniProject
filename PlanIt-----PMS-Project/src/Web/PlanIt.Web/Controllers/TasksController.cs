@@ -164,7 +164,7 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
 
-            await this.hoursService.AddHour(problem, user, hours);
+            await this.hoursService.AddHourAsync(problem, user, hours);
             await this.problemsService.AddHoursAsync(id, hours);
 
             return this.RedirectToAction(nameof(this.MyTasks));

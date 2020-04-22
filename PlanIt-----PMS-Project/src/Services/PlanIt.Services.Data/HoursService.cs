@@ -15,7 +15,7 @@
             this.hoursRepository = hoursRepository;
         }
 
-        public async Task<Hour> AddHour(Problem problem, PlanItUser user, decimal hours)
+        public async Task<Hour> AddHourAsync(Problem problem, PlanItUser user, decimal hours)
         {
             var hour = new Hour
             {

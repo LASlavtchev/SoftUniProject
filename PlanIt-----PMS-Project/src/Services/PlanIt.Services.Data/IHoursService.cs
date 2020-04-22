@@ -6,6 +6,6 @@
 
     public interface IHoursService
     {
-        Task<Hour> AddHour(Problem problem, PlanItUser user, decimal hours);
+        Task<Hour> AddHourAsync(Problem problem, PlanItUser user, decimal hours);
     }
 }
