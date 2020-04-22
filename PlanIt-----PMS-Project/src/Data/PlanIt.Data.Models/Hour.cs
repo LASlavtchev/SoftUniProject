@@ -12,16 +12,14 @@
         public DateTime Date { get; set; }
 
         [Column(TypeName = "decimal(15,4)")]
-        public decimal WorkedTime { get; set; }
+        public decimal WorkedHours { get; set; }
 
-        public bool IsCompleted { get; set; }
+        public string UserId { get; set; }
 
-        public string PlantItUserId { get; set; }
+        public PlanItUser User { get; set; }
 
-        public PlanItUser Contractor { get; set; }
+        public int ProblemId { get; set; }
 
-        public int SubProjectId { get; set; }
-
-        public SubProject SubProject { get; set; }
+        public Problem Problem { get; set; }
     }
 }
