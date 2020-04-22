@@ -1,0 +1,175 @@
+﻿@using System.Globalization;
+@using PlanIt.Common
+@using PlanIt.Web.ViewModels.Tasks
+@model List<TaskIndexViewModel>
+
+@{
+    ViewData["Title"] = "Tasks";
+}
+
+@section Styles {
+    <environment names="Development">
+        <!-- Ionicons -->
+        <link href="~/lib/ionicons/css/ionicons.css" rel="stylesheet" asp-append-version="true" />
+        <!-- DataTables -->
+        <link href="~/lib/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/datatables-responsive/css/responsive.bootstrap4.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <!-- Font Awesome Icons -->
+        <link href="~/lib/ionicons/css/ionicons.min.css" rel="stylesheet" asp-append-version="true" />
+        <!-- DataTables -->
+        <link href="~/lib/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+
+<div class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <a asp-area=""
+                       asp-controller="Tasks"
+                       asp-action="Assign"
+                       class="btn btn-primary btn-sm">
+                        <i class="fas fa-clipboard-check">
+                        </i>
+                        Assign Task
+                    </a>
+                    <hr>
+                    <div class="text-center"><strong>All assigned tasks</strong></div>
+                </div>
+                <div class="card-body">
+                    <table id="tableTasks" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Project name</th>
+                                <th>Project part</th>
+                                <th>Name</th>
+                                <th>Instruction</th>
+                                <th>Assigned users</th>
+                                <th>Status</th>
+                                <th>Hourly rate</th>
+                                <th>Total Hours</th>
+                                <th>Due date</th>
+                                <th>Costs</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var task in Model)
+                            {
+                                <tr>
+                                    <td>@task.SubProjectProjectName</td>
+                                    <td>@task.SubProjectSubProjectTypeName</td>
+                                    <td>@task.Name</td>
+                                    <td>@task.Instructions</td>
+                                    <td>
+                                        @foreach (var user in task.UserProblems)
+                                        {
+                                            <p>
+                                                <u title="Email: @user.User.Email, Number: @user.User.Phonenumber">
+                                                    @user.User.FullName
+                                                </u>
+                                            </p>
+                                        }
+                                    </td>
+                                    <td>@task.ProgressStatusName</td>
+                                    <td>
+                                        @task.HourlyRate.ToString("F2", CultureInfo.InvariantCulture)
+                                    </td>
+                                    <td>
+                                        @task.TotalHours.ToString("F2", CultureInfo.InvariantCulture)
+                                    </td>
+                                    <td>
+                                        <time datetime="@task.DueDate?.ToString(" O")">
+                                            @(task.DueDate == null ? "-" : task.DueDate?.ToString("dd/MM/yyyy"))
+                                        </time>
+                                    </td>
+                                    <td>
+                                        <a asp-area=""
+                                           asp-controller="Tasks"
+                                           asp-action="TaskHours"
+                                           asp-route-id="@task.Id"
+                                           title="Details">
+                                            <u>
+                                                @task.TotalCost.ToString("F2", CultureInfo.InvariantCulture)
+                                            </u>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group-vertical">
+                                            <a class="btn btn-warning btn-sm"
+                                               asp-area=""
+                                               asp-controller="Tasks"
+                                               asp-action="AddUser"
+                                               asp-route-id="@task.Id">
+                                                <i class="fas fa-user-plus"></i>
+                                                Add user
+                                            </a>
+                                            <a class="btn btn-primary btn-sm"
+                                               asp-area=""
+                                               asp-controller="Tasks"
+                                               asp-action="Edit"
+                                               asp-route-id="@task.Id">
+                                                <i class="fas fa-edit"></i>
+                                                Edit
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Project name</th>
+                                <th>Project part</th>
+                                <th>Name</th>
+                                <th>Instruction</th>
+                                <th>Assigned users</th>
+                                <th>Status</th>
+                                <th>Hourly rate</th>
+                                <th>Total Hours</th>
+                                <th>Due date</th>
+                                <th>Costs</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <environment include="Development">
+        <!-- DataTables -->
+        <script src="~/lib/datatables-bs4/js/jquery.dataTables.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/dataTables.responsive.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <!-- DataTables -->
+        <script src="~/lib/datatables-bs4/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <script>
+        $(function () {
+            $("#tableTasks").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "columnDefs": [{
+                    "targets": 10,
+                    "orderable": false,
+                    "searchable": false
+                }]
+            });
+        });
+    </script>
+}

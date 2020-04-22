@@ -1,0 +1,211 @@
+﻿@using System.Globalization;
+@using PlanIt.Common
+@using PlanIt.Web.ViewModels.Tasks
+@model List<TaskMyTaskViewModel>
+
+@{
+    ViewData["Title"] = "My Tasks";
+}
+
+@section Styles {
+    <environment names="Development">
+        <!-- Ionicons -->
+        <link href="~/lib/ionicons/css/ionicons.css" rel="stylesheet" asp-append-version="true" />
+        <!-- DataTables -->
+        <link href="~/lib/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/datatables-responsive/css/responsive.bootstrap4.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <!-- Font Awesome Icons -->
+        <link href="~/lib/ionicons/css/ionicons.min.css" rel="stylesheet" asp-append-version="true" />
+        <!-- DataTables -->
+        <link href="~/lib/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+
+<div class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="text-center"><strong>My tasks</strong></div>
+                </div>
+                <div class="card-body">
+                    <table id="tableMyTasks" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Project name</th>
+                                <th>Project part</th>
+                                <th>Name</th>
+                                <th>Instruction</th>
+                                <th>Status</th>
+                                <th>Total Hours</th>
+                                <th>Due date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var task in Model)
+                            {
+                                <tr>
+                                    <td>@task.SubProjectProjectName</td>
+                                    <td>@task.SubProjectSubProjectTypeName</td>
+                                    <td>@task.Name</td>
+                                    <td>@task.Instructions</td>
+                                    <td>@task.ProgressStatusName</td>
+                                    <td>
+                                        <a asp-area=""
+                                           asp-controller="Tasks"
+                                           asp-action="MyTaskHours"
+                                           asp-route-id="@task.Id"
+                                           title="Details">
+                                            <u>
+                                                @task.TotalHours.ToString("F2", CultureInfo.InvariantCulture)
+                                            </u>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <time datetime="@task.DueDate?.ToString(" O")">
+                                            @(task.DueDate == null ? "-" : task.DueDate?.ToString("dd/MM/yyyy"))
+                                        </time>
+                                    </td>
+                                    <td>
+                                        @if (task.ProgressStatusName != GlobalConstants.ProgressStatusCompleted)
+                                        {
+                                            <div class="btn-group-vertical">
+                                                <a class="btn btn-warning btn-sm"
+                                                   href="#addHours"
+                                                   data-toggle="modal"
+                                                   onclick="addHours()">
+                                                    <i class="fas fa-clock"></i>
+                                                    Add hours
+                                                </a>
+                                                <input type="hidden" id="taskId" value="@task.Id" />
+                                                <form asp-area="" asp-controller="Tasks" asp-action="ChangeStatus"
+                                                      asp-route-taskId="@task.Id"
+                                                      asp-route-status="@GlobalConstants.ProgressStatusCompleted"
+                                                      class="text-center"
+                                                      method="post">
+                                                    <button class="btn btn-success btn-sm">
+                                                        <i class="fas fa-closed-captioning"></i>
+                                                        Complete task
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <strong>@GlobalConstants.ProgressStatusCompleted</strong>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Project name</th>
+                                <th>Project part</th>
+                                <th>Name</th>
+                                <th>Instruction</th>
+                                <th>Status</th>
+                                <th>Total Hours</th>
+                                <th>Due date</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ModalAddHours -->
+<div class="modal fade" id="addHours" tabindex="-1" role="dialog" aria-labelledby="addHoursModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addHoursModalTitle">Add worked hours</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addHoursForm"
+                  asp-area=""
+                  asp-controller="Tasks"
+                  asp-action="AddHours"
+                  method="post">
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-4 text-right">
+                            <i class="fas fa-clock fa-2x" style="line-height:1.25;"></i>
+                        </div>
+                        <div class="col-4">
+                            <input id="inputTaskId" type="hidden" name="id">
+                            <input id="hours" type="number" step="0.01" class="form-control" name="hours">
+                        </div>
+                        <label class="col-4 col-form-label text-left">Hours</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" onclick="check()">Add worked hours</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /.ModalAddHours -->
+
+
+@section Scripts {
+    <environment include="Development">
+        <!-- DataTables -->
+        <script src="~/lib/datatables-bs4/js/jquery.dataTables.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/dataTables.responsive.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <!-- DataTables -->
+        <script src="~/lib/datatables-bs4/js/jquery.dataTables.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js" asp-append-version="true"></script>
+        <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <script>
+        $(function () {
+            $("#tableMyTasks").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "columnDefs": [{
+                    "targets": 7,
+                    "orderable": false,
+                    "searchable": false
+                }]
+            });
+        });
+    </script>
+    <script>
+        function addHours() {
+            let modal = document.querySelector("#addHours");
+            let element = event.target;
+            let td = element.parentNode;
+
+            let id = td.querySelector("#taskId").value;
+
+            let input = modal.querySelector("#inputTaskId");
+            input.value = id;
+        }
+
+        function check() {
+            let hours = document.querySelector("#hours").value;
+            if (hours < 0) {
+                alert("Hours cannot be negative!!!");
+            }
+        }
+    </script>
+}
+}

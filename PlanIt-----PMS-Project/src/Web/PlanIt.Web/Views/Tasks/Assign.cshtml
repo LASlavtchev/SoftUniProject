@@ -1,0 +1,133 @@
+﻿@using PlanIt.Web.ViewModels.Tasks
+@using PlanIt.Data.Models
+@model TaskAssignInputModel
+
+@{
+    this.ViewData["Title"] = "Assign Task";
+    var projects = (IEnumerable<TaskSelectProjectViewModel>)this.ViewData["Projects"];
+    var selectedproject = (TaskProjectViewModel)this.ViewData["Project"];
+    var selectUsers = (IEnumerable<PlanItUser>)this.ViewData["Users"];
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Assign Task</h3>
+    <div class="container p-4">
+        <div class="form-group row">
+            <div class="col-4 text-right">
+                <i class="fab fa-r-project fa-2x" style="line-height:1.25;"></i>
+            </div>
+            <div class="col-4">
+                <select id="projectId" class="custom-select mr-sm-2">
+                    <option value="0" selected>Choose project...</option>
+                    @foreach (var project in projects)
+                    {
+                        <option value="@project.Id">@project.Name</option>
+                    }
+                </select>
+            </div>
+            <form id="getId" class="col-4 text-left" method="get">
+                <button class="btn btn-primary" onclick="getId()">Choose Project</button>
+            </form>
+        </div>
+        @if (selectedproject != null)
+        {
+            <div>
+                <span>Project: <strong>@selectedproject.Name</strong></span>
+            </div>
+            <hr class="bg-dark" />
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger text-center"></div>
+                <div class="form-group row">
+                    <div class="col-4 text-right">
+                        <i class="fas fa-align-justify fa-2x" style="line-height:1.25;"></i>
+                    </div>
+                    <div class="col-4">
+                        <select asp-for="@Model.SubProjectId" class="custom-select mr-sm-2">
+                            <option value="0" selected>Choose project part...</option>
+                            @foreach (var subProject in selectedproject.SubProjects)
+                            {
+                                <option value="@subProject.Id">@subProject.SubProjectTypeName</option>
+                            }
+                        </select>
+                    </div>
+                    <label class="col-4 col-form-label text-left">Project part</label>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4 text-right">
+                        <i class="fas fa-user-check fa-2x" style="line-height:1.25;"></i>
+                    </div>
+                    <div class="col-4">
+                        <select asp-for="@(Model.UserId)" class="custom-select mr-sm-2">
+                            <option value="null" selected>Choose user...</option>
+                            @foreach (var user in selectUsers)
+                            {
+                                <option value="@(user.Id)">@user.Email</option>
+                            }
+                        </select>
+                    </div>
+                    <label class="col-4 col-form-label text-left">User</label>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4 text-right">
+                        <i class="far fa-clipboard fa-2x" style="line-height:1.25;"></i>
+                    </div>
+                    <div class="col-4">
+                        <input class="form-control" asp-for="@Model.Name">
+                    </div>
+                    <label asp-for="@Model.Name" class="col-4 col-form-label text-left"></label>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4 text-right">
+                        <i class="fas fa-clipboard-list fa-2x" style="line-height:1.25;"></i>
+                    </div>
+                    <div class="col-4">
+                        <textarea class="form-control" asp-for="@Model.Instructions"></textarea>
+                    </div>
+                    <label asp-for="@Model.Instructions" class="col-4 col-form-label text-left"></label>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4 text-right">
+                        <i class="fas fa-clipboard-check fa-2x" style="line-height:1.25;"></i>
+                    </div>
+                    <div class="col-4">
+                        <input type="date" class="form-control" asp-for="@Model.DueDate">
+                    </div>
+                    <label asp-for="@Model.DueDate" class="col-4 col-form-label text-left"></label>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4 text-right">
+                        <i class="fas fa-coins fa-2x" style="line-height:1.25;"></i>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" step="0.01" class="form-control" asp-for="@Model.HourlyRate">
+                    </div>
+                    <label asp-for="@Model.HourlyRate" class="col-4 col-form-label text-left"></label>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12">
+                        <input type="hidden" asp-for="@Model.ProjectId" value="@selectedproject.Id" />
+                        <button type="submit" class="btn btn-primary">Assign task</button>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function getId() {
+            let select = document.getElementById("projectId");
+            let form = document.getElementById("getId");
+            let selectedOptionValue = select.options[select.selectedIndex].value;
+
+            if (selectedOptionValue == 0) {
+                alert("Take another value!!!");
+                event.stopPropagation();
+            }
+            else {
+                form.setAttribute("action", "/Tasks/Assign/" + String(selectedOptionValue));
+            }
+        }
+    </script>
+}
