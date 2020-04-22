@@ -17,14 +17,16 @@
 
         Task<IEnumerable<TViewModel>> GetAllByManagerIdAsync<TViewModel>(string userId);
 
-        Task<Problem> GetByIdAsync(int taskId);
+        Task<Problem> GetByIdAsync(int problemId);
 
-        Task<TViewModel> GetByIdAsync<TViewModel>(int taskId);
+        Task<TViewModel> GetByIdAsync<TViewModel>(int problemId);
 
-        Task<Problem> AddHoursAsync(int taskId, decimal hours);
+        Task<Problem> AddHoursAsync(int problemId, decimal hours);
 
-        Task<Problem> AddUserAsync(int taskId, PlanItUser user);
+        Task<Problem> AddUserAsync(int problemId, PlanItUser user);
 
-        Task<Problem> ChangeStatusAsync(int taskId, ProgressStatus progressStatus);
+        Task<Problem> ChangeStatusAsync(int problemId, ProgressStatus progressStatus);
+
+        Task<Problem> EditAsync<TInputModel>(TInputModel inputModel);
     }
 }

@@ -1,0 +1,86 @@
+﻿@using System.Globalization
+@using PlanIt.Web.ViewModels.Tasks
+@model TaskTaskHoursViewModel
+
+@{
+    this.ViewData["Title"] = "Task Hours Details";
+    var orderedHours = Model.OrderedHours;
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">Task hours details</h3>
+    <div class="container p-4">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    Project name:
+                    <strong> @Model.SubProjectProjectName</strong>
+                    <hr />
+                    Project part name:
+                    <strong> @Model.SubProjectSubProjectTypeName</strong>
+                    <hr />
+                    Task name:
+                    <strong> @Model.Name</strong>
+                    <hr />
+                    Task Instructions:
+                    <strong> @Model.Instructions</strong>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive-sm">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>User name</th>
+                                    <th>Worked hours</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (orderedHours.Count() == 0)
+                                {
+                                    <tr>
+                                        <td align="center" colspan="4">
+                                            <strong>No tasks available</strong>
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    var count = 0;
+                                    foreach (var hour in orderedHours)
+                                    {
+                                        <tr>                                            
+                                            <td>@(count++)</td>
+                                            <td>@hour.User.FullName</td>
+                                            <td>
+                                                @hour.WorkedHours.ToString("F2", CultureInfo.InvariantCulture)
+                                            </td>                                 
+                                            <td>
+                                                <time datetime="@hour.Date.ToString("O")">
+                                                    @hour.Date.ToString("dd/MM/yyyy"))
+                                                </time>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-8">
+                            <a asp-area=""
+                               asp-controller="Tasks"
+                               asp-action="Index"
+                               class="btn btn-dark float-left">
+                                Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -96,21 +96,21 @@
             return problems;
         }
 
-        public async Task<Problem> GetByIdAsync(int taskId)
+        public async Task<Problem> GetByIdAsync(int problemId)
         {
             var problem = await this.problemsRepository
                 .All()
-                .Where(t => t.Id == taskId)
+                .Where(t => t.Id == problemId)
                 .FirstOrDefaultAsync();
 
             return problem;
         }
 
-        public async Task<TViewModel> GetByIdAsync<TViewModel>(int taskId)
+        public async Task<TViewModel> GetByIdAsync<TViewModel>(int problemId)
         {
             var problem = await this.problemsRepository
                 .All()
-                .Where(t => t.Id == taskId)
+                .Where(t => t.Id == problemId)
                 .To<TViewModel>()
                 .FirstOrDefaultAsync();
 
@@ -153,14 +153,35 @@
             return problem;
         }
 
-        public async Task<Problem> ChangeStatusAsync(int taskId, ProgressStatus progressStatus)
+        public async Task<Problem> ChangeStatusAsync(int problemId, ProgressStatus progressStatus)
         {
             var problem = await this.problemsRepository
                .All()
-               .Where(t => t.Id == taskId)
+               .Where(t => t.Id == problemId)
                .FirstOrDefaultAsync();
 
             problem.ProgressStatus = progressStatus;
+
+            this.problemsRepository.Update(problem);
+            await this.problemsRepository.SaveChangesAsync();
+
+            return problem;
+        }
+
+        public async Task<Problem> EditAsync<TInputModel>(TInputModel inputModel)
+        {
+            var inputProblem = AutoMapperConfig.MapperInstance.Map<Problem>(inputModel);
+
+            var problem = await this.problemsRepository
+               .All()
+               .Where(t => t.Id == inputProblem.Id)
+               .FirstOrDefaultAsync();
+
+            problem.Name = inputProblem.Name;
+            problem.Instructions = inputProblem.Instructions;
+            problem.DueDate = inputProblem.DueDate?.ToUniversalTime();
+            problem.HourlyRate = inputProblem.HourlyRate;
+            problem.ProgressStatusId = inputProblem.ProgressStatusId;
 
             this.problemsRepository.Update(problem);
             await this.problemsRepository.SaveChangesAsync();

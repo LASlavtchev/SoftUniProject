@@ -1,0 +1,89 @@
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Identity
+@using PlanIt.Web.ViewModels.Tasks
+@using PlanIt.Data.Models
+
+@inject UserManager<PlanItUser> userManager
+@model TaskMyTaskHoursViewModel
+
+@{
+    this.ViewData["Title"] = "My Task Hours Details";
+    var userId = this.userManager.GetUserId(this.User);
+    var hours = Model.Hours.Where(h => h.UserId == userId);
+}
+
+<div class="text-center">
+    <h3 class="display-5 p-4 badge-secondary">My Task hours details</h3>
+    <div class="container p-4">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    Project name:
+                    <strong> @Model.SubProjectProjectName</strong>
+                    <hr />
+                    Project part name:
+                    <strong> @Model.SubProjectSubProjectTypeName</strong>
+                    <hr />
+                    Task name:
+                    <strong> @Model.Name</strong>
+                    <hr />
+                    Task Instructions:
+                    <strong> @Model.Instructions</strong>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive-sm">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Worked hours</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (hours.Count() == 0)
+                                {
+                                    <tr>
+                                        <td align="center" colspan="3">
+                                            <strong>No tasks available</strong>
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    var count = 0;
+                                    foreach (var hour in hours)
+                                    {
+                                        <tr>                                            
+                                            <td>@(count++)</td>                                            
+                                            <td>
+                                                @hour.WorkedHours.ToString("F2", CultureInfo.InvariantCulture)
+                                            </td>                                 
+                                            <td>
+                                                <time datetime="@hour.Date.ToString("O")">
+                                                    @hour.Date.ToString("dd/MM/yyyy"))
+                                                </time>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-8">
+                            <a asp-area=""
+                               asp-controller="Tasks"
+                               asp-action="MyTasks"
+                               class="btn btn-dark float-left">
+                                Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

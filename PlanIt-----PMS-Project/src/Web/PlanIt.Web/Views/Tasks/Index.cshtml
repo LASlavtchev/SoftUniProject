@@ -58,15 +58,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var task in Model)
+                            @foreach (var problem in Model)
                             {
                                 <tr>
-                                    <td>@task.SubProjectProjectName</td>
-                                    <td>@task.SubProjectSubProjectTypeName</td>
-                                    <td>@task.Name</td>
-                                    <td>@task.Instructions</td>
+                                    <td>@problem.SubProjectProjectName</td>
+                                    <td>@problem.SubProjectSubProjectTypeName</td>
+                                    <td>@problem.Name</td>
+                                    <td>@problem.Instructions</td>
                                     <td>
-                                        @foreach (var user in task.UserProblems)
+                                        @foreach (var user in problem.UserProblems)
                                         {
                                             <p>
                                                 <u title="Email: @user.User.Email, Number: @user.User.Phonenumber">
@@ -75,44 +75,47 @@
                                             </p>
                                         }
                                     </td>
-                                    <td>@task.ProgressStatusName</td>
+                                    <td>@problem.ProgressStatusName</td>
                                     <td>
-                                        @task.HourlyRate.ToString("F2", CultureInfo.InvariantCulture)
-                                    </td>
-                                    <td>
-                                        @task.TotalHours.ToString("F2", CultureInfo.InvariantCulture)
-                                    </td>
-                                    <td>
-                                        <time datetime="@task.DueDate?.ToString(" O")">
-                                            @(task.DueDate == null ? "-" : task.DueDate?.ToString("dd/MM/yyyy"))
-                                        </time>
+                                        @problem.HourlyRate.ToString("F2", CultureInfo.InvariantCulture)
                                     </td>
                                     <td>
                                         <a asp-area=""
                                            asp-controller="Tasks"
                                            asp-action="TaskHours"
-                                           asp-route-id="@task.Id"
+                                           asp-route-id="@problem.Id"
                                            title="Details">
                                             <u>
-                                                @task.TotalCost.ToString("F2", CultureInfo.InvariantCulture)
+                                                @problem.TotalHours.ToString("F2", CultureInfo.InvariantCulture)
                                             </u>
                                         </a>
                                     </td>
                                     <td>
+                                        <time datetime="@problem.DueDate?.ToString(" O")">
+                                            @(problem.DueDate == null ? "-" : problem.DueDate?.ToString("dd/MM/yyyy"))
+                                        </time>
+                                    </td>
+                                    <td>
+                                        @problem.TotalCost.ToString("F2", CultureInfo.InvariantCulture)                                        
+                                    </td>
+                                    <td>
                                         <div class="btn-group-vertical">
-                                            <a class="btn btn-warning btn-sm"
-                                               asp-area=""
-                                               asp-controller="Tasks"
-                                               asp-action="AddUser"
-                                               asp-route-id="@task.Id">
-                                                <i class="fas fa-user-plus"></i>
-                                                Add user
-                                            </a>
+                                            @if (problem.ProgressStatusName != GlobalConstants.ProgressStatusCompleted)
+                                            {
+                                                <a class="btn btn-warning btn-sm"
+                                                   asp-area=""
+                                                   asp-controller="Tasks"
+                                                   asp-action="AddUser"
+                                                   asp-route-id="@problem.Id">
+                                                    <i class="fas fa-user-plus"></i>
+                                                    Add user
+                                                </a>
+                                            }
                                             <a class="btn btn-primary btn-sm"
                                                asp-area=""
                                                asp-controller="Tasks"
                                                asp-action="Edit"
-                                               asp-route-id="@task.Id">
+                                               asp-route-id="@problem.Id">
                                                 <i class="fas fa-edit"></i>
                                                 Edit
                                             </a>

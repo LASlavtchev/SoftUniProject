@@ -47,30 +47,56 @@
         [TypeFilter(typeof(MyProjectsOnlyAttribute))]
         public async Task<IActionResult> Index()
         {
-            var tasks = Enumerable.Empty<TaskIndexViewModel>();
+            var problems = Enumerable.Empty<TaskIndexViewModel>();
 
             if (this.User.IsInRole(GlobalConstants.UserRoleName))
             {
                 var currentUserId = this.userManager.GetUserId(this.User);
 
-                tasks = await this.problemsService.GetAllByManagerIdAsync<TaskIndexViewModel>(currentUserId);
+                problems = await this.problemsService.GetAllByManagerIdAsync<TaskIndexViewModel>(currentUserId);
             }
             else
             {
-                tasks = await this.problemsService.GetAllAsync<TaskIndexViewModel>();
+                problems = await this.problemsService.GetAllAsync<TaskIndexViewModel>();
             }
 
-            return this.View(tasks);
+            return this.View(problems);
+        }
+
+        [TypeFilter(typeof(MyProjectsOnlyAttribute))]
+        public async Task<IActionResult> TaskHours(int id)
+        {
+            var problem = await this.problemsService.GetByIdAsync<TaskTaskHoursViewModel>(id);
+
+            if (problem == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(problem);
         }
 
         public async Task<IActionResult> MyTasks()
         {
             var currentUserId = this.userManager.GetUserId(this.User);
 
-            var tasks = await this.problemsService
+            var problems = await this.problemsService
                 .GetAllByUserIdAsync<TaskMyTaskViewModel>(currentUserId);
 
-            return this.View(tasks);
+            return this.View(problems);
+        }
+
+        public async Task<IActionResult> MyTaskHours(int id)
+        {
+            var problem = await this.problemsService
+                .GetByIdAsync<TaskMyTaskHoursViewModel>(id);
+
+            if (problem == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(problem);
         }
 
         [TypeFilter(typeof(MyProjectsOnlyAttribute))]
@@ -171,11 +197,11 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeStatus(int taskId, string status)
+        public async Task<IActionResult> ChangeStatus(int problemId, string status)
         {
-            var task = await this.problemsService.GetByIdAsync(taskId);
+            var problem = await this.problemsService.GetByIdAsync(problemId);
 
-            if (task == null)
+            if (problem == null)
             {
                 return this.NotFound();
             }
@@ -187,7 +213,7 @@
                 return this.NotFound();
             }
 
-            await this.problemsService.ChangeStatusAsync(taskId, progressStatus);
+            await this.problemsService.ChangeStatusAsync(problemId, progressStatus);
 
             return this.RedirectToAction(nameof(this.MyTasks));
         }
@@ -195,9 +221,9 @@
         [TypeFilter(typeof(MyProjectsOnlyAttribute))]
         public async Task<IActionResult> AddUser(int id)
         {
-            var task = await this.problemsService.GetByIdAsync<TaskAddUserInputModel>(id);
+            var problem = await this.problemsService.GetByIdAsync<TaskAddUserInputModel>(id);
 
-            if (task == null)
+            if (problem == null)
             {
                 return this.NotFound();
             }
@@ -206,7 +232,7 @@
 
             this.ViewData["Users"] = selectUsers;
 
-            return this.View(task);
+            return this.View(problem);
         }
 
         [HttpPost]
@@ -239,8 +265,59 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
+        [TypeFilter(typeof(MyProjectsOnlyAttribute))]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var problem = await this.problemsService.GetByIdAsync<TaskEditInputModel>(id);
 
+            if (problem == null)
+            {
+                return this.NotFound();
+            }
 
+            var statuses = await this.progressStatusesService.GetAllAsync<TaskProgressStatusViewModel>();
+            this.ViewData["Statuses"] = statuses;
+
+            return this.View(problem);
+        }
+
+        [HttpPost]
+        [TypeFilter(typeof(MyProjectsOnlyAttribute))]
+        public async Task<IActionResult> Edit(int id, TaskEditInputModel inputModel)
+        {
+            if (id != inputModel.Id)
+            {
+                return this.NotFound();
+            }
+
+            var subProject = await this.subProjectsService
+                .GetByIdAsync<TaskProjectSubProjectViewModel>(inputModel.SubProjectId);
+
+            if (subProject == null)
+            {
+                this.ModelState.AddModelError(string.Empty, "Project part doesn`t exist!");
+            }
+
+            if (inputModel.DueDate != null)
+            {
+                if (inputModel.DueDate > subProject.DueDate)
+                {
+                    this.ModelState.AddModelError(string.Empty, $"Due date has to be before project part Due date");
+                }
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                var statuses = await this.progressStatusesService.GetAllAsync<TaskProgressStatusViewModel>();
+                this.ViewData["Statuses"] = statuses;
+
+                return this.View(inputModel);
+            }
+
+            await this.problemsService.EditAsync<TaskEditInputModel>(inputModel);
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
 
         private async Task<IEnumerable<TaskSelectProjectViewModel>> GetProjects(ClaimsPrincipal principal)
         {
