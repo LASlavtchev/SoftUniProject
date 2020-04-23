@@ -2,21 +2,14 @@
 {
     using System.ComponentModel;
 
+    using AutoMapper;
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
 
-    public class ProjectManagerViewModel : IMapFrom<PlanItUser>
+    public class ProjectManagerViewModel : IMapFrom<PlanItUser>, IHaveCustomMappings
     {
-        public string Id { get; set; }
-
-        public string FirstName { get; set; }
-
-        public string MiddleName { get; set; }
-
-        public string LastName { get; set; }
-
         [DisplayName("Full name")]
-        public string FullName => $"{this.FirstName} {this.MiddleName} {this.LastName}";
+        public string FullName { get; set; }
 
         public string CompanyName { get; set; }
 
@@ -25,5 +18,14 @@
         public string Email { get; set; }
 
         public string PhoneNumber { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<PlanItUser, ProjectManagerViewModel>()
+                .ForMember(x => x.FullName, options =>
+                {
+                    options.MapFrom(u => $"{u.FirstName} {u.MiddleName} {u.LastName}");
+                });
+        }
     }
 }

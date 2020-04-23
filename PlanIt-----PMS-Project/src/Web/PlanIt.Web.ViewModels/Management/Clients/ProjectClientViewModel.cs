@@ -1,22 +1,12 @@
 ﻿namespace PlanIt.Web.ViewModels.Management.Clients
 {
+    using AutoMapper;
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
 
-    public class ProjectClientViewModel : IMapFrom<Client>
+    public class ProjectClientViewModel : IMapFrom<Client>, IHaveCustomMappings
     {
-        public int Id { get; set; }
-
-        public string PlantItUserId { get; set; }
-
-        public string PlantItUserFirstName { get; set; }
-
-        public string PlantItUserMiddleName { get; set; }
-
-        public string PlantItUserLastName { get; set; }
-
-        public string FullName =>
-            $"{this.PlantItUserFirstName} {this.PlantItUserMiddleName} {this.PlantItUserLastName}";
+        public string FullName { get; set; }
 
         public string PlantItUserCompanyName { get; set; }
 
@@ -25,5 +15,14 @@
         public string PlantItUserEmail { get; set; }
 
         public string PlantItUserPhoneNumber { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<Client, ProjectClientViewModel>()
+                .ForMember(x => x.FullName, options =>
+                {
+                    options.MapFrom(c => $"{c.PlantItUser.FirstName} {c.PlantItUser.MiddleName} {c.PlantItUser.LastName}");
+                });
+        }
     }
 }
