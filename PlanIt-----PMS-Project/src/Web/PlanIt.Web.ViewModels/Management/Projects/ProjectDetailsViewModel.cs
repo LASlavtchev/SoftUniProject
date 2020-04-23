@@ -4,14 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using AutoMapper;
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
-    using PlanIt.Web.ViewModels.Management.AdditionalCosts;
     using PlanIt.Web.ViewModels.Management.Clients;
     using PlanIt.Web.ViewModels.Management.SubProjects;
     using PlanIt.Web.ViewModels.Management.Users;
 
-    public class ProjectDetailsViewModel : IMapFrom<Project>
+    public class ProjectDetailsViewModel : IMapFrom<Project>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -39,8 +39,15 @@
 
         public decimal TotalCosts => this.SubProjects.Select(sb => sb.TotalSubProjectCosts).Sum();
 
-        public IEnumerable<ProjectAdditionalCostViewModel> AdditionalCosts { get; set; }
+        public decimal TotalAdditionalCosts { get; set; }
 
-        public decimal TotalAdditionalCosts => this.AdditionalCosts.Select(ac => ac.TotalCost).Sum();
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<Project, ProjectDetailsViewModel>()
+                .ForMember(x => x.TotalAdditionalCosts, options =>
+                {
+                    options.MapFrom(p => p.AdditionalCosts.Select(ac => ac.TotalCost).Sum());
+                });
+        }
     }
 }
