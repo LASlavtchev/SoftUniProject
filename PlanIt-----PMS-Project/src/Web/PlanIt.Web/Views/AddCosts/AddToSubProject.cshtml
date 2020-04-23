@@ -1,10 +1,11 @@
 ﻿@using PlanIt.Web.ViewModels.AdditionalCosts
+@using PlanIt.Web.ViewModels.AdditionalCosts.Projects
 @model AddCostAddToSubProjectInputModel
 
 @{
     this.ViewData["Title"] = "Add Cost";
     var projects = (IEnumerable<AddCostSelectProjectViewModel>)this.ViewData["Projects"];
-    var selectedproject = (AddCostProjectViewModel)this.ViewData["Project"];
+    var selectedProject = (AddCostAddToSubProjectProjectViewModel)this.ViewData["Project"];
 }
 
 <div class="text-center">
@@ -27,10 +28,10 @@
                 <button class="btn btn-primary" onclick="getId()">Choose Project</button>
             </form>
         </div>
-        @if (selectedproject != null)
+        @if (selectedProject != null)
         {
             <div>
-                <span>Project: <strong>@selectedproject.Name</strong></span>
+                <span>Project: <strong>@selectedProject.Name</strong></span>
             </div>
             <hr class="bg-dark" />
             <form method="post">
@@ -42,7 +43,7 @@
                     <div class="col-4">
                         <select asp-for="@Model.SubProjectId" class="custom-select mr-sm-2">
                             <option value="null" selected>Choose project...</option>
-                            @foreach (var subProject in selectedproject.SubProjects)
+                            @foreach (var subProject in selectedProject.SubProjects)
                             {
                                 <option value="@subProject.Id">@subProject.SubProjectTypeName</option>
                             }
@@ -88,7 +89,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-12">
-                        <input type="hidden" asp-for="@Model.ProjectId" value="@selectedproject.Id"/>
+                        <input type="hidden" asp-for="@Model.ProjectId" value="@selectedProject.Id"/>
                         <button type="submit" class="btn btn-primary">Add cost</button>
                     </div>
                 </div>

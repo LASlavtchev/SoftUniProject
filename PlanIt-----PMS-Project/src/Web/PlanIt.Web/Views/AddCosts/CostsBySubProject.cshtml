@@ -1,17 +1,22 @@
 ﻿@using System.Globalization
 @using PlanIt.Web.ViewModels.AdditionalCosts
-@model AddCostDetailsSubProjectViewModel
+@using PlanIt.Web.ViewModels.AdditionalCosts.SubProjects
+@model AddCostCostsBySubProjectSubProjectViewModel
 
 @{
     this.ViewData["Title"] = "Cost Details";
-    var costs = (List<AddCostDetailsViewModel>)Model.AdditionalCosts;
+    var costs = (List<AddCostCostsBySubProjectViewModel>)Model.AdditionalCosts;
 }
 
 <div class="text-center">
-    <h3 class="display-5 p-4 badge-secondary">Project additional costs details</h3>
+    <h3 class="display-5 p-4 badge-secondary">Project part additional costs details</h3>
     <div class="container p-4">
         <div class="container">
             <div class="card">
+                <div class="card-header">
+                    Project name:
+                    <strong> @Model.ProjectName</strong>
+                </div>
                 <div class="card-header">
                     Project part name:
                     <strong> @Model.SubProjectTypeName</strong>
@@ -121,11 +126,12 @@
                     <hr />
                     <div class="row">
                         <div class="col-8">
-                            <a asp-area="Management"
-                               asp-controller="Projects"
-                               asp-action="MyProjects"
+                            <a asp-area=""
+                               asp-controller="AddCosts"
+                               asp-action="CostsByProject"
+                               asp-route-projectId="@Model.ProjectId"
                                class="btn btn-dark float-left">
-                                Back to My projects
+                                Back
                             </a>
                         </div>
                     </div>

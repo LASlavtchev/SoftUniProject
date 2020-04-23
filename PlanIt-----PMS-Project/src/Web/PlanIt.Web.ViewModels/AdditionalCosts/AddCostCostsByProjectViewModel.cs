@@ -3,7 +3,7 @@
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
 
-    public class AddCostDetailsViewModel : IMapFrom<AdditionalCost>
+    public class AddCostCostsByProjectViewModel : IMapFrom<AdditionalCost>
     {
         public int Id { get; set; }
 
@@ -16,7 +16,5 @@
         public int Quantity { get; set; }
 
         public decimal TotalCost { get; set; }
-
-        public string SubProjectSubProjectTypeName { get; set; }
     }
 }

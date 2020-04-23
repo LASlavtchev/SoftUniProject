@@ -41,7 +41,7 @@
         "jquery.validate.unobtrusive.min.js"
       ]
     },
-    {"provider": "unpkg",
+    {"provider": "jsdelivr",
       "library": "animate.css@3.7.2",
       "destination": "wwwroot/lib/animate/",
       "files": [

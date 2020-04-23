@@ -9,7 +9,6 @@
     var status = Model.IsBudgetApproved == false ? "Not Approved" : "Approved";
     var netBudget = Model.Budget - Model.TotalAdditionalCosts - Model.TotalCosts;
     var subProjects = (List<ProjectSubProjectViewModel>)Model.SubProjects;
-    var referrerPath = new Uri(Context.Request.Headers["Referer"].ToString()).AbsolutePath;
 }
 
 <div class="text-center">
@@ -273,10 +272,25 @@
                     }
                     <div class="row">
                         <div class="col-8">
-                            <a href="@referrerPath"
-                               class="btn btn-dark float-left">
-                                Back to projects
-                            </a>
+                            @if (this.User.IsInRole(GlobalConstants.UserRoleName))
+                            {
+                                <a asp-area="Management"
+                                   asp-controller="Projects"
+                                   asp-action="MyProjects"
+                                   class="btn btn-dark float-left">
+                                    Back
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-area="Management"
+                                   asp-controller="Projects"
+                                   asp-action="Index"
+                                   class="btn btn-dark float-left">
+                                    Back
+                                </a>
+                            }
+
                         </div>
                         <div class="col-4 btn-group">
                             <a asp-area="Management"

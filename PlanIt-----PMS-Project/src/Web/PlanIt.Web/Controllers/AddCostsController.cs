@@ -12,6 +12,8 @@
     using PlanIt.Services.Data;
     using PlanIt.Web.Infrastructure.Filters;
     using PlanIt.Web.ViewModels.AdditionalCosts;
+    using PlanIt.Web.ViewModels.AdditionalCosts.Projects;
+    using PlanIt.Web.ViewModels.AdditionalCosts.SubProjects;
 
     [Authorize]
     [TypeFilter(typeof(MyProjectsOnlyAttribute))]
@@ -46,7 +48,7 @@
 
             var projectId = (int)id;
             var selectedProject = await this.projectsService
-                .GetByIdAsync<AddCostProjectViewModel>(projectId);
+                .GetByIdAsync<AddCostAddToSubProjectProjectViewModel>(projectId);
 
             this.ViewData["Project"] = selectedProject;
 
@@ -62,7 +64,7 @@
             }
 
             var selectedProject = await this.projectsService
-                    .GetByIdAsync<AddCostProjectViewModel>(inputModel.ProjectId);
+                    .GetByIdAsync<AddCostAddToSubProjectProjectViewModel>(inputModel.ProjectId);
 
             if (selectedProject == null)
             {
@@ -81,7 +83,7 @@
 
             await this.additionalCostsService.AddAsync<AddCostAddToSubProjectInputModel>(inputModel);
 
-            return this.RedirectToAction("Details", "Projects", new { area = "Management", id = selectedProject.Id });
+            return this.RedirectToAction(nameof(this.CostsBySubProject), new { subProjectId = inputModel.SubProjectId });
         }
 
         public async Task<IActionResult> AddToProject()
@@ -96,7 +98,7 @@
         public async Task<IActionResult> AddToProject(AddCostAddToProjectInputModel inputModel)
         {
             var project = await this.projectsService
-                    .GetByIdAsync<AddCostProjectViewModel>(inputModel.ProjectId);
+                    .GetByIdAsync<AddCostAddToProjectProjectViewModel>(inputModel.ProjectId);
 
             if (project == null)
             {
@@ -114,28 +116,30 @@
 
             await this.additionalCostsService.AddAsync<AddCostAddToProjectInputModel>(inputModel);
 
-            return this.RedirectToAction("Details", "Projects", new { area = "Management", id = project.Id });
+            return this.RedirectToAction(nameof(this.CostsByProject), new { projectId = project.Id });
         }
 
         public async Task<IActionResult> CostsByProject(int projectId)
         {
-            var projectCosts = await this.projectsService
-                .GetByIdAsync<AddCostDetailsProjectViewModel>(projectId);
+            var project = await this.projectsService
+                .GetByIdAsync<AddCostCostsByProjectProjectViewModel>(projectId);
 
-            if (projectCosts == null)
+            if (project == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(projectCosts);
+            return this.View(project);
         }
 
         public async Task<IActionResult> CostsBySubProject(int subProjectId)
         {
             var subProject = await this.subProjectsService
-                .GetByIdAsync<AddCostDetailsSubProjectViewModel>(subProjectId);
+                .GetByIdAsync<AddCostCostsBySubProjectSubProjectViewModel>(subProjectId);
 
-            if (subProject == null)
+            var project = await this.projectsService.GetByIdAsync(subProject.ProjectId);
+
+            if (subProject == null || project == null)
             {
                 return this.NotFound();
             }
@@ -178,7 +182,7 @@
 
             await this.additionalCostsService.EditAsync<AddCostEditInputModel>(inputModel);
 
-            return this.RedirectToAction("Details", "Projects", new { area = "Management", id = cost.ProjectId });
+            return this.RedirectToAction(nameof(this.CostsByProject), new { projectId = cost.ProjectId });
         }
 
         [HttpPost]
@@ -189,12 +193,12 @@
 
             if (cost == null)
             {
-                this.NotFound();
+                return this.NotFound();
             }
 
             await this.additionalCostsService.DeleteAsync(id);
 
-            return this.RedirectToAction("Details", "Projects", new { area = "Management", id = cost.ProjectId });
+            return this.RedirectToAction(nameof(this.CostsByProject), new { projectId = cost.ProjectId });
         }
 
         private async Task<IEnumerable<AddCostSelectProjectViewModel>> GetProjects(ClaimsPrincipal principal)

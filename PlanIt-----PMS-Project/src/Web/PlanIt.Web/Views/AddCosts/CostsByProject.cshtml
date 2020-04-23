@@ -1,6 +1,6 @@
 ﻿@using System.Globalization
-@using PlanIt.Web.ViewModels.AdditionalCosts
-@model AddCostDetailsProjectViewModel
+@using PlanIt.Web.ViewModels.AdditionalCosts.Projects
+@model AddCostCostsByProjectProjectViewModel
 
 @{
     this.ViewData["Title"] = "Cost Details";
@@ -152,9 +152,10 @@
                         <div class="col-8">
                             <a asp-area="Management"
                                asp-controller="Projects"
-                               asp-action="MyProjects"
+                               asp-action="Details"
+                               asp-route-id="@Model.Id"
                                class="btn btn-dark float-left">
-                                Back to My projects
+                                Back
                             </a>
                         </div>                        
                     </div>

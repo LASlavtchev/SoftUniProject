@@ -17,7 +17,6 @@
         [DisplayName("Project name")]
         public string Name { get; set; }
 
-        [DateTimeAfterNow(ErrorMessage = GlobalConstants.ErrorMessageDateTime)]
         [DisplayName("Start date")]
         public DateTime StartDate { get; set; }
 
