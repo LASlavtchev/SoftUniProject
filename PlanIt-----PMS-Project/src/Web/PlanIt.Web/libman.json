@@ -41,9 +41,13 @@
         "jquery.validate.unobtrusive.min.js"
       ]
     },
-    {
+    {"provider": "unpkg",
       "library": "animate.css@3.7.2",
-      "destination": "wwwroot/lib/animate/"
+      "destination": "wwwroot/lib/animate/",
+      "files": [
+        "animate.css",
+        "animate.min.css"
+      ]
     },
     {
       "library": "font-awesome@5.12.1",
@@ -62,18 +66,18 @@
         "webfonts/fa-solid-900.woff2"
       ]
     },
-    {
-      "library": "admin-lte@3.0.2",
+    {"provider": "jsdelivr",
+      "library": "admin-lte@3.0.4",
       "destination": "wwwroot/lib/admin-lte/",
       "files": [
-        "css/adminlte.css",
-        "css/adminlte.min.css",
-        "css/adminlte.css.map",
-        "css/adminlte.min.css.map",
-        "js/adminlte.js",
-        "js/adminlte.min.js",
-        "js/adminlte.js.map",
-        "js/adminlte.min.js.map"
+        "dist/css/adminlte.css",
+        "dist/css/adminlte.min.css",
+        "dist/css/adminlte.css.map",
+        "dist/css/adminlte.min.css.map",
+        "dist/js/adminlte.js",
+        "dist/js/adminlte.min.js",
+        "dist/js/adminlte.js.map",
+        "dist/js/adminlte.min.js.map"
       ]
     },
     {
