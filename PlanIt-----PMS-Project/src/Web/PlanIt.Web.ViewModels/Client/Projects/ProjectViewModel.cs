@@ -15,8 +15,6 @@
 
         public DateTime? DueDate { get; set; }
 
-        public bool IsBudgetApproved { get; set; }
-
         public decimal ClientBudget { get; set; }
 
         public DateTime ClientDueDate { get; set; }
