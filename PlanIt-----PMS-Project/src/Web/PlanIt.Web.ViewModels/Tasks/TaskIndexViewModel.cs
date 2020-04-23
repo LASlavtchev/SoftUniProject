@@ -5,6 +5,7 @@
 
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
+    using PlanIt.Web.ViewModels.Tasks.UserProblems;
 
     public class TaskIndexViewModel : IMapFrom<Problem>
     {

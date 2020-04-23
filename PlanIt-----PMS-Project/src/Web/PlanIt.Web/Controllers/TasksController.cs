@@ -14,6 +14,9 @@
     using PlanIt.Services.Data;
     using PlanIt.Web.Infrastructure.Filters;
     using PlanIt.Web.ViewModels.Tasks;
+    using PlanIt.Web.ViewModels.Tasks.ProgressStatuses;
+    using PlanIt.Web.ViewModels.Tasks.Projects;
+    using PlanIt.Web.ViewModels.Tasks.SubProjects;
 
     [Authorize]
     public class TasksController : BaseController
@@ -96,6 +99,10 @@
                 return this.NotFound();
             }
 
+            var currentUserId = this.userManager.GetUserId(this.User);
+
+            problem.Hours = problem.Hours.Where(h => h.UserId == currentUserId);
+
             return this.View(problem);
         }
 
@@ -112,7 +119,7 @@
 
             var projectId = (int)id;
             var selectedProject = await this.projectsService
-                .GetByIdAsync<TaskProjectViewModel>(projectId);
+                .GetByIdAsync<TaskAssignProjectViewModel>(projectId);
             var selectUsers = await this.SelectUsersAsync(this.User);
 
             this.ViewData["Project"] = selectedProject;
@@ -126,7 +133,7 @@
         public async Task<IActionResult> Assign(TaskAssignInputModel inputModel)
         {
             var subProject = await this.subProjectsService
-                .GetByIdAsync<TaskProjectSubProjectViewModel>(inputModel.SubProjectId);
+                .GetByIdAsync<TaskAssignSubProjectViewModel>(inputModel.SubProjectId);
 
             if (subProject == null)
             {
@@ -141,7 +148,7 @@
             }
 
             var selectedProject = await this.projectsService
-                    .GetByIdAsync<TaskProjectViewModel>(inputModel.ProjectId);
+                    .GetByIdAsync<TaskAssignProjectViewModel>(inputModel.ProjectId);
 
             if (selectedProject == null)
             {
@@ -150,7 +157,7 @@
 
             if (inputModel.DueDate != null)
             {
-                if (inputModel.DueDate > subProject.DueDate)
+                if (inputModel.DueDate?.ToUniversalTime() > subProject.DueDate)
                 {
                     this.ModelState.AddModelError(string.Empty, $"Due date has to be before project part Due date");
                 }
@@ -275,7 +282,7 @@
                 return this.NotFound();
             }
 
-            var statuses = await this.progressStatusesService.GetAllAsync<TaskProgressStatusViewModel>();
+            var statuses = await this.progressStatusesService.GetAllAsync<TaskEditProgressStatusViewModel>();
             this.ViewData["Statuses"] = statuses;
 
             return this.View(problem);
@@ -291,7 +298,7 @@
             }
 
             var subProject = await this.subProjectsService
-                .GetByIdAsync<TaskProjectSubProjectViewModel>(inputModel.SubProjectId);
+                .GetByIdAsync<TaskEditSubProjectViewModel>(inputModel.SubProjectId);
 
             if (subProject == null)
             {
@@ -300,7 +307,7 @@
 
             if (inputModel.DueDate != null)
             {
-                if (inputModel.DueDate > subProject.DueDate)
+                if (inputModel.DueDate?.ToUniversalTime() > subProject.DueDate)
                 {
                     this.ModelState.AddModelError(string.Empty, $"Due date has to be before project part Due date");
                 }
@@ -308,7 +315,7 @@
 
             if (!this.ModelState.IsValid)
             {
-                var statuses = await this.progressStatusesService.GetAllAsync<TaskProgressStatusViewModel>();
+                var statuses = await this.progressStatusesService.GetAllAsync<TaskEditProgressStatusViewModel>();
                 this.ViewData["Statuses"] = statuses;
 
                 return this.View(inputModel);

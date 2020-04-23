@@ -4,6 +4,7 @@
 
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
+    using PlanIt.Web.ViewModels.Tasks.Hours;
 
     public class TaskMyTaskHoursViewModel : IMapFrom<Problem>
     {

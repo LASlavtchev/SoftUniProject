@@ -1,16 +1,15 @@
 ﻿namespace PlanIt.Services.Data
 {
-    using Microsoft.AspNetCore.Identity;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
     using PlanIt.Common;
     using PlanIt.Data.Common.Repositories;
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public class ProblemsService : IProblemsService
     {

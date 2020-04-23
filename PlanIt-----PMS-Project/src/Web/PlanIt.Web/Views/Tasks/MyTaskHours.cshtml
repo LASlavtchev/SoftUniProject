@@ -1,15 +1,10 @@
 ﻿@using System.Globalization
-@using Microsoft.AspNetCore.Identity
 @using PlanIt.Web.ViewModels.Tasks
-@using PlanIt.Data.Models
-
-@inject UserManager<PlanItUser> userManager
 @model TaskMyTaskHoursViewModel
 
 @{
     this.ViewData["Title"] = "My Task Hours Details";
-    var userId = this.userManager.GetUserId(this.User);
-    var hours = Model.Hours.Where(h => h.UserId == userId);
+    var hours = Model.Hours;
 }
 
 <div class="text-center">

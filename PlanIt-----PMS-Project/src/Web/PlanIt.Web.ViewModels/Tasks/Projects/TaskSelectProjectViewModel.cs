@@ -1,9 +1,9 @@
-﻿namespace PlanIt.Web.ViewModels.Tasks
+﻿namespace PlanIt.Web.ViewModels.Tasks.Projects
 {
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
 
-    public class TaskProgressStatusViewModel : IMapFrom<ProgressStatus>
+    public class TaskSelectProjectViewModel : IMapFrom<Project>
     {
         public int Id { get; set; }
 

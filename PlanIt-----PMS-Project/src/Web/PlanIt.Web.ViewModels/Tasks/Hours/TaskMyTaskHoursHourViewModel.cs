@@ -1,4 +1,4 @@
-﻿namespace PlanIt.Web.ViewModels.Tasks
+﻿namespace PlanIt.Web.ViewModels.Tasks.Hours
 {
     using System;
 

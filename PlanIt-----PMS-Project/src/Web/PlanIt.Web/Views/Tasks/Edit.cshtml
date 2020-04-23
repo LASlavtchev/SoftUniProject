@@ -1,9 +1,10 @@
 ﻿@using PlanIt.Web.ViewModels.Tasks
+@using PlanIt.Web.ViewModels.Tasks.ProgressStatuses
 @model TaskEditInputModel
 
 @{
     this.ViewData["Title"] = "Edit Task";
-    var statuses = (IEnumerable<TaskProgressStatusViewModel>)this.ViewData["Statuses"];
+    var statuses = (IEnumerable<TaskEditProgressStatusViewModel>)this.ViewData["Statuses"];
 }
 
 <div class="text-center">

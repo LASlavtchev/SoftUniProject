@@ -1,11 +1,12 @@
 ﻿@using PlanIt.Web.ViewModels.Tasks
+@using PlanIt.Web.ViewModels.Tasks.Projects
 @using PlanIt.Data.Models
 @model TaskAssignInputModel
 
 @{
     this.ViewData["Title"] = "Assign Task";
     var projects = (IEnumerable<TaskSelectProjectViewModel>)this.ViewData["Projects"];
-    var selectedProject = (TaskProjectViewModel)this.ViewData["Project"];
+    var selectedProject = (TaskAssignProjectViewModel)this.ViewData["Project"];
     var selectUsers = (IEnumerable<PlanItUser>)this.ViewData["Users"];
 }
 

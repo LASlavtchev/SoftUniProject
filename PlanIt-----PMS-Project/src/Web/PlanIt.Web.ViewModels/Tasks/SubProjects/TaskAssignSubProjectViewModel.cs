@@ -1,11 +1,11 @@
-﻿namespace PlanIt.Web.ViewModels.Tasks
+﻿namespace PlanIt.Web.ViewModels.Tasks.SubProjects
 {
     using System;
 
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
 
-    public class TaskProjectSubProjectViewModel : IMapFrom<SubProject>
+    public class TaskAssignSubProjectViewModel : IMapFrom<SubProject>
     {
         public int Id { get; set; }
 
