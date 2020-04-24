@@ -43,11 +43,16 @@
         [TempData]
         public string ErrorMessage { get; set; }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(this.ErrorMessage))
             {
                 this.ModelState.AddModelError(string.Empty, this.ErrorMessage);
+            }
+
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.Forbid();
             }
 
             returnUrl ??= this.Url.Content("~/");
@@ -56,6 +61,8 @@
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             this.ReturnUrl = returnUrl;
+
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

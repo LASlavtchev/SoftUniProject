@@ -228,6 +228,7 @@
                 project.DueDate = project.ClientDueDate;
             }
 
+            project.ClientBudget = project.Budget;
             project.ProgressStatus = await this.progressStatusesService.GetByNameAsync(GlobalConstants.ProgressStatusInProgress);
 
             this.projectsRepository.Update(project);

@@ -1,18 +1,5 @@
-﻿@model PlanIt.Web.ViewModels.Administration.Dashboard.IndexViewModel
-@{
-    this.ViewData["Title"] = "Admin dashboard";
-}
-
-@section Styles {
-    <environment names="Development">
-        <!-- Ionicons -->
-        <link href="~/lib/ionicons/css/ionicons.css" rel="stylesheet" asp-append-version="true" />
-    </environment>
-    <environment names="Staging,Production">
-        <!-- Font Awesome Icons -->
-        <link href="~/lib/ionicons/css/ionicons.min.css" rel="stylesheet" asp-append-version="true" />
-    </environment>
-}
+﻿@using PlanIt.Common
+@model PlanIt.Web.ViewModels.Dashboard.IndexAdministrationViewModel
 
 <div class="content">
     <div class="container-fluid">
@@ -31,7 +18,10 @@
                     <a asp-area="Administration"
                        asp-controller="Invites"
                        asp-action="Index"
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
             </div>
             <!-- ./col -->
@@ -48,7 +38,10 @@
                     <a asp-area="Administration"
                        asp-controller="Invites"
                        asp-action="Index"
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
             </div>
             <!-- ./col -->
@@ -65,7 +58,10 @@
                     <a asp-area="Administration"
                        asp-controller="Invites"
                        asp-action="Index"
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
             </div>
             <!-- ./col -->
@@ -82,7 +78,10 @@
                     <a asp-area="Administration"
                        asp-controller="Invites"
                        asp-action="Index"
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
             </div>
             <!-- ./col -->
@@ -103,7 +102,10 @@
                     <a asp-area="Administration"
                        asp-controller="Users"
                        asp-action="All"
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
             </div>
             <!-- ./col -->
@@ -120,7 +122,10 @@
                     <a asp-area="Administration"
                        asp-controller="Users"
                        asp-action="All"
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
             </div>
             <!-- ./col -->
@@ -134,11 +139,13 @@
                     <div class="icon">
                         <i class="ion ion-person-stalker"></i>
                     </div>
-                    <a
-                       asp-area="Administration"
+                    <a asp-area="Administration"
                        asp-controller="Users"
-                       asp-action="Deleted" 
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                       asp-action="Deleted"
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
             </div>
             <!-- ./col -->
@@ -152,10 +159,26 @@
                     <div class="icon">
                         <i class="ion ion-ios-person-outline"></i>
                     </div>
-                    <a asp-area="Administration"
-                       asp-controller="Users"
-                       asp-action="All"
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <a asp-area="Administration"
+                           asp-controller="Users"
+                           asp-action="All"
+                           class="small-box-footer">
+                            More info
+                            <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-area="Management"
+                           asp-controller="Clients"
+                           asp-action="Index"
+                           class="small-box-footer">
+                            More info
+                            <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    }
                 </div>
             </div>
             <!-- ./col -->

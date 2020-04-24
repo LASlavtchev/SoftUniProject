@@ -1,11 +1,11 @@
-﻿namespace PlanIt.Web.ViewModels.Administration.Dashboard
+﻿namespace PlanIt.Web.ViewModels.Dashboard
 {
     using PlanIt.Web.ViewModels.Administration.Users;
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    public class IndexViewModel
+    public class IndexAdministrationViewModel
     {
         // Invites
         public int InvitesCount { get; set; }

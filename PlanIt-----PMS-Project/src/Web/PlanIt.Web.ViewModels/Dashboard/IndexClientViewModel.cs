@@ -1,6 +1,6 @@
-﻿namespace PlanIt.Web.ViewModels.Client.Dashboard
+﻿namespace PlanIt.Web.ViewModels.Dashboard
 {
-    public class IndexViewModel
+    public class IndexClientViewModel
     {
         // Projects
         public int ProjectsCount { get; set; }

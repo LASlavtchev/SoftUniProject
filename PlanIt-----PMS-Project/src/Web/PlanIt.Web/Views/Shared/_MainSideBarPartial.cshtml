@@ -37,54 +37,23 @@
                 <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    @if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
-this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-                    {
-                        <a asp-area="Administration" asp-controller="Dashboard" asp-action="Index" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Dashboard
-                            </p>
-                        </a>
-                    }
-                    else if (this.User.IsInRole(GlobalConstants.ProjectManagerRoleName))
-                    {
-                        <a asp-area="Management" asp-controller="Dashboard" asp-action="Index" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Dashboard
-                            </p>
-                        </a>
-                    }
-                    else if (this.User.IsInRole(GlobalConstants.ClientRoleName))
-                    {
-                        <a asp-area="Client" asp-controller="Dashboard" asp-action="Index" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Dashboard
-                            </p>
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-area="Administration" asp-controller="Dashboard" asp-action="Index" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Dashboard
-                            </p>
-                        </a>
-                    }
+                    <a asp-area="" asp-controller="Dashboard" asp-action="Index" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Dashboard
+                        </p>
+                    </a>
                 </li>
 
                 @if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
-                    this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                 {
                     <partial name="_InvitesMainSideBarPartial" />
                     <partial name="_UsersMainSideBarPartial" />
                 }
 
                 @if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
-                   this.User.IsInRole(GlobalConstants.ProjectManagerRoleName))
+               this.User.IsInRole(GlobalConstants.ProjectManagerRoleName))
                 {
                     <li class="nav-item">
                         <a asp-area="Management"
@@ -108,6 +77,20 @@ this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         <partial name="_SubProjectsMainSideBarPartial" />
                     }
                 }
+                <li class="nav-item">
+                    <form id="formLogout"
+                          asp-area="Identity"
+                          asp-page="/Account/Logout"
+                          asp-route-returnUrl="@this.Url.Page("/Login")"
+                          method="post">                        
+                    </form>
+                    <a href="#" onclick="document.getElementById('formLogout').submit();" title="Logout" class="nav-link">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p>
+                            Logout
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

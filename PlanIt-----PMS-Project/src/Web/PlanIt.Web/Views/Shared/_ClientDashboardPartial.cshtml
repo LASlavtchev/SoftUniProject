@@ -1,23 +1,9 @@
 ﻿@using System.Globalization
-@model PlanIt.Web.ViewModels.Client.Dashboard.IndexViewModel
-@{
-    this.ViewData["Title"] = "Client dashboard";
-}
-
-@section Styles {
-    <environment names="Development">
-        <!-- Ionicons -->
-        <link href="~/lib/ionicons/css/ionicons.css" rel="stylesheet" asp-append-version="true" />
-    </environment>
-    <environment names="Staging,Production">
-        <!-- Font Awesome Icons -->
-        <link href="~/lib/ionicons/css/ionicons.min.css" rel="stylesheet" asp-append-version="true" />
-    </environment>
-}
+@model PlanIt.Web.ViewModels.Dashboard.IndexClientViewModel
 
 <div class="content">
     <div class="container-fluid">
-        <!-- Small boxes (Invites) -->
+        <!-- Small boxes (projects) -->
         <div class="row">
             <div class="col-lg-3 col-6">
                 <!-- small box -->
@@ -32,7 +18,10 @@
                     <a asp-area="Client"
                        asp-controller="Projects"
                        asp-action="Index"
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
             </div>
             <!-- ./col -->
@@ -49,7 +38,10 @@
                     <a asp-area="Client"
                        asp-controller="Projects"
                        asp-action="Index"
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
             </div>
             <!-- ./col -->
@@ -66,7 +58,10 @@
                     <a asp-area="Client"
                        asp-controller="Projects"
                        asp-action="Index"
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
             </div>
             <!-- ./col -->
@@ -83,7 +78,10 @@
                     <a asp-area="Client"
                        asp-controller="Projects"
                        asp-action="Index"
-                       class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
             </div>
             <!-- ./col -->

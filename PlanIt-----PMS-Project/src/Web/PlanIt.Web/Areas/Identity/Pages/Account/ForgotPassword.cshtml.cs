@@ -32,6 +32,17 @@
         [BindProperty]
         public InputModel Input { get; set; }
 
+        public IActionResult OnGet()
+        {
+
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.Forbid();
+            }
+
+            return this.Page();
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (this.ModelState.IsValid)

@@ -1,0 +1,28 @@
+﻿@using PlanIt.Common
+@model PlanIt.Web.ViewModels.Dashboard.IndexViewModel
+
+@{
+    this.ViewData["Title"] = "Dashboard";
+}
+
+@section Styles {
+    <environment names="Development">
+        <!-- Ionicons -->
+        <link href="~/lib/ionicons/css/ionicons.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <!-- Font Awesome Icons -->
+        <link href="~/lib/ionicons/css/ionicons.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+
+@if (this.User.IsInRole(GlobalConstants.ClientRoleName))
+{
+    <partial name="_ClientDashboardPartial" model="@Model.ClientDashboard" />
+}
+
+
+@if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) || this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+{
+    <partial name="_AdministrationDashboardPartial" model="@Model.AdministrationDashboard" />   
+}

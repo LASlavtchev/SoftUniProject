@@ -40,9 +40,16 @@
         [TempData]
         public string ErrorMessage { get; set; }
 
-        public void OnGet(string returnUrl = null)
+        public IActionResult OnGet(string returnUrl = null)
         {
             this.ReturnUrl = returnUrl;
+
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.Forbid();
+            }
+
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
