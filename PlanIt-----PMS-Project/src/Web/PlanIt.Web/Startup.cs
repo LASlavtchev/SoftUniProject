@@ -1,7 +1,10 @@
 ﻿namespace PlanIt.Web
 {
+    using System;
     using System.Reflection;
 
+    using Hangfire;
+    using Hangfire.SqlServer;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -18,9 +21,11 @@
     using PlanIt.Data.Models;
     using PlanIt.Data.Repositories;
     using PlanIt.Data.Seeding;
+    using PlanIt.Services.CronJobs;
     using PlanIt.Services.Data;
     using PlanIt.Services.Mapping;
     using PlanIt.Services.Messaging;
+    using PlanIt.Web.HangFire;
     using PlanIt.Web.ViewModels;
 
     public class Startup
@@ -42,6 +47,23 @@
             // Helper database for inviting users
             services.AddDbContext<InvitesDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnectionInvites")));
+
+            // Hangfire
+            services.AddHangfire(
+                config => config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                    .UseSimpleAssemblyNameTypeSerializer()
+                    .UseRecommendedSerializerSettings()
+                    .UseSqlServerStorage(
+                        this.configuration.GetConnectionString("DefaultConnectionInvites"),
+                        new SqlServerStorageOptions
+                        {
+                            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                            QueuePollInterval = TimeSpan.Zero,
+                            UseRecommendedIsolationLevel = true,
+                            UsePageLocksOnDequeue = true,
+                            DisableGlobalLocks = true,
+                        }));
 
             services.AddDefaultIdentity<PlanItUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<PlanItRole>().AddEntityFrameworkStores<PlanItDbContext>();
@@ -85,13 +107,16 @@
             services.AddTransient<IAdditionalCostsService, AdditionalCostsService>();
             services.AddTransient<IHoursService, HoursService>();
 
+            // Hangfire services
+            services.AddScoped<IInviteDbCleanupJob, InviteDbCleanupJob>();
+
             var sendGridApiKey = this.configuration["SendGrid:ApiKey"];
             services
                 .AddTransient<IEmailSender>(serviceProvider => new SendGridEmailSender(sendGridApiKey));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager)
         {
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
@@ -109,6 +134,7 @@
 
                 new PlanItDbContextSeeder().SeedAsync(mainDbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
                 new InvitesDbContextSeeder().SeedAsync(inviteUserDbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+                recurringJobManager.AddOrUpdate<InviteDbCleanupJob>("DbCleanupJob", x => x.Work(), Cron.Daily);
             }
 
             if (env.IsDevelopment())
@@ -130,6 +156,11 @@
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseHangfireServer(new BackgroundJobServerOptions { WorkerCount = 1 });
+            app.UseHangfireDashboard(
+                "/hangfire",
+                new DashboardOptions { Authorization = new[] { new HangfireAuthorizationFilter() } });
 
             app.UseEndpoints(
                 endpoints =>
