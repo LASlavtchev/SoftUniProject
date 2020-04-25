@@ -146,8 +146,8 @@
                                             <td>@subProjects[i].SubProjectTypeName</td>
                                             <td>@subProjects[i].ProgressStatusName</td>
                                             <td>
-                                                <time datetime="@subProjects[i].DueDate.ToString("O")">
-                                                    @(subProjects[i].DueDate.ToString("dd/MM/yyyy"))
+                                                <time datetime="@subProjects[i].DueDate?.ToString("O")">
+                                                    @(subProjects[i].DueDate == null ? "-" : subProjects[i].DueDate?.ToString("dd/MM/yyyy"))
                                                 </time>
                                             </td>
                                             <td>

@@ -54,7 +54,7 @@
         {
             var subProject = await this.subProjectsRepository
                 .All()
-                .Where(sp => sp.Id == subProjectId)
+                .Where(sp => sp.Id == subProjectId && sp.Project.IsDeleted == false)
                 .To<TViewModel>()
                 .FirstOrDefaultAsync();
 
@@ -95,7 +95,7 @@
         {
             var subProject = await this.subProjectsRepository
                 .All()
-                .Where(sp => sp.Id == subProjectId)
+                .Where(sp => sp.Id == subProjectId && sp.Project.IsDeleted == false)
                 .Include(sp => sp.Problems)
                 .Include(p => p.ProgressStatus)
                 .FirstOrDefaultAsync();

@@ -17,7 +17,7 @@
 
         public string ProgressStatusName { get; set; }
 
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
 
         public decimal TotalSubProjectCosts { get; set; }
 
