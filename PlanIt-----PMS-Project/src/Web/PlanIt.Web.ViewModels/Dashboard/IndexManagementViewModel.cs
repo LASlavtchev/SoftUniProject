@@ -1,6 +1,6 @@
 ﻿namespace PlanIt.Web.ViewModels.Dashboard
 {
-    public class IndexAdministrationViewModel
+    public class IndexManagementViewModel
     {
         // Invites
         public int InvitesCount { get; set; }
@@ -19,5 +19,7 @@
         public int UsersDeletedCount { get; set; }
 
         public int ClientsCount { get; set; }
+
+        public int SettingsCount { get; set; }
     }
 }

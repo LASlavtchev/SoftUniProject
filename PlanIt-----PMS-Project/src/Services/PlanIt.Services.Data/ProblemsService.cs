@@ -24,6 +24,40 @@
             this.progressStatusesService = progressStatusesService;
         }
 
+        public int AllTasksCountByUserId(string userId)
+        {
+            var count = this.problemsRepository
+                .All()
+                .Where(t => t.UserProblems.Select(up => up.PlanItUserId).Contains(userId))
+                .Count();
+
+            return count;
+        }
+
+        public int AllCompletedTasksCountByUserId(string userId)
+        {
+            var count = this.problemsRepository
+                .All()
+                .Where(t => t.ProgressStatus.Name == GlobalConstants.ProgressStatusCompleted &&
+                       t.UserProblems.Select(up => up.PlanItUserId).Contains(userId))
+                .Count();
+
+            return count;
+        }
+
+        public decimal SumCostsCompleteProjectsByManagerId(string userId)
+        {
+            var costs = this.problemsRepository
+                .All()
+                .Where(t => t.SubProject.Project.ProgressStatus.Name == GlobalConstants.ProgressStatusCompleted &&
+                       t.SubProject.Project.ProjectManagerId == userId &&
+                       t.SubProject.Project.IsDeleted == false)
+                .Select(p => p.TotalHours * p.HourlyRate)
+                .Sum();
+
+            return costs;
+        }
+
         public async Task<Problem> AssignAsync<TInputModel>(PlanItUser user, TInputModel model)
         {
             var input = AutoMapperConfig.MapperInstance.Map<Problem>(model);

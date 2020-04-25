@@ -13,5 +13,7 @@
         Task<SubProject> EditAsync<TInputModel>(TInputModel inputModel);
 
         Task DeleteAsync(int subProjectId);
+
+        Task<SubProject> ChangeStatusAsync(int subProjectId, ProgressStatus progressStatus);
     }
 }

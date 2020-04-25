@@ -9,6 +9,12 @@
 
     public interface IProblemsService
     {
+        int AllTasksCountByUserId(string userId);
+
+        int AllCompletedTasksCountByUserId(string userId);
+
+        decimal SumCostsCompleteProjectsByManagerId(string userId);
+
         Task<Problem> AssignAsync<TInputModel>(PlanItUser user, TInputModel model);
 
         Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>();

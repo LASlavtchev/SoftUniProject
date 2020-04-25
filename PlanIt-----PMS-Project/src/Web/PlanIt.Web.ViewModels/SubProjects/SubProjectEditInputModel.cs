@@ -22,11 +22,12 @@
         [DisplayName("Status")]
         public int ProgressStatusId { get; set; }
 
-        public int ProjectId{ get; set; }
+        public int ProjectId { get; set; }
 
         [DisplayName("Project Name")]
         public string ProjectName { get; set; }
 
+        [Required]
         [DisplayName("Due Date")]
         public DateTime? DueDate { get; set; }
     }

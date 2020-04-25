@@ -6,6 +6,8 @@
 
     public interface IAdditionalCostsService
     {
+        decimal SumAdditionalCostsCompletedProjectsByManagerId(string userId);
+
         Task<AdditionalCost> AddAsync<TInputModel>(TInputModel inputModel);
 
         Task<TViewModel> GetByIdAsync<TViewModel>(int costId);

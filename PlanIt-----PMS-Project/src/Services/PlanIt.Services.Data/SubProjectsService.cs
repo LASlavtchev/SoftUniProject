@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using PlanIt.Common;
     using PlanIt.Data.Common.Repositories;
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
@@ -88,6 +89,37 @@
 
             this.subProjectsRepository.Delete(subProject);
             await this.subProjectsRepository.SaveChangesAsync();
+        }
+
+        public async Task<SubProject> ChangeStatusAsync(int subProjectId, ProgressStatus progressStatus)
+        {
+            var subProject = await this.subProjectsRepository
+                .All()
+                .Where(sp => sp.Id == subProjectId)
+                .Include(sp => sp.Problems)
+                .Include(p => p.ProgressStatus)
+                .FirstOrDefaultAsync();
+
+            bool isCompleted = true;
+
+            foreach (var problem in subProject.Problems)
+            {
+                if (problem.ProgressStatus.Name != GlobalConstants.ProgressStatusCompleted)
+                {
+                    isCompleted = false;
+                    break;
+                }
+            }
+
+            if (isCompleted)
+            {
+                subProject.ProgressStatus = progressStatus;
+
+                this.subProjectsRepository.Update(subProject);
+                await this.subProjectsRepository.SaveChangesAsync();
+            }
+
+            return subProject;
         }
     }
 }

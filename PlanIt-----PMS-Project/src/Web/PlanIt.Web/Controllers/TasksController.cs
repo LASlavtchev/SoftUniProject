@@ -222,6 +222,16 @@
 
             await this.problemsService.ChangeStatusAsync(problemId, progressStatus);
 
+            if (status == GlobalConstants.ProgressStatusCompleted)
+            {
+                var subProject = await this.subProjectsService.ChangeStatusAsync(problem.SubProjectId, progressStatus);
+
+                if (subProject.ProgressStatus.Name == GlobalConstants.ProgressStatusCompleted)
+                {
+                    await this.projectsService.ChangeStatusAsync(subProject.ProjectId, progressStatus);
+                }
+            }
+
             return this.RedirectToAction(nameof(this.MyTasks));
         }
 

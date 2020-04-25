@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Claims;
-    using System.Text;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -33,6 +31,50 @@
                 .Count();
 
             return allCount;
+        }
+
+        public int AllCountByManagerId(string userId)
+        {
+            var count = this.projectsRepository
+                .All()
+                .Where(p => p.ProjectManagerId == userId)
+                .Count();
+
+            return count;
+        }
+
+        public int AllCompletedCountByManagerId(string userId)
+        {
+            var count = this.projectsRepository
+                .All()
+                .Where(p => p.ProjectManagerId == userId &&
+                       p.ProgressStatus.Name == GlobalConstants.ProgressStatusCompleted)
+                .Count();
+
+            return count;
+        }
+
+        public decimal TotalBudgetByManagerId(string userId)
+        {
+            var budget = this.projectsRepository
+                .All()
+                .Where(p => p.ProjectManagerId == userId)
+                .Select(p => p.Budget)
+                .Sum();
+
+            return budget;
+        }
+
+        public decimal CompletedTotalBudgetByManagerId(string userId)
+        {
+            var budget = this.projectsRepository
+                .All()
+                .Where(p => p.ProjectManagerId == userId &&
+                       p.ProgressStatus.Name == GlobalConstants.ProgressStatusCompleted)
+                .Select(p => p.Budget)
+                .Sum();
+
+            return budget;
         }
 
         public int AllCountByClientId(int clientId)
@@ -383,6 +425,37 @@
 
             this.projectsRepository.Update(project);
             await this.projectsRepository.SaveChangesAsync();
+
+            return project;
+        }
+
+        public async Task<Project> ChangeStatusAsync(int projectId, ProgressStatus progressStatus)
+        {
+            var project = await this.projectsRepository
+                .All()
+                .Where(p => p.Id == projectId)
+                .Include(p => p.SubProjects)
+                .Include(sp => sp.ProgressStatus)
+                .FirstOrDefaultAsync();
+
+            bool isCompleted = true;
+
+            foreach (var subProject in project.SubProjects)
+            {
+                if (subProject.ProgressStatus.Name != GlobalConstants.ProgressStatusCompleted)
+                {
+                    isCompleted = false;
+                    break;
+                }
+            }
+
+            if (isCompleted)
+            {
+                project.ProgressStatus = progressStatus;
+
+                this.projectsRepository.Update(project);
+                await this.projectsRepository.SaveChangesAsync();
+            }
 
             return project;
         }

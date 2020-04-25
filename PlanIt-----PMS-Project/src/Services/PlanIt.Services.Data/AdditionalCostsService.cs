@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using PlanIt.Common;
     using PlanIt.Data.Common.Repositories;
     using PlanIt.Data.Models;
     using PlanIt.Services.Mapping;
@@ -15,6 +16,19 @@
         public AdditionalCostsService(IDeletableEntityRepository<AdditionalCost> additionalCostsRepository)
         {
             this.additionalCostsRepository = additionalCostsRepository;
+        }
+
+        public decimal SumAdditionalCostsCompletedProjectsByManagerId(string userId)
+        {
+            var costs = this.additionalCostsRepository
+                .All()
+                .Where(ac => ac.Project.ProjectManagerId == userId &&
+                             ac.Project.ProgressStatus.Name == GlobalConstants.ProgressStatusCompleted &&
+                             ac.Project.IsDeleted == false)
+                .Select(ac => ac.TotalCost)
+                .Sum();
+
+            return costs;
         }
 
         public async Task<AdditionalCost> AddAsync<TInputModel>(TInputModel inputModel)

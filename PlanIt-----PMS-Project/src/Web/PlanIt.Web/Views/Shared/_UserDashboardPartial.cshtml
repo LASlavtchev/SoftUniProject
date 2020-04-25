@@ -1,0 +1,175 @@
+﻿@using System.Globalization
+@model PlanIt.Web.ViewModels.Dashboard.IndexUserViewModel
+
+<div class="content">
+    <div class="container-fluid">
+        <!-- Small boxes -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.MyProjectsCount</h3>
+                        <p>My projects</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-ios-list"></i>
+                    </div>
+                    <a asp-area="Management"
+                       asp-controller="Projects"
+                       asp-action="MyProjects"
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@Model.MyCompletedProjectsCount</h3>
+                        <p>My completed projects</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-ios-list-outline"></i>
+                    </div>
+                    <a asp-area="Management"
+                       asp-controller="Projects"
+                       asp-action="MyProjects"
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@Model.MyTasksCount</h3>
+                        <p>My Tasks</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-ios-refresh-empty"></i>
+                    </div>
+                    <a asp-area=""
+                       asp-controller="Tasks"
+                       asp-action="MyTasks"
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@Model.MyCompletedTasksCount</h3>
+                        <p>My completed tasks</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-ios-refresh-outline"></i>
+                    </div>
+                    <a asp-area=""
+                       asp-controller="Tasks"
+                       asp-action="MyTasks"
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+        <!-- Small boxes -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.TotalBudgetMyProjects.ToString("F2", CultureInfo.InvariantCulture)</h3>
+                        <p>Total budget<br />my projects</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-cash"></i>
+                    </div>
+                    <a asp-area="Management"
+                       asp-controller="Projects"
+                       asp-action="MyProjects"
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@Model.TotalBudgetMyCompletedProjects.ToString("F2", CultureInfo.InvariantCulture)</h3>
+                        <p>Total budget<br />my completed projects</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-ios-pricetag"></i>
+                    </div>
+                    <a asp-area="Management"
+                       asp-controller="Projects"
+                       asp-action="MyProjects"
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@Model.TotalCostsMyCompletedProjects.ToString("F2", CultureInfo.InvariantCulture)</h3>
+                        <p>Total costs<br />my projects</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-ios-pricetag-outline"></i>
+                    </div>
+                    <a asp-area="Management"
+                       asp-controller="Projects"
+                       asp-action="MyProjects"
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@Model.TotalProfit.ToString("F2", CultureInfo.InvariantCulture)</h3>
+                        <p>Total profit<br />my projects</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-cash"></i>
+                    </div>
+                    <a asp-area="Management"
+                       asp-controller="Projects"
+                       asp-action="MyProjects"
+                       class="small-box-footer">
+                        More info
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+    </div>
+</div>

@@ -9,6 +9,14 @@
     {
         int AllCount();
 
+        int AllCountByManagerId(string userId);
+
+        int AllCompletedCountByManagerId(string userId);
+
+        decimal TotalBudgetByManagerId(string userId);
+
+        decimal CompletedTotalBudgetByManagerId(string userId);
+
         int AllCountByClientId(int clientId);
 
         int AllApprovedCountByClientId(int clientId);
@@ -58,5 +66,7 @@
         Task<Project> EditByManagerAsync<TInputModel>(TInputModel inputModel);
 
         Task<Project> CalculateProjectBudget(int projectId);
+
+        Task<Project> ChangeStatusAsync(int projectId, ProgressStatus progressStatus);
     }
 }
