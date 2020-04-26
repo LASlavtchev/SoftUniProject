@@ -9,6 +9,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using PlanIt.Data;
     using PlanIt.Data.Common.Repositories;
+    using PlanIt.Data.Models;
     using PlanIt.Data.Repositories;
     using PlanIt.Services.Mapping;
     using PlanIt.Web.ViewModels;
@@ -45,6 +46,9 @@
             services.AddDbContext<InvitesDbContext>(
                 options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
 
+            services.AddIdentityCore<PlanItUser>(IdentityOptionsProvider.GetIdentityOptions)
+                .AddRoles<PlanItRole>().AddEntityFrameworkStores<PlanItDbContext>();
+
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
@@ -52,6 +56,11 @@
 
             // Application services
             services.AddTransient<IInvitesService, InvitesService>();
+            services.AddTransient<IClientsServices, ClientsService>();
+            services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IProjectsService, ProjectsService>();
+            services.AddTransient<IProgressStatusesService, ProgressStatusesService>();
+            services.AddTransient<IProblemsService, ProblemsService>();
 
             // AutoMapper
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
