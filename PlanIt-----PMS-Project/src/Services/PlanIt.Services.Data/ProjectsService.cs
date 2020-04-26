@@ -33,6 +33,26 @@
             return allCount;
         }
 
+        public int AllApprovedCount()
+        {
+            var allCount = this.projectsRepository
+                .All()
+                .Where(p => p.IsBudgetApproved)
+                .Count();
+
+            return allCount;
+        }
+
+        public int AllCompletedCount()
+        {
+            var allCount = this.projectsRepository
+                .All()
+                .Where(p => p.IsBudgetApproved && p.ProgressStatus.Name == GlobalConstants.ProgressStatusCompleted)
+                .Count();
+
+            return allCount;
+        }
+
         public int AllCountByManagerId(string userId)
         {
             var count = this.projectsRepository
@@ -72,6 +92,45 @@
                 .Where(p => p.ProjectManagerId == userId &&
                        p.ProgressStatus.Name == GlobalConstants.ProgressStatusCompleted)
                 .Select(p => p.Budget)
+                .Sum();
+
+            return budget;
+        }
+
+        public decimal TotalBudgetApproved()
+        {
+            var budget = this.projectsRepository
+                .All()
+                .Where(p => p.IsBudgetApproved)
+                .Select(p => p.Budget)
+                .Sum();
+
+            return budget;
+        }
+
+        public decimal TotalBudgetCompleted()
+        {
+            var budget = this.projectsRepository
+                .All()
+                .Where(p => p.IsBudgetApproved && p.ProgressStatus.Name == GlobalConstants.ProgressStatusCompleted)
+                .Select(p => p.Budget)
+                .Sum();
+
+            return budget;
+        }
+
+        public decimal TotalCostsCompleted()
+        {
+            var budget = this.projectsRepository
+                .All()
+                .Where(p => p.IsBudgetApproved && p.ProgressStatus.Name == GlobalConstants.ProgressStatusCompleted)
+                .Select(p => new
+                {
+                    AdditionalCosts = p.AdditionalCosts.Select(ac => ac.TotalCost).Sum(),
+                    Costs = p.SubProjects.SelectMany(sp => sp.Problems).Select(x => x.HourlyRate * x.TotalHours).Sum(),
+                })
+                .ToList()
+                .Select(a => a.AdditionalCosts + a.Costs)
                 .Sum();
 
             return budget;
@@ -260,18 +319,36 @@
             var project = this.projectsRepository
                 .All()
                 .Where(p => p.Id == projectId)
+                .Include(p => p.SubProjects)
+                .ThenInclude(sp => sp.Problems)
                 .FirstOrDefault();
 
             project.IsBudgetApproved = true;
             project.StartDate = DateTime.UtcNow;
 
-            if (project.DueDate == null || project.DueDate > project.ClientDueDate)
+            if (project.DueDate == null)
             {
                 project.DueDate = project.ClientDueDate;
+            }
+            else if (project.DueDate > project.ClientDueDate)
+            {
+                project.ClientDueDate = (DateTime)project.DueDate;
             }
 
             project.ClientBudget = project.Budget;
             project.ProgressStatus = await this.progressStatusesService.GetByNameAsync(GlobalConstants.ProgressStatusInProgress);
+
+            foreach (var subProject in project.SubProjects)
+            {
+                subProject.DueDate = project.DueDate;
+                subProject.ProgressStatus = project.ProgressStatus;
+
+                foreach (var problem in subProject.Problems)
+                {
+                    problem.DueDate = project.DueDate;
+                    problem.ProgressStatus = project.ProgressStatus;
+                }
+            }
 
             this.projectsRepository.Update(project);
             await this.projectsRepository.SaveChangesAsync();

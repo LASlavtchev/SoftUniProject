@@ -17,6 +17,7 @@
     public class DashboardController : BaseController
     {
         private readonly UserManager<PlanItUser> userManager;
+        private readonly RoleManager<PlanItRole> roleManager;
         private readonly IInvitesService invitesService;
         private readonly IUsersService usersService;
         private readonly IClientsServices clientsServices;
@@ -26,6 +27,7 @@
 
         public DashboardController(
             UserManager<PlanItUser> userManager,
+            RoleManager<PlanItRole> roleManager,
             IInvitesService invitesService,
             IUsersService usersService,
             IClientsServices clientsServices,
@@ -34,6 +36,7 @@
             IProblemsService problemsService)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
             this.invitesService = invitesService;
             this.usersService = usersService;
             this.clientsServices = clientsServices;
@@ -81,23 +84,41 @@
                 viewModel.AdministrationDashboard = administrationViewModel;
             }
 
-            //if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
-            //    this.User.IsInRole(GlobalConstants.ProjectManagerRoleName))
-            //{
-            //    var managementViewModel = new IndexManagementViewModel
-            //    {
-            //        InvitesCount = this.invitesService.GetAllCount(),
-            //        InvitesApprovedCount = this.invitesService.GetAllApprovedCount(),
-            //        InvitesInvitedExpiredOnCount = this.invitesService.GetAllInvitedExpiredOnCount(),
-            //        InvitesRequestExpiredOnCount = this.invitesService.GetAllRequestExpiredOnCount(),
-            //        UsersWithDeletedCount = this.usersService.GetAllWithDeletedCount(),
-            //        UsersCount = this.usersService.GetAllCount(),
-            //        UsersDeletedCount = this.usersService.GetAllDeletedCount(),
-            //        ClientsCount = this.clientsServices.GetAllCount(),
-            //    };
+            if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
+                this.User.IsInRole(GlobalConstants.ProjectManagerRoleName))
+            {
+                var userRole = await this.roleManager.FindByNameAsync(GlobalConstants.UserRoleName);
+                var userRoleId = userRole.Id;
 
-            //    viewModel.ManagementDashboard = managementViewModel;
-            //}
+                var managementViewModel = new IndexManagementViewModel
+                {
+                    AllProjectsCount = this.projectsService
+                    .AllCount(),
+                    AllApprovedProjectsCount = this.projectsService
+                    .AllApprovedCount(),
+                    AllCompletedProjectsCount = this.projectsService
+                    .AllCompletedCount(),
+                    AssignedManagersCount = this.userManager
+                    .Users
+                    .Where(u => u.Projects.Count != 0)
+                    .Count(),
+                    AssignedUsersCount = this.userManager
+                    .Users
+                    .Where(u => u.UserProblems.Count != 0)
+                    .Count(),
+                    FreeUsersCount = this.userManager
+                    .Users
+                    .Where(u => u.UserProblems.Count == 0 && u.Roles.Select(r => r.RoleId).Contains(userRoleId))
+                    .Count(),
+                    TotalBudgetApprovedProjects = this.projectsService
+                    .TotalBudgetApproved(),
+                    TotalBudgetCompletedProjects = this.projectsService
+                    .TotalBudgetCompleted(),
+                    TotalCostsCompletedProjects = this.projectsService.TotalCostsCompleted(),
+                };
+
+                viewModel.ManagementDashboard = managementViewModel;
+            }
 
             if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
                 this.User.IsInRole(GlobalConstants.ProjectManagerRoleName) ||

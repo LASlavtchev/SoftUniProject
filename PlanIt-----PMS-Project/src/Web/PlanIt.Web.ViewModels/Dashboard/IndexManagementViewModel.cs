@@ -2,24 +2,25 @@
 {
     public class IndexManagementViewModel
     {
-        // Invites
-        public int InvitesCount { get; set; }
+        public int AllProjectsCount { get; set; }
 
-        public int InvitesApprovedCount { get; set; }
+        public int AllApprovedProjectsCount { get; set; }
 
-        public int InvitesInvitedExpiredOnCount { get; set; }
+        public int AllCompletedProjectsCount { get; set; }
 
-        public int InvitesRequestExpiredOnCount { get; set; }
+        public int AssignedManagersCount { get; set; }
 
-        // Users
-        public int UsersWithDeletedCount { get; set; }
+        public int AssignedUsersCount { get; set; }
 
-        public int UsersCount { get; set; }
+        public int FreeUsersCount { get; set; }
 
-        public int UsersDeletedCount { get; set; }
+        public decimal TotalBudgetApprovedProjects { get; set; }
 
-        public int ClientsCount { get; set; }
+        public decimal TotalBudgetCompletedProjects { get; set; }
 
-        public int SettingsCount { get; set; }
+        public decimal TotalCostsCompletedProjects { get; set; }
+
+        public decimal TotalProfit =>
+            this.TotalBudgetCompletedProjects - this.TotalCostsCompletedProjects;
     }
 }

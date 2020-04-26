@@ -23,21 +23,22 @@
 }
 
 @if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
-   this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+  this.User.IsInRole(GlobalConstants.AdministratorRoleName))
 {
     <hr style="height: 20px;border-top:1px dashed;" />
     <partial name="_AdministrationDashboardPartial" model="@Model.AdministrationDashboard" />
 }
 
 @if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
-   this.User.IsInRole(GlobalConstants.ProjectManagerRoleName))
+  this.User.IsInRole(GlobalConstants.ProjectManagerRoleName))
 {
-    <!--<partial name="_ManagementDashboardPartial" model="@@Model.ManagementDashboard" />-->
+    <hr style="height: 20px;border-top:1px dashed;" />
+    <partial name="_ManagementDashboardPartial" model="@Model.ManagementDashboard" />
 }
 
 @if (this.User.IsInRole(GlobalConstants.CompanyOwnerRoleName) ||
-   this.User.IsInRole(GlobalConstants.ProjectManagerRoleName) ||
-   this.User.IsInRole(GlobalConstants.UserRoleName))
+  this.User.IsInRole(GlobalConstants.ProjectManagerRoleName) ||
+  this.User.IsInRole(GlobalConstants.UserRoleName))
 {
     <hr style="height: 20px;border-top:1px dashed;" />
     <partial name="_UserDashboardPartial" model="@Model.UserDashboard" />

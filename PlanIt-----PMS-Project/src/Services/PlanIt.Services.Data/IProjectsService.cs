@@ -9,6 +9,10 @@
     {
         int AllCount();
 
+        int AllApprovedCount();
+
+        int AllCompletedCount();
+
         int AllCountByManagerId(string userId);
 
         int AllCompletedCountByManagerId(string userId);
@@ -16,6 +20,12 @@
         decimal TotalBudgetByManagerId(string userId);
 
         decimal CompletedTotalBudgetByManagerId(string userId);
+
+        decimal TotalBudgetApproved();
+
+        decimal TotalBudgetCompleted();
+
+        decimal TotalCostsCompleted();
 
         int AllCountByClientId(int clientId);
 
