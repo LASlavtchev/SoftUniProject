@@ -370,7 +370,7 @@
                 Id = 1,
                 Name = "Project1",
                 Budget = 1000,
-                DueDate = null,
+                DueDate = DateTime.Parse("4/29/2020"),
                 ClientBudget = 2000.20M,
                 ClientDueDate = DateTime.Parse("4/27/2020"),
             };
@@ -386,7 +386,7 @@
                 Id = 1,
                 Name = "Project1",
                 Budget = 1000,
-                DueDate = null,
+                DueDate = DateTime.Parse("4/29/2020"),
                 ClientBudget = 2000.20M,
                 ClientDueDate = DateTime.Parse("4/27/2020"),
             };
@@ -396,7 +396,7 @@
             // Assert
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
-            Assert.Null(actual.DueDate);
+            Assert.Equal(expected.DueDate, actual.DueDate);
             Assert.Equal(expected.ClientBudget, actual.ClientBudget);
             Assert.Equal(expected.ClientDueDate, actual.ClientDueDate);
         }
@@ -480,7 +480,7 @@
             {
                 Name = "New",
                 ClientBudget = 200,
-                ClientDueDate = DateTime.UtcNow,
+                ClientDueDate = DateTime.Now,
                 ClientId = 1,
             };
 
@@ -527,8 +527,8 @@
             var inputProject = new Web.ViewModels.Management.Projects.ProjectCreateInputModel
             {
                 Name = "New",
-                StartDate = DateTime.UtcNow,
-                DueDate = DateTime.UtcNow.AddDays(10),
+                StartDate = DateTime.Now,
+                DueDate = DateTime.Now.AddDays(10),
                 ClientId = 1,
             };
 
@@ -912,29 +912,557 @@
             Assert.Equal(expected.ProgressStatus.Name, actual.ProgressStatus.Name);
         }
 
+        [Fact]
+        public async Task EditByClientAsyncShouldEditProjectCorrectly()
+        {
+            // Arrange
+            var project = new Project
+            {
+                Id = 1,
+                Name = "Project",
+                ClientBudget = 1000,
+                ClientDueDate = DateTime.UtcNow.AddDays(5),
+            };
 
+            var inputModel = new ProjectEditInputModel
+            {
+                Id = 1,
+                Name = "Project1",
+                ClientBudget = 2000,
+                ClientDueDate = DateTime.Now.AddDays(10),
+            };
 
+            await this.PlanItDbContext.Projects.AddAsync(project);
+            await this.PlanItDbContext.SaveChangesAsync();
 
+            // Act
+            var expected = new Project
+            {
+                Id = 1,
+                Name = "Project1",
+                ClientBudget = 2000,
+                ClientDueDate = DateTime.UtcNow.AddDays(10),
+            };
 
+            var actual = await this.ProjectsService
+                .EditByClientAsync<ProjectEditInputModel>(inputModel);
 
+            // Assert
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.ClientBudget, actual.ClientBudget);
+            Assert.Equal(expected.ClientDueDate.ToString(DateTimeFormat), actual.ClientDueDate.ToString(DateTimeFormat));
+        }
 
+        [Fact]
+        public async Task EditByManagerAsyncWithNullManagerAndEqualDatesShouldEditProjectCorrectly()
+        {
+            // Arrange
+            var inputModel = new PlanIt.Web.ViewModels.Management.Projects.ProjectEditInputModel
+            {
+                Id = 1,
+                Name = "Project1",
+                StartDate = DateTime.Parse("04-28-2020").ToLocalTime(),
+                DueDate = DateTime.Parse("04-30-2020").ToLocalTime(),
+                ProgressStatusId = 2,
+                ProjectManagerId = null,
+            };
 
+            var project = new Project
+            {
+                Id = 1,
+                Name = "Project2",
+                StartDate = DateTime.Parse("04-28-2020"),
+                DueDate = DateTime.Parse("04-30-2020"),
+                ProgressStatusId = 1,
+                ProjectManagerId = "First",
+                IsBudgetApproved = true,
+            };
 
+            await this.PlanItDbContext.Projects.AddAsync(project);
+            await this.PlanItDbContext.SaveChangesAsync();
 
+            // Act
+            var expected = new Project
+            {
+                Id = 1,
+                Name = "Project1",
+                StartDate = DateTime.Parse("04-28-2020"),
+                DueDate = DateTime.Parse("04-30-2020"),
+                ProgressStatusId = 1,
+                ProjectManagerId = "First",
+            };
 
+            var actual = await this.ProjectsService
+                .EditByManagerAsync<PlanIt.Web.ViewModels.Management.Projects.ProjectEditInputModel>(inputModel);
 
+            // Assert
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Budget, actual.Budget);
+            Assert.Equal(expected.StartDate?.ToString(DateTimeFormat), actual.StartDate?.ToString(DateTimeFormat));
+            Assert.Equal(expected.DueDate?.ToString(DateTimeFormat), actual.DueDate?.ToString(DateTimeFormat));
+            Assert.Equal(expected.ProgressStatusId, actual.ProgressStatusId);
+            Assert.Equal(expected.ProjectManagerId, actual.ProjectManagerId);
+            Assert.True(actual.IsBudgetApproved);
+        }
 
+        [Fact]
+        public async Task EditByManagerAsyncWithNotNullManagerAndEqualDatesShouldEditProjectCorrectly()
+        {
+            // Arrange
+            var inputModel = new PlanIt.Web.ViewModels.Management.Projects.ProjectEditInputModel
+            {
+                Id = 1,
+                Name = "Project1",
+                StartDate = DateTime.Parse("04-28-2020").ToLocalTime(),
+                DueDate = DateTime.Parse("04-30-2020").ToLocalTime(),
+                ProgressStatusId = 2,
+                ProjectManagerId = "Second",
+            };
 
+            var project = new Project
+            {
+                Id = 1,
+                Name = "Project2",
+                StartDate = DateTime.Parse("04-28-2020"),
+                DueDate = DateTime.Parse("04-30-2020"),
+                ProgressStatusId = 1,
+                ProjectManagerId = "First",
+                IsBudgetApproved = true,
+            };
 
+            await this.PlanItDbContext.Projects.AddAsync(project);
+            await this.PlanItDbContext.SaveChangesAsync();
 
+            // Act
+            var expected = new Project
+            {
+                Id = 1,
+                Name = "Project1",
+                StartDate = DateTime.Parse("04-28-2020"),
+                DueDate = DateTime.Parse("04-30-2020"),
+                ProgressStatusId = 2,
+                ProjectManagerId = "Second",
+            };
 
+            var actual = await this.ProjectsService
+                .EditByManagerAsync<PlanIt.Web.ViewModels.Management.Projects.ProjectEditInputModel>(inputModel);
 
+            // Assert
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Budget, actual.Budget);
+            Assert.Equal(expected.StartDate?.ToString(DateTimeFormat), actual.StartDate?.ToString(DateTimeFormat));
+            Assert.Equal(expected.DueDate?.ToString(DateTimeFormat), actual.DueDate?.ToString(DateTimeFormat));
+            Assert.Equal(expected.ProgressStatusId, actual.ProgressStatusId);
+            Assert.Equal(expected.ProjectManagerId, actual.ProjectManagerId);
+            Assert.True(actual.IsBudgetApproved);
+        }
 
+        [Fact]
+        public async Task EditByManagerAsyncWithNotNullManagerAndNotEqualStartDateShouldEditProjectCorrectly()
+        {
+            // Arrange
+            var inputModel = new PlanIt.Web.ViewModels.Management.Projects.ProjectEditInputModel
+            {
+                Id = 1,
+                Name = "Project1",
+                StartDate = DateTime.Parse("04-29-2020").ToLocalTime(),
+                DueDate = DateTime.Parse("04-30-2020").ToLocalTime(),
+                ProgressStatusId = 2,
+                ProjectManagerId = "Second",
+            };
 
+            var project = new Project
+            {
+                Id = 1,
+                Name = "Project2",
+                StartDate = DateTime.Parse("04-28-2020"),
+                DueDate = DateTime.Parse("04-30-2020"),
+                ProgressStatusId = 1,
+                ProjectManagerId = "First",
+                IsBudgetApproved = true,
+            };
 
+            var status = new ProgressStatus
+            {
+                Id = 5,
+                Name = GlobalConstants.ProgressStatusSuspended,
+            };
 
+            await this.PlanItDbContext.Projects.AddAsync(project);
+            await this.PlanItDbContext.ProgressStatuses.AddAsync(status);
+            await this.PlanItDbContext.SaveChangesAsync();
 
+            // Act
+            var expected = new Project
+            {
+                Id = 1,
+                Name = "Project1",
+                StartDate = DateTime.Parse("04-29-2020"),
+                DueDate = DateTime.Parse("04-30-2020"),
+                ProgressStatusId = 5,
+                ProjectManagerId = "Second",
+            };
 
+            var actual = await this.ProjectsService
+                .EditByManagerAsync<PlanIt.Web.ViewModels.Management.Projects.ProjectEditInputModel>(inputModel);
+
+            // Assert
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Budget, actual.Budget);
+            Assert.Equal(expected.StartDate?.ToString(DateTimeFormat), actual.StartDate?.ToString(DateTimeFormat));
+            Assert.Equal(expected.DueDate?.ToString(DateTimeFormat), actual.DueDate?.ToString(DateTimeFormat));
+            Assert.Equal(expected.ProgressStatusId, actual.ProgressStatusId);
+            Assert.Equal(expected.ProjectManagerId, actual.ProjectManagerId);
+            Assert.False(actual.IsBudgetApproved);
+        }
+
+        [Fact]
+        public async Task EditByManagerAsyncWithNotNullManagerAndNotEqualDueDateShouldEditProjectCorrectly()
+        {
+            // Arrange
+            var inputModel = new PlanIt.Web.ViewModels.Management.Projects.ProjectEditInputModel
+            {
+                Id = 1,
+                Name = "Project1",
+                StartDate = DateTime.Parse("04-28-2020").ToLocalTime(),
+                DueDate = DateTime.Parse("05-30-2020").ToLocalTime(),
+                ProgressStatusId = 2,
+                ProjectManagerId = "Second",
+            };
+
+            var project = new Project
+            {
+                Id = 1,
+                Name = "Project2",
+                StartDate = DateTime.Parse("04-28-2020"),
+                DueDate = DateTime.Parse("04-30-2020"),
+                ProgressStatusId = 1,
+                ProjectManagerId = "First",
+                IsBudgetApproved = true,
+            };
+
+            var status = new ProgressStatus
+            {
+                Id = 5,
+                Name = GlobalConstants.ProgressStatusSuspended,
+            };
+
+            await this.PlanItDbContext.Projects.AddAsync(project);
+            await this.PlanItDbContext.ProgressStatuses.AddAsync(status);
+            await this.PlanItDbContext.SaveChangesAsync();
+
+            // Act
+            var expected = new Project
+            {
+                Id = 1,
+                Name = "Project1",
+                StartDate = DateTime.Parse("04-28-2020"),
+                DueDate = DateTime.Parse("05-30-2020"),
+                ProgressStatusId = 5,
+                ProjectManagerId = "Second",
+            };
+
+            var actual = await this.ProjectsService
+                .EditByManagerAsync<PlanIt.Web.ViewModels.Management.Projects.ProjectEditInputModel>(inputModel);
+
+            // Assert
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Budget, actual.Budget);
+            Assert.Equal(expected.StartDate?.ToString(DateTimeFormat), actual.StartDate?.ToString(DateTimeFormat));
+            Assert.Equal(expected.DueDate?.ToString(DateTimeFormat), actual.DueDate?.ToString(DateTimeFormat));
+            Assert.Equal(expected.ProgressStatusId, actual.ProgressStatusId);
+            Assert.Equal(expected.ProjectManagerId, actual.ProjectManagerId);
+            Assert.False(actual.IsBudgetApproved);
+        }
+
+        [Fact]
+        public async Task GetAllApprovedAsyncShouldReturnCorrectNumber()
+        {
+            // Arrange
+            await this.AddTestingProjectsToDb();
+
+            // Act
+            var expected = 4;
+
+            var projects = await this.ProjectsService
+                .GetAllApprovedAsync<ProjectViewModel>();
+
+            var actual = projects.Count();
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task GetAllNotApprovedAsyncShouldReturnCorrectNumber()
+        {
+            // Arrange
+            await this.AddTestingProjectsToDb();
+
+            // Act
+            var expected = 1;
+
+            var projects = await this.ProjectsService
+                .GetAllNotApprovedAsync<ProjectViewModel>();
+
+            var actual = projects.Count();
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task GetAllDeletedAsyncShouldReturnCorrectNumber()
+        {
+            // Arrange
+            var projects = new List<Project>
+            {
+                new Project
+                {
+                    Id = 1,
+                    IsDeleted = true,
+                    Client = new Client
+                    {
+                        Id = 1,
+                        IsDeleted = false,
+                    },
+                },
+                new Project
+                {
+                    Id = 2,
+                    IsDeleted = false,
+                    Client = new Client
+                    {
+                        Id = 2,
+                        IsDeleted = false,
+                    },
+                },
+                new Project
+                {
+                    Id = 3,
+                    IsDeleted = true,
+                    Client = new Client
+                    {
+                        Id = 3,
+                        IsDeleted = true,
+                    },
+                },
+            };
+
+            await this.PlanItDbContext.Projects.AddRangeAsync(projects);
+            await this.PlanItDbContext.SaveChangesAsync();
+
+            // Act
+            var expected = 1;
+
+            var deletedProjects = await this.ProjectsService
+                .GetAllDeletedAsync<ProjectViewModel>();
+
+            var actual = deletedProjects.Count();
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task CalculateProjectBudgetWithNotApprovedBudgetShouldEditCorrectlyProject()
+        {
+            // Arrange
+            var project = new Project
+            {
+                Id = 1,
+                IsBudgetApproved = false,
+            };
+
+            await this.PlanItDbContext.Projects.AddAsync(project);
+
+            for (int i = 0; i < 3; i++)
+            {
+                var subProject = new SubProject
+                {
+                    ProjectId = 1,
+                    Budget = 1000,
+                };
+
+                await this.PlanItDbContext.SubProjects.AddAsync(subProject);
+            }
+
+            await this.PlanItDbContext.SaveChangesAsync();
+
+            int projectId = 1;
+
+            // Act
+            var expected = new Project
+            {
+                Id = 1,
+                Budget = 3000,
+                IsBudgetApproved = false,
+            };
+
+            var actual = await this.ProjectsService.CalculateProjectBudget(projectId);
+
+            // Assert
+            Assert.Equal(expected.Budget, actual.Budget);
+            Assert.False(actual.IsBudgetApproved);
+        }
+
+        [Fact]
+        public async Task CalculateProjectBudgetWithApprovedBudgetShouldEditCorrectlyProject()
+        {
+            // Arrange
+            var project = new Project
+            {
+                Id = 1,
+                IsBudgetApproved = true,
+            };
+
+            await this.PlanItDbContext.Projects.AddAsync(project);
+
+            for (int i = 0; i < 3; i++)
+            {
+                var subProject = new SubProject
+                {
+                    ProjectId = 1,
+                    Budget = 1000,
+                };
+
+                await this.PlanItDbContext.SubProjects.AddAsync(subProject);
+            }
+
+            await this.PlanItDbContext.SaveChangesAsync();
+
+            int projectId = 1;
+
+            // Act
+            var expected = new Project
+            {
+                Id = 1,
+                Budget = 3000,
+                IsBudgetApproved = false,
+            };
+
+            var actual = await this.ProjectsService.CalculateProjectBudget(projectId);
+
+            // Assert
+            Assert.Equal(expected.Budget, actual.Budget);
+            Assert.False(actual.IsBudgetApproved);
+        }
+
+        [Fact]
+        public async Task ChangeStatusAsyncWithSubProjectsCompletedShouldChangeStatusToCompleted()
+        {
+            // Arrange
+            var project = new Project
+            {
+                Id = 1,
+                ProgressStatus = new ProgressStatus
+                {
+                    Name = GlobalConstants.ProgressStatusInProgress,
+                },
+            };
+
+            await this.PlanItDbContext.Projects.AddAsync(project);
+
+            for (int i = 0; i < 3; i++)
+            {
+                var subProject = new SubProject
+                {
+                    ProjectId = 1,
+                    ProgressStatus = new ProgressStatus
+                    {
+                        Name = GlobalConstants.ProgressStatusCompleted,
+                    },
+                };
+
+                await this.PlanItDbContext.SubProjects.AddAsync(subProject);
+            }
+
+            await this.PlanItDbContext.SaveChangesAsync();
+
+            int projectId = 1;
+
+            var status = new ProgressStatus
+            {
+                Name = GlobalConstants.ProgressStatusCompleted,
+            };
+
+            // Act
+            var expected = new Project
+            {
+                Id = 1,
+                ProgressStatus = new ProgressStatus
+                {
+                    Name = GlobalConstants.ProgressStatusCompleted,
+                },
+            };
+
+            var actual = await this.ProjectsService.ChangeStatusAsync(projectId, status);
+
+            // Assert
+            Assert.Equal(expected.ProgressStatus.Name, actual.ProgressStatus.Name);
+        }
+
+        [Fact]
+        public async Task ChangeStatusAsyncWithOneSubProjectsNotCompletedShouldNotChangeStatus()
+        {
+            // Arrange
+            var project = new Project
+            {
+                Id = 1,
+                ProgressStatus = new ProgressStatus
+                {
+                    Name = GlobalConstants.ProgressStatusAssigned,
+                },
+            };
+
+            await this.PlanItDbContext.Projects.AddAsync(project);
+
+            var subProjects = new List<SubProject>
+            {
+                new SubProject
+                {
+                    ProjectId = 1,
+                    ProgressStatus = new ProgressStatus
+                    {
+                        Name = GlobalConstants.ProgressStatusCompleted,
+                    },
+                },
+                new SubProject
+                {
+                    ProjectId = 1,
+                    ProgressStatus = new ProgressStatus
+                    {
+                        Name = GlobalConstants.ProgressStatusInProgress,
+                    },
+                },
+            };
+
+            await this.PlanItDbContext.SubProjects.AddRangeAsync(subProjects);
+
+            await this.PlanItDbContext.SaveChangesAsync();
+
+            int projectId = 1;
+
+            var status = new ProgressStatus
+            {
+                Name = GlobalConstants.ProgressStatusCompleted,
+            };
+
+            // Act
+            var expected = new Project
+            {
+                Id = 1,
+                ProgressStatus = new ProgressStatus
+                {
+                    Name = GlobalConstants.ProgressStatusAssigned,
+                },
+            };
+
+            var actual = await this.ProjectsService.ChangeStatusAsync(projectId, status);
+
+            // Assert
+            Assert.Equal(expected.ProgressStatus.Name, actual.ProgressStatus.Name);
+        }
 
         private async Task AddTestingProjectsToDb()
         {
@@ -1114,7 +1642,7 @@
                     HourlyRate = 25,
                     TotalHours = 4, // Ok 100
                 },
-                 new Problem
+                new Problem
                 {
                     Id = 6,
                     SubProjectId = 4,
@@ -1126,12 +1654,5 @@
             await this.PlanItDbContext.Problems.AddRangeAsync(problems);
             await this.PlanItDbContext.SaveChangesAsync();
         }
-
-
-
-
-
-
-
     }
 }
