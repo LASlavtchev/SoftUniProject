@@ -61,6 +61,7 @@
             services.AddTransient<IProjectsService, ProjectsService>();
             services.AddTransient<IProgressStatusesService, ProgressStatusesService>();
             services.AddTransient<IProblemsService, ProblemsService>();
+            services.AddTransient<ISubProjectsService, SubProjectsService>();
 
             // AutoMapper
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
