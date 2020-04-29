@@ -1,9 +1,7 @@
 ﻿namespace PlanIt.Services.Data.Tests
 {
     using System;
-    using System.Collections.Generic;
     using System.Reflection;
-    using System.Text;
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
@@ -62,6 +60,7 @@
             services.AddTransient<IProgressStatusesService, ProgressStatusesService>();
             services.AddTransient<IProblemsService, ProblemsService>();
             services.AddTransient<ISubProjectsService, SubProjectsService>();
+            services.AddTransient<IAdditionalCostsService, AdditionalCostsService>();
 
             // AutoMapper
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
