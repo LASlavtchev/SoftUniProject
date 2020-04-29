@@ -27,7 +27,6 @@
         [DisplayName("Project Name")]
         public string ProjectName { get; set; }
 
-        [Required]
         [DisplayName("Due Date")]
         public DateTime? DueDate { get; set; }
     }
