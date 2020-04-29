@@ -35,7 +35,7 @@
                     <i class="fas fa-clipboard-check fa-2x" style="line-height:1.25;"></i>
                 </div>
                 <div class="col-4">
-                    <input type="date" class="form-control" asp-for="@Model.DueDate">
+                    <input type="date" datepicker="@Model.DueDate?.ToLocalTime().ToString("yyyy-MM-dd")" class="form-control" asp-for="@Model.DueDate">
                 </div>
                 <label asp-for="@Model.DueDate" class="col-4 col-form-label text-left"></label>
             </div>
@@ -72,3 +72,22 @@
         </form>
     </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        let inputElements = document.querySelectorAll("[datepicker]");
+
+        for (let i = 0; i < inputElements.length; i++) {
+            let localeDate = inputElements[i].getAttribute("datepicker");
+            console.log(localeDate);
+            inputElements[i].value = localeDate;
+        }
+
+        function convertUTCDateToLocalDate(date) {
+            var newDate = new Date(date);
+            newDate.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+            return newDate;
+        }
+    </script>
+}

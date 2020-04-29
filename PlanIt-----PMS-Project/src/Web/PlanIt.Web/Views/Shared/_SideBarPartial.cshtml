@@ -3,10 +3,11 @@
     <div class="p-3">
         <i class="fa fa-user-cog"> Settings</i>
         <hr color="white" />
-
-
-
-
+        <a asp-area="Identity"
+           asp-page="/Account/Manage/Index"
+           title="Manage">
+            <i class="fa fa-person-booth"> Manage profile</i>
+        </a>
         <hr color="white" />
         <div>
             <form id="form"
